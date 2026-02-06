@@ -5,6 +5,12 @@
     },
     "api/checkout.js": {
       "maxDuration": 10
+    },
+    "api/user.js": {
+      "maxDuration": 10
+    },
+    "api/webhook.js": {
+      "maxDuration": 10
     }
   }
 }

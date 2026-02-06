@@ -1,15 +1,80 @@
+const KV_URL = process.env.KV_REST_API_URL;
+const KV_TOKEN = process.env.KV_REST_API_TOKEN;
+const FREE_LIMIT = 3;
+
+async function verifyGoogleToken(idToken) {
+  const res = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${idToken}`);
+  if (!res.ok) return null;
+  const data = await res.json();
+  if (data.aud !== process.env.GOOGLE_CLIENT_ID) return null;
+  return { email: data.email, name: data.name };
+}
+
+async function kvGet(key) {
+  const res = await fetch(`${KV_URL}/get/${key}`, {
+    headers: { Authorization: `Bearer ${KV_TOKEN}` }
+  });
+  if (!res.ok) return null;
+  const data = await res.json();
+  return data.result ? JSON.parse(data.result) : null;
+}
+
+async function kvSet(key, value) {
+  await fetch(`${KV_URL}/set/${key}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${KV_TOKEN}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ value: JSON.stringify(value) })
+  });
+}
+
+function todayStr() {
+  return new Date().toISOString().slice(0, 10);
+}
+
 export default async function handler(req, res) {
-  // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  // Verify Google token
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Please sign in to generate posts' });
   }
 
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  const idToken = authHeader.split('Bearer ')[1];
+  const googleUser = await verifyGoogleToken(idToken);
+  if (!googleUser) {
+    return res.status(401).json({ error: 'Invalid or expired token. Please sign in again.' });
+  }
+
+  // Check usage in KV
+  const key = `user:${googleUser.email}`;
+  let userData = await kvGet(key);
+
+  if (!userData) {
+    userData = {
+      email: googleUser.email,
+      name: googleUser.name,
+      usage: { date: todayStr(), count: 0 },
+      isPro: false
+    };
+  }
+
+  // Reset daily count if new day
+  if (userData.usage.date !== todayStr()) {
+    userData.usage = { date: todayStr(), count: 0 };
+  }
+
+  // Check limit (Pro = unlimited)
+  if (!userData.isPro && userData.usage.count >= FREE_LIMIT) {
+    return res.status(429).json({ error: 'Daily limit reached', remaining: 0 });
   }
 
   const apiKey = process.env.OPENAI_API_KEY;
@@ -97,7 +162,13 @@ Output ONLY the post text. Nothing else.`;
     const data = await response.json();
     const post = data.choices[0].message.content;
 
-    return res.status(200).json({ post });
+    // Bump usage after successful generation
+    userData.usage.count++;
+    await kvSet(key, userData);
+
+    const remaining = userData.isPro ? 999 : Math.max(0, FREE_LIMIT - userData.usage.count);
+
+    return res.status(200).json({ post, remaining });
 
   } catch (error) {
     console.error('Server error:', error);

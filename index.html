@@ -11,6 +11,7 @@
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -467,6 +468,65 @@
     margin-top: 20px;
   }
   .footer a { color: var(--accent2); text-decoration: none; }
+
+  /* === AUTH === */
+  .auth-area { display: flex; align-items: center; gap: 10px; }
+  .user-info {
+    display: flex; align-items: center; gap: 8px;
+    padding: 4px 12px 4px 4px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .user-info:hover { border-color: var(--border-light); }
+  .user-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .user-name { font-size: 12px; font-weight: 500; color: var(--text2); }
+  .signout-btn {
+    padding: 6px 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .signout-btn:hover { border-color: var(--red); color: var(--red); }
+  .login-prompt {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+  .login-prompt p { margin-bottom: 16px; }
+  .google-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 28px;
+    background: white;
+    border: none; border-radius: 12px;
+    color: #333;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .google-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+  .google-btn img { width: 20px; height: 20px; }
+  .pro-badge {
+    padding: 2px 8px;
+    background: linear-gradient(135deg, var(--orange), #f97316);
+    border-radius: 100px;
+    font-size: 10px; font-weight: 700;
+    color: #1a1a1a;
+  }
 </style>
 </head>
 <body>
@@ -485,7 +545,13 @@
     <div class="nav-right">
       <div class="usage-pill">
         <div class="usage-indicator" id="usageIndicator"></div>
-        <span id="usageLabel">3/3 free today</span>
+        <span id="usageLabel">—</span>
+      </div>
+      <div class="auth-area" id="authArea">
+        <button class="google-btn" id="googleSignInBtn" onclick="startGoogleLogin()">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
+          Sign in
+        </button>
       </div>
       <button class="settings-btn" onclick="showInfo()" title="Info">ℹ️</button>
     </div>
@@ -501,8 +567,19 @@
     <p>Just describe your topic — LinkedGenie crafts a professional, engaging post ready to publish in seconds.</p>
   </section>
 
-  <!-- Generator -->
-  <div class="gen-card" id="genCard">
+  <!-- Login Prompt (shown when not signed in) -->
+  <div class="gen-card" id="loginPromptCard">
+    <div class="login-prompt">
+      <p>Sign in with Google to start generating LinkedIn posts</p>
+      <button class="google-btn" onclick="startGoogleLogin()">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
+        Sign in with Google
+      </button>
+    </div>
+  </div>
+
+  <!-- Generator (hidden until signed in) -->
+  <div class="gen-card" id="genCard" style="display:none;">
     <div class="field-label">
       <span class="field-label-icon">💡</span> Your idea or topic
     </div>
@@ -644,31 +721,111 @@ let currentStyle = 'storytelling';
 let currentLang = 'english';
 let currentTone = 'professional';
 let resultText = '';
+let idToken = null;
+let currentUser = null;
 const FREE_LIMIT = 3;
-const USAGE_KEY = 'lg_usage';
+const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID'; // Will be replaced after setup
 
-// ============ USAGE ============
-function todayStr() { return new Date().toISOString().slice(0, 10); }
-function getUsage() {
+// ============ GOOGLE AUTH ============
+function startGoogleLogin() {
+  google.accounts.id.prompt();
+}
+
+function handleCredentialResponse(response) {
+  idToken = response.credential;
+  // Decode JWT to get user info (for UI only, server verifies separately)
+  const payload = JSON.parse(atob(idToken.split('.')[1]));
+  currentUser = {
+    email: payload.email,
+    name: payload.name,
+    picture: payload.picture
+  };
+  onSignIn();
+}
+
+function onSignIn() {
+  // Update navbar
+  const authArea = document.getElementById('authArea');
+  authArea.innerHTML = `
+    <div class="user-info">
+      <img class="user-avatar" src="${currentUser.picture}" alt="" referrerpolicy="no-referrer">
+      <span class="user-name">${currentUser.name.split(' ')[0]}</span>
+      ${currentUser.isPro ? '<span class="pro-badge">PRO</span>' : ''}
+    </div>
+    <button class="signout-btn" onclick="signOut()">Sign out</button>
+  `;
+
+  // Show generator, hide login prompt
+  document.getElementById('loginPromptCard').style.display = 'none';
+  document.getElementById('genCard').style.display = 'block';
+
+  // Fetch user status from server
+  fetchUserStatus();
+}
+
+async function fetchUserStatus() {
   try {
-    const d = JSON.parse(localStorage.getItem(USAGE_KEY));
-    if (d && d.date === todayStr()) return d;
-  } catch(e) {}
-  return { date: todayStr(), count: 0 };
+    const res = await fetch('/api/user', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${idToken}`
+      }
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    currentUser.isPro = data.isPro;
+    updateUsageUI(data.remaining, data.isPro ? 'unlimited' : FREE_LIMIT);
+
+    // Update Pro badge
+    if (data.isPro) {
+      const info = document.querySelector('.user-info');
+      if (info && !info.querySelector('.pro-badge')) {
+        const badge = document.createElement('span');
+        badge.className = 'pro-badge';
+        badge.textContent = 'PRO';
+        info.appendChild(badge);
+      }
+    }
+  } catch (e) {
+    console.error('Failed to fetch user status:', e);
+  }
 }
-function setUsage(u) { localStorage.setItem(USAGE_KEY, JSON.stringify(u)); }
-function canUse() { return getUsage().count < FREE_LIMIT; }
-function bumpUsage() {
-  const u = getUsage(); u.count++; setUsage(u); refreshUsageUI();
+
+function signOut() {
+  google.accounts.id.disableAutoSelect();
+  idToken = null;
+  currentUser = null;
+
+  // Reset UI
+  const authArea = document.getElementById('authArea');
+  authArea.innerHTML = `
+    <button class="google-btn" id="googleSignInBtn" onclick="startGoogleLogin()">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
+      Sign in
+    </button>
+  `;
+  document.getElementById('loginPromptCard').style.display = 'block';
+  document.getElementById('genCard').style.display = 'none';
+  document.getElementById('outputCard').classList.remove('visible');
+  document.getElementById('paywallCard').classList.remove('visible');
+  document.getElementById('usageLabel').textContent = '—';
+  document.getElementById('usageIndicator').className = 'usage-indicator';
 }
-function refreshUsageUI() {
-  const u = getUsage();
-  const left = Math.max(0, FREE_LIMIT - u.count);
-  document.getElementById('usageLabel').textContent = `${left}/${FREE_LIMIT} free today`;
+
+function updateUsageUI(remaining, limit) {
+  const label = document.getElementById('usageLabel');
   const dot = document.getElementById('usageIndicator');
   dot.className = 'usage-indicator';
-  if (left === 0) dot.classList.add('out');
-  else if (left === 1) dot.classList.add('warn');
+
+  if (limit === 'unlimited') {
+    label.textContent = 'Unlimited (Pro)';
+    return;
+  }
+
+  label.textContent = `${remaining}/${limit} free today`;
+  if (remaining === 0) dot.classList.add('out');
+  else if (remaining === 1) dot.classList.add('warn');
 }
 
 // ============ MODAL ============
@@ -696,6 +853,11 @@ document.getElementById('ideaInput').addEventListener('input', function() {
 
 // ============ GENERATE ============
 async function handleGenerate() {
+  if (!idToken) {
+    startGoogleLogin();
+    return;
+  }
+
   const idea = document.getElementById('ideaInput').value.trim();
   if (!idea) {
     const ta = document.getElementById('ideaInput');
@@ -703,11 +865,7 @@ async function handleGenerate() {
     setTimeout(() => ta.style.borderColor = 'var(--border)', 1500);
     return;
   }
-  if (!canUse()) {
-    document.getElementById('paywallCard').classList.add('visible');
-    document.getElementById('outputCard').classList.remove('visible');
-    return;
-  }
+
   const btn = document.getElementById('genBtn');
   const btnText = document.getElementById('genBtnText');
   btn.disabled = true;
@@ -717,14 +875,39 @@ async function handleGenerate() {
   try {
     const response = await fetch('/api/generate', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${idToken}`
+      },
       body: JSON.stringify({ idea, style: currentStyle, tone: currentTone, lang: currentLang })
     });
-    if (!response.ok) throw new Error(`Server error: ${response.status}`);
+
     const data = await response.json();
+
+    if (response.status === 429) {
+      // Daily limit reached
+      document.getElementById('paywallCard').classList.add('visible');
+      document.getElementById('outputCard').classList.remove('visible');
+      updateUsageUI(0, FREE_LIMIT);
+      btn.disabled = false;
+      btnText.innerHTML = '⚡ Generate Post';
+      return;
+    }
+
+    if (response.status === 401) {
+      // Token expired, re-login
+      signOut();
+      startGoogleLogin();
+      return;
+    }
+
+    if (!response.ok) throw new Error(data.error || 'Server error');
+
     resultText = data.post;
     showOutput(data.post);
-    bumpUsage();
+    if (data.remaining !== undefined) {
+      updateUsageUI(data.remaining, currentUser.isPro ? 'unlimited' : FREE_LIMIT);
+    }
   } catch (err) {
     console.error(err);
     btnText.textContent = '❌ Error — please try again';
@@ -762,8 +945,17 @@ function openUpgrade() {
   window.open('/api/checkout', '_blank');
 }
 
-// ============ INIT ============
-refreshUsageUI();
+// ============ INIT GOOGLE ============
+window.onload = function() {
+  if (typeof google !== 'undefined') {
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: handleCredentialResponse,
+      auto_select: true
+    });
+    google.accounts.id.prompt();
+  }
+};
 </script>
 
 </body>
