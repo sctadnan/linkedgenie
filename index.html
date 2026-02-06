@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinkedGenie — AI LinkedIn Post Generator | Create Viral Posts in Seconds</title>
+<meta name="description" content="Generate professional, engaging LinkedIn posts in seconds with AI. Turn any idea into viral content. Free to use.">
+<meta name="keywords" content="LinkedIn post generator, AI content writer, LinkedIn content, social media tool, viral posts">
+<meta property="og:title" content="LinkedGenie — AI LinkedIn Post Generator">
+<meta property="og:description" content="Turn any idea into a viral LinkedIn post in seconds with AI.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #06080d;
+    --bg2: #0b0f18;
+    --surface: #0f1420;
+    --surface2: #151c2c;
+    --surface3: #1a2236;
+    --border: #1e2a3f;
+    --border-light: #2a3a55;
+    --accent: #6366f1;
+    --accent2: #818cf8;
+    --accent-glow: rgba(99, 102, 241, 0.12);
+    --accent-glow2: rgba(99, 102, 241, 0.06);
+    --green: #34d399;
+    --green-dim: rgba(52, 211, 153, 0.1);
+    --orange: #fbbf24;
+    --orange-dim: rgba(251, 191, 36, 0.1);
+    --red: #f87171;
+    --text: #e8ecf4;
+    --text2: #c1c9d9;
+    --text-dim: #8694ad;
+    --text-muted: #5a6a84;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* === BACKGROUND EFFECTS === */
+  .bg-grid {
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+  .bg-glow {
+    position: fixed; top: -200px; left: 50%; transform: translateX(-50%);
+    width: 800px; height: 600px;
+    background: radial-gradient(ellipse, rgba(99,102,241,0.08) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+  .bg-glow2 {
+    position: fixed; bottom: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(ellipse, rgba(52,211,153,0.04) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* === LAYOUT === */
+  .container { max-width: 720px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+  /* === NAVBAR === */
+  .navbar {
+    padding: 16px 0;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), #a855f7);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 2px 16px rgba(99,102,241,0.25);
+  }
+  .nav-name {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px; font-weight: 400;
+    color: var(--text);
+  }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .usage-pill {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 12px; font-weight: 500;
+    color: var(--text-dim);
+  }
+  .usage-indicator {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px rgba(52,211,153,0.5);
+  }
+  .usage-indicator.warn { background: var(--orange); box-shadow: 0 0 8px rgba(251,191,36,0.5); }
+  .usage-indicator.out { background: var(--red); box-shadow: 0 0 8px rgba(248,113,113,0.5); }
+
+  .settings-btn {
+    width: 36px; height: 36px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-dim);
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .settings-btn:hover { border-color: var(--accent); color: var(--text); }
+
+  /* === HERO === */
+  .hero {
+    text-align: center;
+    padding: 48px 0 32px;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 16px;
+    background: var(--accent-glow);
+    border: 1px solid rgba(99,102,241,0.15);
+    border-radius: 100px;
+    font-size: 12px; font-weight: 500;
+    color: var(--accent2);
+    margin-bottom: 20px;
+  }
+  .hero-badge-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent2); }
+  .hero h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  .hero h1 em {
+    font-style: italic;
+    background: linear-gradient(135deg, var(--accent2), #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero p {
+    font-size: 16px; line-height: 1.6;
+    color: var(--text-dim);
+    max-width: 460px; margin: 0 auto;
+  }
+
+  /* === GENERATOR CARD === */
+  .gen-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+
+  .field-label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 600;
+    color: var(--text2);
+    margin-bottom: 10px;
+  }
+  .field-label-icon { font-size: 15px; }
+
+  .idea-textarea {
+    width: 100%; height: 100px;
+    padding: 14px 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; line-height: 1.6;
+    resize: vertical;
+    outline: none;
+    transition: all 0.25s;
+  }
+  .idea-textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+  .idea-textarea::placeholder { color: var(--text-muted); }
+
+  .textarea-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 6px; margin-bottom: 20px;
+  }
+  .char-info { font-size: 11px; color: var(--text-muted); }
+
+  /* Style Cards */
+  .styles-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 520px) { .styles-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  .style-card {
+    padding: 14px 8px;
+    background: var(--bg2);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-align: center;
+    user-select: none;
+  }
+  .style-card:hover { border-color: var(--border-light); background: var(--surface2); }
+  .style-card.active {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+    box-shadow: 0 0 0 3px var(--accent-glow2);
+  }
+  .style-icon { font-size: 22px; margin-bottom: 6px; }
+  .style-title { font-size: 12px; font-weight: 600; color: var(--text); }
+  .style-sub { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+  /* Options */
+  .options-row {
+    display: flex; gap: 8px; margin-bottom: 20px;
+  }
+  .opt-btn {
+    flex: 1; padding: 10px;
+    background: var(--bg2);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: all 0.2s;
+    text-align: center;
+  }
+  .opt-btn:hover { border-color: var(--border-light); }
+  .opt-btn.active { border-color: var(--accent); background: var(--accent-glow); color: var(--text); }
+
+  /* Tone select */
+  .tone-row { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .tone-chip {
+    padding: 6px 14px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 12px; font-weight: 500;
+    color: var(--text-dim);
+    cursor: pointer; transition: all 0.2s;
+    user-select: none;
+  }
+  .tone-chip:hover { border-color: var(--border-light); }
+  .tone-chip.active { border-color: var(--accent); background: var(--accent-glow); color: var(--accent2); }
+
+  /* Generate Button */
+  .gen-btn {
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, var(--accent), #8b5cf6);
+    border: none; border-radius: 12px;
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    position: relative; overflow: hidden;
+  }
+  .gen-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(99,102,241,0.35); }
+  .gen-btn:active { transform: translateY(0); }
+  .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+  .gen-btn .shimmer {
+    position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    animation: shimmer 2.5s infinite;
+  }
+  @keyframes shimmer { 100% { left: 100%; } }
+  .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* === OUTPUT === */
+  .output-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: none;
+  }
+  .output-card.visible { display: block; animation: slideUp 0.4s ease; }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .output-top {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .output-badge {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 600; color: var(--green);
+  }
+  .output-badge-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px rgba(52,211,153,0.4); }
+  .output-actions { display: flex; gap: 6px; }
+  .act-btn {
+    padding: 7px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 500;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .act-btn:hover { border-color: var(--accent); color: var(--text); }
+  .act-btn.copied { border-color: var(--green); color: var(--green); background: var(--green-dim); }
+
+  .output-text {
+    padding: 18px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 14px; line-height: 1.8;
+    color: var(--text2);
+    white-space: pre-wrap;
+    max-height: 380px;
+    overflow-y: auto;
+  }
+  .output-text::-webkit-scrollbar { width: 4px; }
+  .output-text::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .output-stats {
+    display: flex; gap: 16px; margin-top: 12px;
+    padding: 10px 16px;
+    background: var(--surface2);
+    border-radius: 10px;
+    flex-wrap: wrap;
+  }
+  .stat-item { font-size: 11px; color: var(--text-muted); }
+  .stat-item b { color: var(--text-dim); font-weight: 600; }
+
+  /* === PAYWALL === */
+  .paywall-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px 28px;
+    text-align: center;
+    display: none;
+  }
+  .paywall-card.visible { display: block; animation: slideUp 0.4s ease; }
+  .paywall-icon { font-size: 48px; margin-bottom: 16px; }
+  .paywall-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 26px; margin-bottom: 10px;
+  }
+  .paywall-desc { font-size: 14px; color: var(--text-dim); line-height: 1.6; margin-bottom: 24px; }
+  .upgrade-btn {
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, var(--orange), #f97316);
+    border: none; border-radius: 12px;
+    color: #1a1a1a; font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: all 0.3s;
+    margin-bottom: 10px;
+  }
+  .upgrade-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(251,191,36,0.3); }
+  .paywall-price { font-size: 12px; color: var(--text-muted); }
+  .paywall-price b { color: var(--text-dim); }
+
+  /* === SETTINGS MODAL === */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.visible { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    width: 100%; max-width: 440px;
+    animation: slideUp 0.3s ease;
+  }
+  .modal-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px; margin-bottom: 6px;
+  }
+  .modal-desc { font-size: 13px; color: var(--text-dim); margin-bottom: 20px; line-height: 1.5; }
+  .modal-field { margin-bottom: 16px; }
+  .modal-label { font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 6px; display: block; }
+  .modal-input {
+    width: 100%; padding: 10px 14px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    outline: none; transition: all 0.2s;
+  }
+  .modal-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+  .modal-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+  .modal-hint a { color: var(--accent2); text-decoration: none; }
+  .modal-actions { display: flex; gap: 8px; margin-top: 20px; }
+  .modal-btn {
+    flex: 1; padding: 10px;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .modal-btn-secondary { background: var(--surface2); border: 1px solid var(--border); color: var(--text-dim); }
+  .modal-btn-secondary:hover { border-color: var(--border-light); color: var(--text); }
+  .modal-btn-primary { background: var(--accent); border: none; color: white; }
+  .modal-btn-primary:hover { background: var(--accent2); }
+  .modal-status { margin-top: 12px; font-size: 12px; text-align: center; }
+  .modal-status.success { color: var(--green); }
+  .modal-status.error { color: var(--red); }
+
+  /* === FEATURES === */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 32px 0 40px;
+  }
+  @media (max-width: 520px) { .features { grid-template-columns: 1fr; } }
+  .feature-card {
+    padding: 20px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+  .feature-card:hover { border-color: var(--border-light); transform: translateY(-2px); }
+  .feature-icon { font-size: 24px; margin-bottom: 8px; }
+  .feature-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .feature-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+  /* === FOOTER === */
+  .footer {
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 20px;
+  }
+  .footer a { color: var(--accent2); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+<div class="bg-glow2"></div>
+
+<div class="container">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="#" class="nav-logo">
+      <div class="nav-icon">✨</div>
+      <span class="nav-name">LinkedGenie</span>
+    </a>
+    <div class="nav-right">
+      <div class="usage-pill">
+        <div class="usage-indicator" id="usageIndicator"></div>
+        <span id="usageLabel">3/3 free today</span>
+      </div>
+      <button class="settings-btn" onclick="showInfo()" title="Info">ℹ️</button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      Powered by GPT-4o AI
+    </div>
+    <h1>Turn any idea into a <em>viral LinkedIn post</em></h1>
+    <p>Just describe your topic — LinkedGenie crafts a professional, engaging post ready to publish in seconds.</p>
+  </section>
+
+  <!-- Generator -->
+  <div class="gen-card" id="genCard">
+    <div class="field-label">
+      <span class="field-label-icon">💡</span> Your idea or topic
+    </div>
+    <textarea class="idea-textarea" id="ideaInput" placeholder="e.g. Why I turned down a $200K offer to stay at my startup...&#10;e.g. 5 mistakes I made as a first-time manager&#10;e.g. How AI is changing the hiring process" maxlength="500"></textarea>
+    <div class="textarea-footer">
+      <span class="char-info">Be specific for better results</span>
+      <span class="char-info"><span id="charCount">0</span>/500</span>
+    </div>
+
+    <div class="field-label">
+      <span class="field-label-icon">🎨</span> Writing style
+    </div>
+    <div class="styles-grid">
+      <div class="style-card active" data-style="storytelling" onclick="pickStyle(this)">
+        <div class="style-icon">📖</div>
+        <div class="style-title">Story</div>
+        <div class="style-sub">Personal narrative</div>
+      </div>
+      <div class="style-card" data-style="educational" onclick="pickStyle(this)">
+        <div class="style-icon">🎓</div>
+        <div class="style-title">Educational</div>
+        <div class="style-sub">Tips & frameworks</div>
+      </div>
+      <div class="style-card" data-style="motivational" onclick="pickStyle(this)">
+        <div class="style-icon">🔥</div>
+        <div class="style-title">Motivational</div>
+        <div class="style-sub">Inspire action</div>
+      </div>
+      <div class="style-card" data-style="contrarian" onclick="pickStyle(this)">
+        <div class="style-icon">🤔</div>
+        <div class="style-title">Hot Take</div>
+        <div class="style-sub">Bold opinion</div>
+      </div>
+    </div>
+
+    <div class="field-label">
+      <span class="field-label-icon">🌐</span> Language
+    </div>
+    <div class="options-row">
+      <button class="opt-btn active" data-lang="english" onclick="pickLang(this)">🇺🇸 English</button>
+      <button class="opt-btn" data-lang="arabic" onclick="pickLang(this)">🇸🇦 العربية</button>
+    </div>
+
+    <div class="field-label">
+      <span class="field-label-icon">🎭</span> Tone
+    </div>
+    <div class="tone-row">
+      <div class="tone-chip active" data-tone="professional" onclick="pickTone(this)">Professional</div>
+      <div class="tone-chip" data-tone="casual" onclick="pickTone(this)">Casual</div>
+      <div class="tone-chip" data-tone="bold" onclick="pickTone(this)">Bold</div>
+      <div class="tone-chip" data-tone="humorous" onclick="pickTone(this)">Humorous</div>
+    </div>
+
+    <button class="gen-btn" id="genBtn" onclick="handleGenerate()">
+      <span class="shimmer"></span>
+      <span id="genBtnText">⚡ Generate Post</span>
+    </button>
+  </div>
+
+  <!-- Output -->
+  <div class="output-card" id="outputCard">
+    <div class="output-top">
+      <div class="output-badge">
+        <div class="output-badge-dot"></div>
+        Your LinkedIn Post
+      </div>
+      <div class="output-actions">
+        <button class="act-btn" id="copyBtn" onclick="copyResult()">📋 Copy</button>
+        <button class="act-btn" onclick="handleGenerate()">🔄 Regenerate</button>
+      </div>
+    </div>
+    <div class="output-text" id="outputText"></div>
+    <div class="output-stats">
+      <div class="stat-item">Words: <b id="statWords">0</b></div>
+      <div class="stat-item">Characters: <b id="statChars">0</b></div>
+      <div class="stat-item">Read time: <b id="statTime">0s</b></div>
+      <div class="stat-item">Emoji count: <b id="statEmoji">0</b></div>
+    </div>
+  </div>
+
+  <!-- Paywall -->
+  <div class="paywall-card" id="paywallCard">
+    <div class="paywall-icon">✨</div>
+    <div class="paywall-title">You've used all free posts today</div>
+    <div class="paywall-desc">
+      Upgrade to <b>LinkedGenie Pro</b> for unlimited AI-generated posts,
+      priority generation, and exclusive writing styles.
+    </div>
+    <button class="upgrade-btn" onclick="openUpgrade()">🚀 Upgrade to Pro — $7/month</button>
+    <div class="paywall-price">Cancel anytime · <b>3 subscribers = we break even!</b></div>
+  </div>
+
+  <!-- Features -->
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-title">Instant Generation</div>
+      <div class="feature-desc">Posts generated in under 5 seconds using GPT-4o AI</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <div class="feature-title">4 Writing Styles</div>
+      <div class="feature-desc">Story, Educational, Motivational, or Hot Take</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌍</div>
+      <div class="feature-title">Bilingual</div>
+      <div class="feature-desc">Full support for English & Arabic content</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    LinkedGenie © 2025 · Built with ❤️ and AI
+  </footer>
+</div>
+
+<!-- Info Modal -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal">
+    <div class="modal-title">ℹ️ About LinkedGenie</div>
+    <div class="modal-desc">
+      LinkedGenie uses advanced AI to generate professional LinkedIn posts instantly.
+      <br><br>
+      <b>Free plan:</b> 3 posts per day — no signup needed!<br>
+      <b>Pro plan:</b> $7/month — unlimited posts.
+      <br><br>
+      Your data is never stored. Each generation is independent and private.
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-primary" onclick="toggleSettings()" style="flex:1">Got it!</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============ STATE ============
+let currentStyle = 'storytelling';
+let currentLang = 'english';
+let currentTone = 'professional';
+let resultText = '';
+const FREE_LIMIT = 3;
+const USAGE_KEY = 'lg_usage';
+
+// ============ USAGE ============
+function todayStr() { return new Date().toISOString().slice(0, 10); }
+function getUsage() {
+  try {
+    const d = JSON.parse(localStorage.getItem(USAGE_KEY));
+    if (d && d.date === todayStr()) return d;
+  } catch(e) {}
+  return { date: todayStr(), count: 0 };
+}
+function setUsage(u) { localStorage.setItem(USAGE_KEY, JSON.stringify(u)); }
+function canUse() { return getUsage().count < FREE_LIMIT; }
+function bumpUsage() {
+  const u = getUsage(); u.count++; setUsage(u); refreshUsageUI();
+}
+function refreshUsageUI() {
+  const u = getUsage();
+  const left = Math.max(0, FREE_LIMIT - u.count);
+  document.getElementById('usageLabel').textContent = `${left}/${FREE_LIMIT} free today`;
+  const dot = document.getElementById('usageIndicator');
+  dot.className = 'usage-indicator';
+  if (left === 0) dot.classList.add('out');
+  else if (left === 1) dot.classList.add('warn');
+}
+
+// ============ MODAL ============
+function showInfo() { toggleSettings(); }
+function toggleSettings() {
+  document.getElementById('settingsModal').classList.toggle('visible');
+}
+
+// ============ UI HANDLERS ============
+function pickStyle(el) {
+  document.querySelectorAll('.style-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active'); currentStyle = el.dataset.style;
+}
+function pickLang(el) {
+  document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active'); currentLang = el.dataset.lang;
+}
+function pickTone(el) {
+  document.querySelectorAll('.tone-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active'); currentTone = el.dataset.tone;
+}
+document.getElementById('ideaInput').addEventListener('input', function() {
+  document.getElementById('charCount').textContent = this.value.length;
+});
+
+// ============ GENERATE ============
+async function handleGenerate() {
+  const idea = document.getElementById('ideaInput').value.trim();
+  if (!idea) {
+    const ta = document.getElementById('ideaInput');
+    ta.style.borderColor = 'var(--red)'; ta.focus();
+    setTimeout(() => ta.style.borderColor = 'var(--border)', 1500);
+    return;
+  }
+  if (!canUse()) {
+    document.getElementById('paywallCard').classList.add('visible');
+    document.getElementById('outputCard').classList.remove('visible');
+    return;
+  }
+  const btn = document.getElementById('genBtn');
+  const btnText = document.getElementById('genBtnText');
+  btn.disabled = true;
+  btnText.innerHTML = '<span class="spinner"></span> Generating with AI...';
+  document.getElementById('paywallCard').classList.remove('visible');
+
+  try {
+    const response = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idea, style: currentStyle, tone: currentTone, lang: currentLang })
+    });
+    if (!response.ok) throw new Error(`Server error: ${response.status}`);
+    const data = await response.json();
+    resultText = data.post;
+    showOutput(data.post);
+    bumpUsage();
+  } catch (err) {
+    console.error(err);
+    btnText.textContent = '❌ Error — please try again';
+    setTimeout(() => { btnText.innerHTML = '⚡ Generate Post'; btn.disabled = false; }, 2500);
+    return;
+  }
+  btn.disabled = false;
+  btnText.innerHTML = '⚡ Generate Post';
+}
+
+function showOutput(text) {
+  const card = document.getElementById('outputCard');
+  document.getElementById('outputText').textContent = text;
+  card.classList.add('visible');
+  const words = text.split(/\s+/).filter(w => w).length;
+  const chars = text.length;
+  const readSec = Math.ceil(words / 3.5);
+  const emojiCount = (text.match(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE00}-\u{FE0F}\u{1F900}-\u{1F9FF}\u{200D}\u{20E3}♻️📈🤝💡●→←•✨⚡🔥📖🎓🤔]/gu) || []).length;
+  document.getElementById('statWords').textContent = words;
+  document.getElementById('statChars').textContent = chars.toLocaleString();
+  document.getElementById('statTime').textContent = readSec > 60 ? `${Math.floor(readSec/60)}m ${readSec%60}s` : `${readSec}s`;
+  document.getElementById('statEmoji').textContent = emojiCount;
+  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function copyResult() {
+  navigator.clipboard.writeText(resultText).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.classList.add('copied'); btn.textContent = '✅ Copied!';
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '📋 Copy'; }, 2000);
+  });
+}
+
+function openUpgrade() {
+  window.open('/api/checkout', '_blank');
+}
+
+// ============ INIT ============
+refreshUsageUI();
+</script>
+
+</body>
+</html>
