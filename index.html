@@ -548,10 +548,7 @@
         <span id="usageLabel">—</span>
       </div>
       <div class="auth-area" id="authArea">
-        <button class="google-btn" id="googleSignInBtn" onclick="startGoogleLogin()">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
-          Sign in
-        </button>
+        <div id="googleBtnNav"></div>
       </div>
       <button class="settings-btn" onclick="showInfo()" title="Info">ℹ️</button>
     </div>
@@ -571,10 +568,7 @@
   <div class="gen-card" id="loginPromptCard">
     <div class="login-prompt">
       <p>Sign in with Google to start generating LinkedIn posts</p>
-      <button class="google-btn" onclick="startGoogleLogin()">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
-        Sign in with Google
-      </button>
+      <div id="googleBtnMain" style="display:inline-block;"></div>
     </div>
   </div>
 
@@ -727,8 +721,12 @@ const FREE_LIMIT = 3;
 const GOOGLE_CLIENT_ID = '518315582553-qg3onsjs8r7d6u5kue1fugppan66a2k9.apps.googleusercontent.com';
 
 // ============ GOOGLE AUTH ============
-function startGoogleLogin() {
-  google.accounts.id.prompt();
+function renderGoogleButtons() {
+  const options = { theme: 'outline', size: 'medium', shape: 'pill', text: 'signin' };
+  const navBtn = document.getElementById('googleBtnNav');
+  const mainBtn = document.getElementById('googleBtnMain');
+  if (navBtn) google.accounts.id.renderButton(navBtn, { ...options, size: 'small' });
+  if (mainBtn) google.accounts.id.renderButton(mainBtn, { ...options, size: 'large', width: 280 });
 }
 
 function handleCredentialResponse(response) {
@@ -799,12 +797,8 @@ function signOut() {
 
   // Reset UI
   const authArea = document.getElementById('authArea');
-  authArea.innerHTML = `
-    <button class="google-btn" id="googleSignInBtn" onclick="startGoogleLogin()">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
-      Sign in
-    </button>
-  `;
+  authArea.innerHTML = `<div id="googleBtnNav"></div>`;
+  renderGoogleButtons();
   document.getElementById('loginPromptCard').style.display = 'block';
   document.getElementById('genCard').style.display = 'none';
   document.getElementById('outputCard').classList.remove('visible');
@@ -854,7 +848,7 @@ document.getElementById('ideaInput').addEventListener('input', function() {
 // ============ GENERATE ============
 async function handleGenerate() {
   if (!idToken) {
-    startGoogleLogin();
+    google.accounts.id.prompt();
     return;
   }
 
@@ -897,7 +891,7 @@ async function handleGenerate() {
     if (response.status === 401) {
       // Token expired, re-login
       signOut();
-      startGoogleLogin();
+      google.accounts.id.prompt();
       return;
     }
 
@@ -953,6 +947,7 @@ window.onload = function() {
       callback: handleCredentialResponse,
       auto_select: true
     });
+    renderGoogleButtons();
     google.accounts.id.prompt();
   }
 };
