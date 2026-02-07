@@ -478,6 +478,8 @@
     white-space: nowrap;
   }
   .hook-btn:hover { border-color: var(--accent); color: var(--text); }
+  .hook-btn-write { background: var(--accent-glow); border-color: var(--accent); color: var(--accent); }
+  .hook-btn-write:hover { background: var(--accent); color: #fff; }
 
   /* === MULTI OUTPUT (Profile headlines, Reply options) === */
   .multi-output { display: none; }
@@ -763,12 +765,12 @@
               <div class="style-title">Achievement</div>
               <div class="style-sub">Milestone win</div>
             </div>
-            <div class="style-card pro-only" data-style="job_posting" onclick="pickStyle(this)">
+            <div class="style-card" data-style="job_posting" onclick="pickStyle(this)">
               <div class="style-icon">💼</div>
               <div class="style-title">Job Post</div>
               <div class="style-sub">Hiring ad</div>
             </div>
-            <div class="style-card pro-only" data-style="open_to_work" onclick="pickStyle(this)">
+            <div class="style-card" data-style="open_to_work" onclick="pickStyle(this)">
               <div class="style-icon">🔍</div>
               <div class="style-title">Open to Work</div>
               <div class="style-sub">Job search</div>
@@ -1155,7 +1157,9 @@ const T = {
     footer: "LinkedGenie © 2025 · Built with ❤️ and AI",
     modalTitle: "ℹ️ About LinkedGenie",
     modalDesc: 'LinkedGenie is your complete AI toolkit for LinkedIn content creation.<br><br><b>Free plan:</b> Sign in with Google — 3 generations per day.<br><b>Pro plan:</b> $7/month — unlimited access to all tools and templates.<br><br><b>Tools included:</b><br>✍️ Post generator (8 styles + rewrite + hooks)<br>👤 Profile optimizer (headline, about, experience)<br>📩 Message crafter (connection, follow-up, thank you)<br>💬 Comment reply generator',
-    modalUpgrade: "Upgrade to Pro", modalGotIt: "Got it!"
+    modalUpgrade: "Upgrade to Pro", modalGotIt: "Got it!",
+    hookOptionsTitle: "Hook Options", headlineOptionsTitle: "Headline Options", replyOptionsTitle: "Reply Options",
+    writeAboutThis: "✍️ Write", signOut: "Sign out"
   },
   spanish: {
     heroBadge: "Suite de Contenido LinkedIn con IA",
@@ -1225,7 +1229,9 @@ const T = {
     footer: "LinkedGenie © 2025 · Hecho con ❤️ e IA",
     modalTitle: "ℹ️ Acerca de LinkedGenie",
     modalDesc: 'LinkedGenie es tu kit completo de IA para crear contenido en LinkedIn.<br><br><b>Plan Gratis:</b> Inicia sesión con Google — 3 generaciones por día.<br><b>Plan Pro:</b> $7/mes — acceso ilimitado a todas las herramientas.<br><br><b>Herramientas:</b><br>✍️ Generador de posts (8 estilos + reescritura + ganchos)<br>👤 Optimizador de perfil (titular, acerca de, experiencia)<br>📩 Redactor de mensajes (conexión, seguimiento, agradecimiento)<br>💬 Generador de respuestas a comentarios',
-    modalUpgrade: "Actualizar a Pro", modalGotIt: "¡Entendido!"
+    modalUpgrade: "Actualizar a Pro", modalGotIt: "¡Entendido!",
+    hookOptionsTitle: "Opciones de Gancho", headlineOptionsTitle: "Opciones de Titular", replyOptionsTitle: "Opciones de Respuesta",
+    writeAboutThis: "✍️ Escribir", signOut: "Cerrar sesión"
   },
   portuguese: {
     heroBadge: "Suite de Conteúdo LinkedIn com IA",
@@ -1295,7 +1301,9 @@ const T = {
     footer: "LinkedGenie © 2025 · Feito com ❤️ e IA",
     modalTitle: "ℹ️ Sobre o LinkedGenie",
     modalDesc: 'LinkedGenie é seu kit completo de IA para criar conteúdo no LinkedIn.<br><br><b>Plano Grátis:</b> Login com Google — 3 gerações por dia.<br><b>Plano Pro:</b> $7/mês — acesso ilimitado a todas as ferramentas.<br><br><b>Ferramentas:</b><br>✍️ Gerador de posts (8 estilos + reescrita + ganchos)<br>👤 Otimizador de perfil (título, sobre, experiência)<br>📩 Criador de mensagens (conexão, follow-up, agradecimento)<br>💬 Gerador de respostas a comentários',
-    modalUpgrade: "Atualizar para Pro", modalGotIt: "Entendi!"
+    modalUpgrade: "Atualizar para Pro", modalGotIt: "Entendi!",
+    hookOptionsTitle: "Opções de Gancho", headlineOptionsTitle: "Opções de Título", replyOptionsTitle: "Opções de Resposta",
+    writeAboutThis: "✍️ Escrever", signOut: "Sair"
   },
   french: {
     heroBadge: "Suite de Contenu LinkedIn propulsée par l'IA",
@@ -1365,7 +1373,9 @@ const T = {
     footer: "LinkedGenie © 2025 · Fait avec ❤️ et IA",
     modalTitle: "ℹ️ À propos de LinkedGenie",
     modalDesc: "LinkedGenie est votre boîte à outils IA complète pour créer du contenu LinkedIn.<br><br><b>Plan Gratuit :</b> Connectez-vous avec Google — 3 générations par jour.<br><b>Plan Pro :</b> 7$/mois — accès illimité à tous les outils.<br><br><b>Outils inclus :</b><br>✍️ Générateur de posts (8 styles + réécriture + accroches)<br>👤 Optimiseur de profil (titre, à propos, expérience)<br>📩 Rédacteur de messages (connexion, suivi, remerciement)<br>💬 Générateur de réponses aux commentaires",
-    modalUpgrade: "Passer à Pro", modalGotIt: "Compris !"
+    modalUpgrade: "Passer à Pro", modalGotIt: "Compris !",
+    hookOptionsTitle: "Options d'Accroche", headlineOptionsTitle: "Options de Titre", replyOptionsTitle: "Options de Réponse",
+    writeAboutThis: "✍️ Écrire", signOut: "Se déconnecter"
   },
   german: {
     heroBadge: "KI-gestützte LinkedIn Content Suite",
@@ -1435,11 +1445,13 @@ const T = {
     footer: "LinkedGenie © 2025 · Mit ❤️ und KI erstellt",
     modalTitle: "ℹ️ Über LinkedGenie",
     modalDesc: 'LinkedGenie ist Ihr komplettes KI-Toolkit für LinkedIn Content.<br><br><b>Kostenlos:</b> Mit Google anmelden — 3 Generierungen pro Tag.<br><b>Pro:</b> 7$/Monat — unbegrenzter Zugang zu allen Tools.<br><br><b>Tools:</b><br>✍️ Beitragsgenerator (8 Stile + Umschreiben + Hooks)<br>👤 Profil-Optimierer (Überschrift, Über mich, Erfahrung)<br>📩 Nachrichtenverfasser (Vernetzung, Follow-up, Dank)<br>💬 Kommentarantwort-Generator',
-    modalUpgrade: "Auf Pro upgraden", modalGotIt: "Verstanden!"
+    modalUpgrade: "Auf Pro upgraden", modalGotIt: "Verstanden!",
+    hookOptionsTitle: "Hook-Optionen", headlineOptionsTitle: "Überschrift-Optionen", replyOptionsTitle: "Antwort-Optionen",
+    writeAboutThis: "✍️ Schreiben", signOut: "Abmelden"
   },
   arabic: {
     heroBadge: "مجموعة محتوى LinkedIn مدعومة بالذكاء الاصطناعي",
-    heroTitle: 'أدواتك المتكاملة لـ<em>محتوى LinkedIn</em>',
+    heroTitle: 'أدواتك المتكاملة <em>لمحتوى LinkedIn</em>',
     heroDesc: "أنشئ منشورات، حسّن ملفك الشخصي، اكتب رسائل وردود — كل ذلك بالذكاء الاصطناعي.",
     loginPrompt: "سجّل الدخول بحساب Google لبدء إنشاء محتوى LinkedIn",
     tabPost: "✍️ منشور", tabProfile: "👤 الملف الشخصي", tabMessage: "📩 رسالة", tabReply: "💬 رد",
@@ -1505,7 +1517,9 @@ const T = {
     footer: "LinkedGenie © 2025 · صُنع بـ ❤️ والذكاء الاصطناعي",
     modalTitle: "ℹ️ عن LinkedGenie",
     modalDesc: 'LinkedGenie هو مجموعة أدوات الذكاء الاصطناعي المتكاملة لإنشاء محتوى LinkedIn.<br><br><b>الخطة المجانية:</b> سجّل بحساب Google — 3 عمليات إنشاء يومياً.<br><b>خطة Pro:</b> 7$/شهرياً — وصول غير محدود لجميع الأدوات.<br><br><b>الأدوات:</b><br>✍️ منشئ المنشورات (8 أساليب + إعادة كتابة + عناوين جذب)<br>👤 محسّن الملف الشخصي (العنوان، نبذة عني، الخبرة)<br>📩 كاتب الرسائل (تواصل، متابعة، شكر)<br>💬 منشئ ردود التعليقات',
-    modalUpgrade: "ترقية إلى Pro", modalGotIt: "فهمت!"
+    modalUpgrade: "ترقية إلى Pro", modalGotIt: "فهمت!",
+    hookOptionsTitle: "خيارات العناوين الجاذبة", headlineOptionsTitle: "خيارات العنوان", replyOptionsTitle: "خيارات الرد",
+    writeAboutThis: "✍️ اكتب عنه", signOut: "تسجيل الخروج"
   }
 };
 
@@ -1751,10 +1765,17 @@ function isTokenExpired(token) {
   try { const p = JSON.parse(atob(token.split('.')[1])); return Date.now() >= p.exp * 1000; } catch { return true; }
 }
 
+function decodeJwtPayload(token) {
+  const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+  const raw = atob(base64);
+  const utf8 = new TextDecoder().decode(new Uint8Array([...raw].map(c => c.charCodeAt(0))));
+  return JSON.parse(utf8);
+}
+
 function handleCredentialResponse(response) {
   idToken = response.credential;
   sessionStorage.setItem('gsi_token', idToken);
-  const payload = JSON.parse(atob(idToken.split('.')[1]));
+  const payload = decodeJwtPayload(idToken);
   currentUser = { email: payload.email, name: payload.name, picture: payload.picture };
   onSignIn();
 }
@@ -1763,13 +1784,14 @@ function restoreSession() {
   const saved = sessionStorage.getItem('gsi_token');
   if (!saved || isTokenExpired(saved)) { sessionStorage.removeItem('gsi_token'); return false; }
   idToken = saved;
-  const payload = JSON.parse(atob(idToken.split('.')[1]));
+  const payload = decodeJwtPayload(idToken);
   currentUser = { email: payload.email, name: payload.name, picture: payload.picture };
   onSignIn();
   return true;
 }
 
 function onSignIn() {
+  const t = T[currentLang] || T.english;
   const authArea = document.getElementById('authArea');
   authArea.innerHTML = `
     <div class="user-info">
@@ -1777,7 +1799,7 @@ function onSignIn() {
       <span class="user-name">${currentUser.name.split(' ')[0]}</span>
       ${currentUser.isPro ? '<span class="pro-badge">PRO</span>' : ''}
     </div>
-    <button class="signout-btn" onclick="signOut()">Sign out</button>
+    <button class="signout-btn" onclick="signOut()">${t.signOut}</button>
   `;
   document.getElementById('loginPromptCard').style.display = 'none';
   document.getElementById('appContent').style.display = '';
@@ -1951,19 +1973,34 @@ function showOutput(text, title) {
   document.getElementById('outputCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-function showMultiOutput(items, title) {
-  document.getElementById('multiTitle').textContent = title;
+function showMultiOutput(items, apiTitle) {
+  const t = T[currentLang] || T.english;
+  // Translate titles from API
+  const titleMap = { 'Hook Options': t.hookOptionsTitle || 'Hook Options', 'Headline Options': t.headlineOptionsTitle || 'Headline Options', 'Reply Options': t.replyOptionsTitle || 'Reply Options' };
+  document.getElementById('multiTitle').textContent = titleMap[apiTitle] || apiTitle;
   const container = document.getElementById('multiCards');
+  const isHooks = (apiTitle === 'Hook Options');
   container.innerHTML = items.map((item, i) => `
     <div class="hook-card">
       <div class="hook-text">${item}</div>
       <div class="hook-actions">
-        <button class="hook-btn" onclick="copyItem(this, ${i})">📋 Copy</button>
+        <button class="hook-btn" onclick="copyItem(this, ${i})">${t.copy}</button>
+        ${isHooks ? `<button class="hook-btn hook-btn-write" onclick="useHook(${i})">${t.writeAboutThis || '✍️ Write'}</button>` : ''}
       </div>
     </div>
   `).join('');
   document.getElementById('multiOutput').classList.add('visible');
   document.getElementById('multiOutput').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function useHook(index) {
+  const text = document.querySelectorAll('.hook-text')[index].textContent;
+  switchTab('post');
+  switchPostMode('write');
+  document.getElementById('ideaInput').value = text;
+  document.getElementById('charCount').textContent = text.length;
+  document.getElementById('multiOutput').classList.remove('visible');
+  document.getElementById('ideaInput').focus();
 }
 
 function copyResult() {
