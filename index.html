@@ -600,6 +600,29 @@
     font-family: 'DM Sans', sans-serif;
     font-size: 10px;
   }
+
+  /* === RTL SUPPORT === */
+  [dir="rtl"] { direction: rtl; text-align: right; }
+  [dir="rtl"] .navbar { flex-direction: row-reverse; }
+  [dir="rtl"] .nav-logo { flex-direction: row-reverse; }
+  [dir="rtl"] .nav-right { flex-direction: row-reverse; }
+  [dir="rtl"] .tabs-row { flex-direction: row-reverse; }
+  [dir="rtl"] .main-tabs { flex-direction: row-reverse; }
+  [dir="rtl"] .sub-tabs { flex-direction: row-reverse; }
+  [dir="rtl"] .tone-row { flex-direction: row-reverse; }
+  [dir="rtl"] .styles-grid { direction: rtl; }
+  [dir="rtl"] .form-row { flex-direction: row-reverse; }
+  [dir="rtl"] .output-top { flex-direction: row-reverse; }
+  [dir="rtl"] .output-actions { flex-direction: row-reverse; }
+  [dir="rtl"] .output-stats { flex-direction: row-reverse; }
+  [dir="rtl"] .modal-actions { flex-direction: row-reverse; }
+  [dir="rtl"] .features { direction: rtl; }
+  [dir="rtl"] .global-lang {
+    background-position: left 8px center;
+    padding-right: 10px; padding-left: 24px;
+  }
+  [dir="rtl"] .textarea-footer { flex-direction: row-reverse; }
+  [dir="rtl"] .hero { text-align: center; }
 </style>
 </head>
 <body>
@@ -631,16 +654,16 @@
   <section class="hero">
     <div class="hero-badge">
       <div class="hero-badge-dot"></div>
-      AI-Powered LinkedIn Content Suite
+      <span id="heroBadgeText">AI-Powered LinkedIn Content Suite</span>
     </div>
-    <h1>Your complete toolkit for <em>LinkedIn content</em></h1>
-    <p>Generate posts, optimize your profile, craft messages, and write replies — all with AI.</p>
+    <h1 id="heroTitleText">Your complete toolkit for <em>LinkedIn content</em></h1>
+    <p id="heroDescText">Generate posts, optimize your profile, craft messages, and write replies — all with AI.</p>
   </section>
 
   <!-- Login Prompt -->
   <div class="gen-card" id="loginPromptCard">
     <div class="login-prompt">
-      <p>Sign in with Google to start creating LinkedIn content</p>
+      <p id="loginPromptText">Sign in with Google to start creating LinkedIn content</p>
       <div id="googleBtnMain" style="display:inline-block;"></div>
     </div>
   </div>
@@ -678,37 +701,37 @@
 
         <!-- Write mode input -->
         <div id="postWriteInput">
-          <div class="field-label"><span class="field-label-icon">💡</span> Your idea or topic</div>
+          <div class="field-label" id="labelIdea"><span class="field-label-icon">💡</span> Your idea or topic</div>
           <textarea class="idea-textarea" id="ideaInput" placeholder="e.g. Why I turned down a $200K offer to stay at my startup...&#10;e.g. 5 mistakes I made as a first-time manager&#10;e.g. How AI is changing the hiring process" maxlength="500"></textarea>
           <div class="textarea-footer">
-            <span class="char-info">Be specific for better results</span>
+            <span class="char-info" id="hintIdea">Be specific for better results</span>
             <span class="char-info"><span id="charCount">0</span>/500</span>
           </div>
         </div>
 
         <!-- Rewrite mode input -->
         <div id="postRewriteInput" style="display:none;">
-          <div class="field-label"><span class="field-label-icon">🔄</span> Paste your post or draft</div>
+          <div class="field-label" id="labelRewrite"><span class="field-label-icon">🔄</span> Paste your post or draft</div>
           <textarea class="idea-textarea large" id="rewriteInput" placeholder="Paste your existing LinkedIn post or rough draft here...&#10;&#10;The AI will rewrite it with better hooks, formatting, and engagement elements while keeping your core message." maxlength="2000"></textarea>
           <div class="textarea-footer">
-            <span class="char-info">Paste your draft — AI will improve it</span>
+            <span class="char-info" id="hintRewrite">Paste your draft — AI will improve it</span>
             <span class="char-info"><span id="rewriteCharCount">0</span>/2000</span>
           </div>
         </div>
 
         <!-- Hooks mode input -->
         <div id="postHooksInput" style="display:none;">
-          <div class="field-label"><span class="field-label-icon">🎣</span> What's your post about?</div>
+          <div class="field-label" id="labelHooks"><span class="field-label-icon">🎣</span> What's your post about?</div>
           <textarea class="idea-textarea" id="hooksInput" placeholder="e.g. The biggest mistake new managers make&#10;e.g. Why remote work is here to stay&#10;e.g. Lessons from scaling a startup to $1M ARR" maxlength="300" style="height:70px;"></textarea>
           <div class="textarea-footer">
-            <span class="char-info">We'll generate 5 scroll-stopping hooks</span>
+            <span class="char-info" id="hintHooks">We'll generate 5 scroll-stopping hooks</span>
             <span class="char-info"><span id="hooksCharCount">0</span>/300</span>
           </div>
         </div>
 
         <!-- Style cards (shown in Write & Rewrite modes) -->
         <div id="postStyleSection">
-          <div class="field-label"><span class="field-label-icon">🎨</span> Writing style</div>
+          <div class="field-label" id="labelStyle"><span class="field-label-icon">🎨</span> Writing style</div>
           <div class="styles-grid">
             <div class="style-card active" data-style="storytelling" onclick="pickStyle(this)">
               <div class="style-icon">📖</div>
@@ -754,7 +777,7 @@
         </div>
 
         <!-- Tone (shown in all post modes) -->
-        <div class="field-label"><span class="field-label-icon">🎭</span> Tone</div>
+        <div class="field-label" id="labelTonePost"><span class="field-label-icon">🎭</span> Tone</div>
         <div class="tone-row">
           <div class="tone-chip active" data-tone="professional" onclick="pickTone(this)">Professional</div>
           <div class="tone-chip" data-tone="casual" onclick="pickTone(this)">Casual</div>
@@ -781,21 +804,21 @@
         <div id="profileHeadline">
           <div class="form-row">
             <div class="form-group">
-              <div class="field-label">Current role / title</div>
+              <div class="field-label" id="labelHlRole">Current role / title</div>
               <input class="form-input" id="hlRole" placeholder="e.g. Product Manager">
             </div>
             <div class="form-group">
-              <div class="field-label">Key skill or specialty</div>
+              <div class="field-label" id="labelHlSkill">Key skill or specialty</div>
               <input class="form-input" id="hlSkill" placeholder="e.g. AI/ML, Growth, Design">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <div class="field-label">What value do you provide?</div>
+              <div class="field-label" id="labelHlValue">What value do you provide?</div>
               <input class="form-input" id="hlValue" placeholder="e.g. Helping startups scale to $1M ARR">
             </div>
             <div class="form-group">
-              <div class="field-label">Target audience</div>
+              <div class="field-label" id="labelHlAudience">Target audience</div>
               <input class="form-input" id="hlAudience" placeholder="e.g. Recruiters, Clients, Founders">
             </div>
           </div>
@@ -804,20 +827,20 @@
         <!-- About -->
         <div id="profileAbout" style="display:none;">
           <div class="form-group">
-            <div class="field-label">Career background (1-2 sentences)</div>
+            <div class="field-label" id="labelAboutBg">Career background (1-2 sentences)</div>
             <textarea class="idea-textarea" id="aboutBg" placeholder="e.g. 6 years in B2B SaaS marketing, led content strategy at 3 startups from seed to Series B" style="height:60px;"></textarea>
           </div>
           <div class="form-group">
-            <div class="field-label">Top achievements (2-3)</div>
+            <div class="field-label" id="labelAboutAch">Top achievements (2-3)</div>
             <textarea class="idea-textarea" id="aboutAchievements" placeholder="e.g. Generated $12M in pipeline&#10;Grew subscriber base from 0 to 100K&#10;Built a team of 15 marketers" style="height:70px;"></textarea>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <div class="field-label">Areas of expertise</div>
+              <div class="field-label" id="labelAboutExp">Areas of expertise</div>
               <input class="form-input" id="aboutExpertise" placeholder="e.g. SEO, Content Strategy, AI">
             </div>
             <div class="form-group">
-              <div class="field-label">What are you looking for?</div>
+              <div class="field-label" id="labelAboutGoal">What are you looking for?</div>
               <input class="form-input" id="aboutGoal" placeholder="e.g. New clients, Hiring, Collaboration">
             </div>
           </div>
@@ -827,22 +850,22 @@
         <div id="profileExperience" style="display:none;">
           <div class="form-row">
             <div class="form-group">
-              <div class="field-label">Job title</div>
+              <div class="field-label" id="labelExpTitle">Job title</div>
               <input class="form-input" id="expTitle" placeholder="e.g. Senior Product Manager">
             </div>
             <div class="form-group">
-              <div class="field-label">Company</div>
+              <div class="field-label" id="labelExpCompany">Company</div>
               <input class="form-input" id="expCompany" placeholder="e.g. Acme AI (Series B Startup)">
             </div>
           </div>
           <div class="form-group">
-            <div class="field-label">Key responsibilities & achievements</div>
+            <div class="field-label" id="labelExpDetails">Key responsibilities & achievements</div>
             <textarea class="idea-textarea" id="expDetails" placeholder="e.g. Led product strategy for core AI platform&#10;Grew users from 5K to 150K&#10;Shipped 12 features, increasing retention by 34%&#10;Built team from 2 to 8 people" style="height:100px;"></textarea>
           </div>
         </div>
 
         <!-- Tone for Profile -->
-        <div class="field-label" style="margin-top:8px;"><span class="field-label-icon">🎭</span> Tone</div>
+        <div class="field-label" id="labelToneProfile" style="margin-top:8px;"><span class="field-label-icon">🎭</span> Tone</div>
         <div class="tone-row">
           <div class="tone-chip active" data-tone="professional" onclick="pickTone(this)">Professional</div>
           <div class="tone-chip" data-tone="casual" onclick="pickTone(this)">Conversational</div>
@@ -851,7 +874,7 @@
 
         <button class="gen-btn" onclick="handleGenerate()">
           <span class="shimmer"></span>
-          <span>⚡ Generate</span>
+          <span id="genBtnProfile">⚡ Generate</span>
         </button>
         <div class="kb-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> to generate</div>
       </div>
@@ -868,16 +891,16 @@
         <div id="msgConnection">
           <div class="form-row">
             <div class="form-group">
-              <div class="field-label">Their name & role</div>
+              <div class="field-label" id="labelConnName">Their name & role</div>
               <input class="form-input" id="connName" placeholder="e.g. Sarah, VP of Marketing at Acme">
             </div>
             <div class="form-group">
-              <div class="field-label">What you have in common</div>
+              <div class="field-label" id="labelConnCommon">What you have in common</div>
               <input class="form-input" id="connCommon" placeholder="e.g. Saw their post about AI, mutual connection">
             </div>
           </div>
           <div class="form-group">
-            <div class="field-label">Your goal</div>
+            <div class="field-label" id="labelConnGoal">Your goal</div>
             <div class="tone-row">
               <div class="tone-chip active" data-goal="networking" onclick="pickGoal(this)">Networking</div>
               <div class="tone-chip" data-goal="collaboration" onclick="pickGoal(this)">Collaboration</div>
@@ -891,16 +914,16 @@
         <div id="msgFollowup" style="display:none;">
           <div class="form-row">
             <div class="form-group">
-              <div class="field-label">Their name</div>
+              <div class="field-label" id="labelFuName">Their name</div>
               <input class="form-input" id="fuName" placeholder="e.g. Mark">
             </div>
             <div class="form-group">
-              <div class="field-label">How you connected</div>
+              <div class="field-label" id="labelFuContext">How you connected</div>
               <input class="form-input" id="fuContext" placeholder="e.g. Met at conference, connected last week">
             </div>
           </div>
           <div class="form-group">
-            <div class="field-label">What do you want?</div>
+            <div class="field-label" id="labelFuAsk">What do you want?</div>
             <input class="form-input" id="fuAsk" placeholder="e.g. 15-min call, advice on career move, job opportunity">
           </div>
         </div>
@@ -909,23 +932,23 @@
         <div id="msgThankyou" style="display:none;">
           <div class="form-row">
             <div class="form-group">
-              <div class="field-label">Their name</div>
+              <div class="field-label" id="labelTyName">Their name</div>
               <input class="form-input" id="tyName" placeholder="e.g. Jennifer">
             </div>
             <div class="form-group">
-              <div class="field-label">Context</div>
+              <div class="field-label" id="labelTyContext">Context</div>
               <input class="form-input" id="tyContext" placeholder="e.g. Interview, coffee chat, advice call">
             </div>
           </div>
           <div class="form-group">
-            <div class="field-label">Key takeaway from the conversation</div>
+            <div class="field-label" id="labelTyTakeaway">Key takeaway from the conversation</div>
             <input class="form-input" id="tyTakeaway" placeholder="e.g. Loved learning about their approach to scaling teams">
           </div>
         </div>
 
         <button class="gen-btn" onclick="handleGenerate()">
           <span class="shimmer"></span>
-          <span>⚡ Generate Message</span>
+          <span id="genBtnMessage">⚡ Generate Message</span>
         </button>
         <div class="kb-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> to generate</div>
       </div>
@@ -933,11 +956,11 @@
       <!-- ==================== TAB: REPLY ==================== -->
       <div class="tab-content" id="tabReply">
         <div class="form-group">
-          <div class="field-label"><span class="field-label-icon">💬</span> Paste the comment you want to reply to</div>
+          <div class="field-label" id="labelReplyComment"><span class="field-label-icon">💬</span> Paste the comment you want to reply to</div>
           <textarea class="idea-textarea large" id="replyComment" placeholder="Paste the LinkedIn comment here..." maxlength="1000"></textarea>
         </div>
 
-        <div class="field-label"><span class="field-label-icon">🎯</span> Reply style</div>
+        <div class="field-label" id="labelReplyStyle"><span class="field-label-icon">🎯</span> Reply style</div>
         <div class="tone-row">
           <div class="tone-chip active" data-replystyle="supportive" onclick="pickReplyStyle(this)">Supportive</div>
           <div class="tone-chip" data-replystyle="insightful" onclick="pickReplyStyle(this)">Add value</div>
@@ -947,7 +970,7 @@
 
         <button class="gen-btn" onclick="handleGenerate()">
           <span class="shimmer"></span>
-          <span>⚡ Generate Replies</span>
+          <span id="genBtnReply">⚡ Generate Replies</span>
         </button>
         <div class="kb-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> to generate</div>
       </div>
@@ -961,14 +984,14 @@
           <span id="outputTitle">Your LinkedIn Post</span>
         </div>
         <div class="output-actions">
-          <button class="act-btn" id="copyBtn" onclick="copyResult()">📋 Copy</button>
-          <button class="act-btn" onclick="handleGenerate()">🔄 Regenerate</button>
+          <button class="act-btn" id="copyBtn" onclick="copyResult()"><span id="copyBtnText">📋 Copy</span></button>
+          <button class="act-btn" onclick="handleGenerate()"><span id="regenBtnText">🔄 Regenerate</span></button>
         </div>
       </div>
       <div class="output-text" id="outputText"></div>
       <div class="output-stats" id="outputStats">
-        <div class="stat-item">Words: <b id="statWords">0</b></div>
-        <div class="stat-item">Characters: <b id="statChars">0</b></div>
+        <div class="stat-item"><span id="statWordsLabel">Words</span>: <b id="statWords">0</b></div>
+        <div class="stat-item"><span id="statCharsLabel">Characters</span>: <b id="statChars">0</b></div>
       </div>
     </div>
 
@@ -986,13 +1009,13 @@
     <!-- Paywall -->
     <div class="paywall-card" id="paywallCard">
       <div class="paywall-icon">✨</div>
-      <div class="paywall-title">You've used all free credits today</div>
-      <div class="paywall-desc">
+      <div class="paywall-title" id="paywallTitleText">You've used all free credits today</div>
+      <div class="paywall-desc" id="paywallDescText">
         Upgrade to <b>LinkedGenie Pro</b> for unlimited access to all tools,
         exclusive templates, and priority generation.
       </div>
-      <button class="upgrade-btn" onclick="openUpgrade()">🚀 Upgrade to Pro — $7/month</button>
-      <div class="paywall-price">Cancel anytime</div>
+      <button class="upgrade-btn" onclick="openUpgrade()" id="paywallBtnText">🚀 Upgrade to Pro — $7/month</button>
+      <div class="paywall-price" id="paywallCancelText">Cancel anytime</div>
     </div>
   </div>
 
@@ -1000,22 +1023,22 @@
   <div class="features">
     <div class="feature-card">
       <div class="feature-icon">✍️</div>
-      <div class="feature-title">Smart Posts</div>
-      <div class="feature-desc">8 templates including Career Update & Job Posting</div>
+      <div class="feature-title" id="featPostsTitle">Smart Posts</div>
+      <div class="feature-desc" id="featPostsDesc">8 templates including Career Update & Job Posting</div>
     </div>
     <div class="feature-card">
       <div class="feature-icon">👤</div>
-      <div class="feature-title">Profile Optimizer</div>
-      <div class="feature-desc">Headline, About section & Experience descriptions</div>
+      <div class="feature-title" id="featProfileTitle">Profile Optimizer</div>
+      <div class="feature-desc" id="featProfileDesc">Headline, About section & Experience descriptions</div>
     </div>
     <div class="feature-card">
       <div class="feature-icon">📩</div>
-      <div class="feature-title">Messages & Replies</div>
-      <div class="feature-desc">Connection requests, follow-ups & comment replies</div>
+      <div class="feature-title" id="featMessagesTitle">Messages & Replies</div>
+      <div class="feature-desc" id="featMessagesDesc">Connection requests, follow-ups & comment replies</div>
     </div>
   </div>
 
-  <footer class="footer">
+  <footer class="footer" id="footerText">
     LinkedGenie © 2025 · Built with ❤️ and AI
   </footer>
 </div>
@@ -1023,8 +1046,8 @@
 <!-- Info Modal -->
 <div class="modal-overlay" id="settingsModal">
   <div class="modal">
-    <div class="modal-title">ℹ️ About LinkedGenie</div>
-    <div class="modal-desc">
+    <div class="modal-title" id="modalTitleText">ℹ️ About LinkedGenie</div>
+    <div class="modal-desc" id="modalDescText">
       LinkedGenie is your complete AI toolkit for LinkedIn content creation.
       <br><br>
       <b>Free plan:</b> Sign in with Google — 3 generations per day.<br>
@@ -1039,8 +1062,8 @@
       <span style="color:var(--text-muted);font-size:11px;">Built by <a href="https://github.com/sctadnan" style="color:var(--accent2);">sctadnan</a></span>
     </div>
     <div class="modal-actions">
-      <button class="modal-btn modal-btn-secondary" onclick="openUpgrade()" style="flex:1">Upgrade to Pro</button>
-      <button class="modal-btn modal-btn-primary" onclick="toggleSettings()" style="flex:1">Got it!</button>
+      <button class="modal-btn modal-btn-secondary" onclick="openUpgrade()" style="flex:1" id="modalUpgradeBtn">Upgrade to Pro</button>
+      <button class="modal-btn modal-btn-primary" onclick="toggleSettings()" style="flex:1" id="modalGotItBtn">Got it!</button>
     </div>
   </div>
 </div>
@@ -1061,6 +1084,572 @@ let idToken = null;
 let currentUser = null;
 const FREE_LIMIT = 50;
 const GOOGLE_CLIENT_ID = '518315582553-qg3onsjs8r7d6u5kue1fugppan66a2k9.apps.googleusercontent.com';
+
+// ============ TRANSLATIONS ============
+const T = {
+  english: {
+    heroBadge: "AI-Powered LinkedIn Content Suite",
+    heroTitle: 'Your complete toolkit for <em>LinkedIn content</em>',
+    heroDesc: "Generate posts, optimize your profile, craft messages, and write replies — all with AI.",
+    loginPrompt: "Sign in with Google to start creating LinkedIn content",
+    tabPost: "✍️ Post", tabProfile: "👤 Profile", tabMessage: "📩 Message", tabReply: "💬 Reply",
+    subWrite: "✍️ Write", subRewrite: "🔄 Rewrite", subHooks: "🎣 Hooks",
+    subHeadline: "💫 Headline", subAbout: "📝 About", subExperience: "💼 Experience",
+    subConnection: "🤝 Connection", subFollowup: "📨 Follow-up", subThankyou: "🙏 Thank You",
+    ideaLabel: "💡 Your idea or topic",
+    ideaPh: "e.g. Why I turned down a $200K offer to stay at my startup...\ne.g. 5 mistakes I made as a first-time manager\ne.g. How AI is changing the hiring process",
+    ideaHint: "Be specific for better results",
+    rewriteLabel: "🔄 Paste your post or draft",
+    rewritePh: "Paste your existing LinkedIn post or rough draft here...\n\nThe AI will rewrite it with better hooks, formatting, and engagement elements while keeping your core message.",
+    rewriteHint: "Paste your draft — AI will improve it",
+    hooksLabel: "🎣 What's your post about?",
+    hooksPh: "e.g. The biggest mistake new managers make\ne.g. Why remote work is here to stay\ne.g. Lessons from scaling a startup to $1M ARR",
+    hooksHint: "We'll generate 5 scroll-stopping hooks",
+    styleLabel: "🎨 Writing style",
+    sStory: "Story", sStorySub: "Personal narrative",
+    sTips: "Tips", sTipsSub: "Frameworks & lists",
+    sMotivational: "Motivational", sMotivationalSub: "Inspire action",
+    sHotTake: "Hot Take", sHotTakeSub: "Bold opinion",
+    sCareer: "Career Update", sCareerSub: "New role / promo",
+    sAchievement: "Achievement", sAchievementSub: "Milestone win",
+    sJobPost: "Job Post", sJobPostSub: "Hiring ad",
+    sOpenToWork: "Open to Work", sOpenToWorkSub: "Job search",
+    toneLabel: "🎭 Tone",
+    tProfessional: "Professional", tCasual: "Casual", tBold: "Bold", tHumorous: "Humorous", tConversational: "Conversational",
+    generate: "⚡ Generate", generating: "Generating...",
+    genMessage: "⚡ Generate Message", genReplies: "⚡ Generate Replies",
+    kbHint: "to generate",
+    hlRole: "Current role / title", hlRolePh: "e.g. Product Manager",
+    hlSkill: "Key skill or specialty", hlSkillPh: "e.g. AI/ML, Growth, Design",
+    hlValue: "What value do you provide?", hlValuePh: "e.g. Helping startups scale to $1M ARR",
+    hlAudience: "Target audience", hlAudiencePh: "e.g. Recruiters, Clients, Founders",
+    aboutBg: "Career background (1-2 sentences)", aboutBgPh: "e.g. 6 years in B2B SaaS marketing, led content strategy at 3 startups from seed to Series B",
+    aboutAch: "Top achievements (2-3)", aboutAchPh: "e.g. Generated $12M in pipeline\nGrew subscriber base from 0 to 100K\nBuilt a team of 15 marketers",
+    aboutExp: "Areas of expertise", aboutExpPh: "e.g. SEO, Content Strategy, AI",
+    aboutGoal: "What are you looking for?", aboutGoalPh: "e.g. New clients, Hiring, Collaboration",
+    expTitle: "Job title", expTitlePh: "e.g. Senior Product Manager",
+    expCompany: "Company", expCompanyPh: "e.g. Acme AI (Series B Startup)",
+    expDetails: "Key responsibilities & achievements", expDetailsPh: "e.g. Led product strategy for core AI platform\nGrew users from 5K to 150K\nShipped 12 features, increasing retention by 34%\nBuilt team from 2 to 8 people",
+    connName: "Their name & role", connNamePh: "e.g. Sarah, VP of Marketing at Acme",
+    connCommon: "What you have in common", connCommonPh: "e.g. Saw their post about AI, mutual connection",
+    connGoal: "Your goal",
+    gNetworking: "Networking", gCollaboration: "Collaboration", gLearn: "Learn from them", gHiring: "Hiring",
+    fuName: "Their name", fuNamePh: "e.g. Mark",
+    fuContext: "How you connected", fuContextPh: "e.g. Met at conference, connected last week",
+    fuAsk: "What do you want?", fuAskPh: "e.g. 15-min call, advice on career move, job opportunity",
+    tyName: "Their name", tyNamePh: "e.g. Jennifer",
+    tyContext: "Context", tyContextPh: "e.g. Interview, coffee chat, advice call",
+    tyTakeaway: "Key takeaway from the conversation", tyTakeawayPh: "e.g. Loved learning about their approach to scaling teams",
+    replyLabel: "💬 Paste the comment you want to reply to",
+    replyPh: "Paste the LinkedIn comment here...",
+    replyStyleLabel: "🎯 Reply style",
+    rSupportive: "Supportive", rValue: "Add value", rQuestion: "Ask question", rDisagree: "Respectful disagree",
+    copy: "📋 Copy", copied: "✅ Copied!", regenerate: "🔄 Regenerate",
+    words: "Words", characters: "Characters",
+    paywallTitle: "You've used all free credits today",
+    paywallDesc: 'Upgrade to <b>LinkedGenie Pro</b> for unlimited access to all tools, exclusive templates, and priority generation.',
+    paywallBtn: "🚀 Upgrade to Pro — $7/month", paywallCancel: "Cancel anytime",
+    featPosts: "Smart Posts", featPostsDesc: "8 templates including Career Update & Job Posting",
+    featProfile: "Profile Optimizer", featProfileDesc: "Headline, About section & Experience descriptions",
+    featMessages: "Messages & Replies", featMessagesDesc: "Connection requests, follow-ups & comment replies",
+    footer: "LinkedGenie © 2025 · Built with ❤️ and AI",
+    modalTitle: "ℹ️ About LinkedGenie",
+    modalDesc: 'LinkedGenie is your complete AI toolkit for LinkedIn content creation.<br><br><b>Free plan:</b> Sign in with Google — 3 generations per day.<br><b>Pro plan:</b> $7/month — unlimited access to all tools and templates.<br><br><b>Tools included:</b><br>✍️ Post generator (8 styles + rewrite + hooks)<br>👤 Profile optimizer (headline, about, experience)<br>📩 Message crafter (connection, follow-up, thank you)<br>💬 Comment reply generator',
+    modalUpgrade: "Upgrade to Pro", modalGotIt: "Got it!"
+  },
+  spanish: {
+    heroBadge: "Suite de Contenido LinkedIn con IA",
+    heroTitle: 'Tu kit completo para <em>contenido en LinkedIn</em>',
+    heroDesc: "Genera publicaciones, optimiza tu perfil, redacta mensajes y escribe respuestas — todo con IA.",
+    loginPrompt: "Inicia sesión con Google para crear contenido en LinkedIn",
+    tabPost: "✍️ Post", tabProfile: "👤 Perfil", tabMessage: "📩 Mensaje", tabReply: "💬 Respuesta",
+    subWrite: "✍️ Escribir", subRewrite: "🔄 Reescribir", subHooks: "🎣 Ganchos",
+    subHeadline: "💫 Titular", subAbout: "📝 Acerca de", subExperience: "💼 Experiencia",
+    subConnection: "🤝 Conexión", subFollowup: "📨 Seguimiento", subThankyou: "🙏 Agradecimiento",
+    ideaLabel: "💡 Tu idea o tema",
+    ideaPh: "ej. Por qué rechacé una oferta de $200K para quedarme en mi startup...\nej. 5 errores que cometí como gerente primerizo\nej. Cómo la IA está cambiando el proceso de contratación",
+    ideaHint: "Sé específico para mejores resultados",
+    rewriteLabel: "🔄 Pega tu publicación o borrador",
+    rewritePh: "Pega tu publicación de LinkedIn o borrador aquí...\n\nLa IA lo reescribirá con mejores ganchos, formato y elementos de interacción manteniendo tu mensaje principal.",
+    rewriteHint: "Pega tu borrador — la IA lo mejorará",
+    hooksLabel: "🎣 ¿De qué trata tu publicación?",
+    hooksPh: "ej. El mayor error de los nuevos gerentes\nej. Por qué el trabajo remoto llegó para quedarse\nej. Lecciones de escalar una startup a $1M ARR",
+    hooksHint: "Generaremos 5 ganchos irresistibles",
+    styleLabel: "🎨 Estilo de escritura",
+    sStory: "Historia", sStorySub: "Narrativa personal",
+    sTips: "Consejos", sTipsSub: "Marcos y listas",
+    sMotivational: "Motivacional", sMotivationalSub: "Inspirar acción",
+    sHotTake: "Opinión Fuerte", sHotTakeSub: "Opinión audaz",
+    sCareer: "Actualización", sCareerSub: "Nuevo rol / ascenso",
+    sAchievement: "Logro", sAchievementSub: "Hito alcanzado",
+    sJobPost: "Empleo", sJobPostSub: "Anuncio de trabajo",
+    sOpenToWork: "Buscando Empleo", sOpenToWorkSub: "Búsqueda laboral",
+    toneLabel: "🎭 Tono",
+    tProfessional: "Profesional", tCasual: "Casual", tBold: "Audaz", tHumorous: "Humorístico", tConversational: "Conversacional",
+    generate: "⚡ Generar", generating: "Generando...",
+    genMessage: "⚡ Generar Mensaje", genReplies: "⚡ Generar Respuestas",
+    kbHint: "para generar",
+    hlRole: "Cargo actual", hlRolePh: "ej. Product Manager",
+    hlSkill: "Habilidad clave", hlSkillPh: "ej. IA/ML, Growth, Diseño",
+    hlValue: "¿Qué valor ofreces?", hlValuePh: "ej. Ayudo a startups a escalar a $1M ARR",
+    hlAudience: "Audiencia objetivo", hlAudiencePh: "ej. Reclutadores, Clientes, Fundadores",
+    aboutBg: "Experiencia profesional (1-2 frases)", aboutBgPh: "ej. 6 años en marketing SaaS B2B, lideré estrategia de contenido en 3 startups",
+    aboutAch: "Logros principales (2-3)", aboutAchPh: "ej. Generé $12M en pipeline\nCrecí base de suscriptores de 0 a 100K\nConstruí equipo de 15 marketers",
+    aboutExp: "Áreas de experiencia", aboutExpPh: "ej. SEO, Estrategia de Contenido, IA",
+    aboutGoal: "¿Qué buscas?", aboutGoalPh: "ej. Nuevos clientes, Contratación, Colaboración",
+    expTitle: "Cargo", expTitlePh: "ej. Senior Product Manager",
+    expCompany: "Empresa", expCompanyPh: "ej. Acme AI (Startup Serie B)",
+    expDetails: "Responsabilidades y logros clave", expDetailsPh: "ej. Lideré estrategia de producto para plataforma de IA\nCrecí usuarios de 5K a 150K\nLancé 12 funciones, aumentando retención un 34%",
+    connName: "Nombre y cargo", connNamePh: "ej. Sara, VP de Marketing en Acme",
+    connCommon: "Qué tienen en común", connCommonPh: "ej. Vi su publicación sobre IA, contacto mutuo",
+    connGoal: "Tu objetivo",
+    gNetworking: "Networking", gCollaboration: "Colaboración", gLearn: "Aprender", gHiring: "Contratación",
+    fuName: "Su nombre", fuNamePh: "ej. Marco",
+    fuContext: "Cómo se conectaron", fuContextPh: "ej. Nos conocimos en conferencia, conectamos la semana pasada",
+    fuAsk: "¿Qué deseas?", fuAskPh: "ej. Llamada de 15 min, consejo sobre cambio de carrera",
+    tyName: "Su nombre", tyNamePh: "ej. Jennifer",
+    tyContext: "Contexto", tyContextPh: "ej. Entrevista, café, llamada de consejo",
+    tyTakeaway: "Lo más valioso de la conversación", tyTakeawayPh: "ej. Me encantó aprender sobre su enfoque para escalar equipos",
+    replyLabel: "💬 Pega el comentario al que quieres responder",
+    replyPh: "Pega el comentario de LinkedIn aquí...",
+    replyStyleLabel: "🎯 Estilo de respuesta",
+    rSupportive: "Apoyo", rValue: "Aportar valor", rQuestion: "Hacer pregunta", rDisagree: "Desacuerdo respetuoso",
+    copy: "📋 Copiar", copied: "✅ ¡Copiado!", regenerate: "🔄 Regenerar",
+    words: "Palabras", characters: "Caracteres",
+    paywallTitle: "Has usado todos los créditos gratuitos hoy",
+    paywallDesc: 'Actualiza a <b>LinkedGenie Pro</b> para acceso ilimitado a todas las herramientas, plantillas exclusivas y generación prioritaria.',
+    paywallBtn: "🚀 Actualizar a Pro — $7/mes", paywallCancel: "Cancela cuando quieras",
+    featPosts: "Posts Inteligentes", featPostsDesc: "8 plantillas incluyendo Actualización de Carrera y Empleo",
+    featProfile: "Optimizador de Perfil", featProfileDesc: "Titular, sección Acerca de y descripciones de Experiencia",
+    featMessages: "Mensajes y Respuestas", featMessagesDesc: "Solicitudes de conexión, seguimientos y respuestas a comentarios",
+    footer: "LinkedGenie © 2025 · Hecho con ❤️ e IA",
+    modalTitle: "ℹ️ Acerca de LinkedGenie",
+    modalDesc: 'LinkedGenie es tu kit completo de IA para crear contenido en LinkedIn.<br><br><b>Plan Gratis:</b> Inicia sesión con Google — 3 generaciones por día.<br><b>Plan Pro:</b> $7/mes — acceso ilimitado a todas las herramientas.<br><br><b>Herramientas:</b><br>✍️ Generador de posts (8 estilos + reescritura + ganchos)<br>👤 Optimizador de perfil (titular, acerca de, experiencia)<br>📩 Redactor de mensajes (conexión, seguimiento, agradecimiento)<br>💬 Generador de respuestas a comentarios',
+    modalUpgrade: "Actualizar a Pro", modalGotIt: "¡Entendido!"
+  },
+  portuguese: {
+    heroBadge: "Suite de Conteúdo LinkedIn com IA",
+    heroTitle: 'Seu kit completo para <em>conteúdo no LinkedIn</em>',
+    heroDesc: "Gere posts, otimize seu perfil, crie mensagens e escreva respostas — tudo com IA.",
+    loginPrompt: "Faça login com Google para criar conteúdo no LinkedIn",
+    tabPost: "✍️ Post", tabProfile: "👤 Perfil", tabMessage: "📩 Mensagem", tabReply: "💬 Resposta",
+    subWrite: "✍️ Escrever", subRewrite: "🔄 Reescrever", subHooks: "🎣 Ganchos",
+    subHeadline: "💫 Título", subAbout: "📝 Sobre", subExperience: "💼 Experiência",
+    subConnection: "🤝 Conexão", subFollowup: "📨 Follow-up", subThankyou: "🙏 Agradecimento",
+    ideaLabel: "💡 Sua ideia ou tema",
+    ideaPh: "ex. Por que recusei uma oferta de $200K para ficar na minha startup...\nex. 5 erros que cometi como gerente iniciante\nex. Como a IA está mudando o processo de contratação",
+    ideaHint: "Seja específico para melhores resultados",
+    rewriteLabel: "🔄 Cole seu post ou rascunho",
+    rewritePh: "Cole seu post do LinkedIn ou rascunho aqui...\n\nA IA vai reescrever com melhores ganchos, formatação e elementos de engajamento mantendo sua mensagem principal.",
+    rewriteHint: "Cole seu rascunho — a IA vai melhorar",
+    hooksLabel: "🎣 Sobre o que é seu post?",
+    hooksPh: "ex. O maior erro de novos gerentes\nex. Por que o trabalho remoto veio para ficar\nex. Lições de escalar uma startup para $1M ARR",
+    hooksHint: "Vamos gerar 5 ganchos irresistíveis",
+    styleLabel: "🎨 Estilo de escrita",
+    sStory: "História", sStorySub: "Narrativa pessoal",
+    sTips: "Dicas", sTipsSub: "Frameworks e listas",
+    sMotivational: "Motivacional", sMotivationalSub: "Inspirar ação",
+    sHotTake: "Opinião Forte", sHotTakeSub: "Opinião ousada",
+    sCareer: "Atualização", sCareerSub: "Novo cargo / promoção",
+    sAchievement: "Conquista", sAchievementSub: "Marco alcançado",
+    sJobPost: "Vaga", sJobPostSub: "Anúncio de emprego",
+    sOpenToWork: "Buscando Emprego", sOpenToWorkSub: "Busca de trabalho",
+    toneLabel: "🎭 Tom",
+    tProfessional: "Profissional", tCasual: "Casual", tBold: "Ousado", tHumorous: "Humorístico", tConversational: "Conversacional",
+    generate: "⚡ Gerar", generating: "Gerando...",
+    genMessage: "⚡ Gerar Mensagem", genReplies: "⚡ Gerar Respostas",
+    kbHint: "para gerar",
+    hlRole: "Cargo atual", hlRolePh: "ex. Product Manager",
+    hlSkill: "Habilidade principal", hlSkillPh: "ex. IA/ML, Growth, Design",
+    hlValue: "Que valor você oferece?", hlValuePh: "ex. Ajudo startups a escalar para $1M ARR",
+    hlAudience: "Público-alvo", hlAudiencePh: "ex. Recrutadores, Clientes, Fundadores",
+    aboutBg: "Experiência profissional (1-2 frases)", aboutBgPh: "ex. 6 anos em marketing SaaS B2B, liderei estratégia de conteúdo em 3 startups",
+    aboutAch: "Principais conquistas (2-3)", aboutAchPh: "ex. Gerei $12M em pipeline\nCresci base de assinantes de 0 a 100K\nConstruí equipe de 15 marketers",
+    aboutExp: "Áreas de expertise", aboutExpPh: "ex. SEO, Estratégia de Conteúdo, IA",
+    aboutGoal: "O que você busca?", aboutGoalPh: "ex. Novos clientes, Contratação, Colaboração",
+    expTitle: "Cargo", expTitlePh: "ex. Senior Product Manager",
+    expCompany: "Empresa", expCompanyPh: "ex. Acme AI (Startup Série B)",
+    expDetails: "Responsabilidades e conquistas", expDetailsPh: "ex. Liderei estratégia de produto para plataforma de IA\nCresci usuários de 5K a 150K\nLancei 12 funcionalidades, aumentando retenção em 34%",
+    connName: "Nome e cargo", connNamePh: "ex. Sara, VP de Marketing na Acme",
+    connCommon: "O que têm em comum", connCommonPh: "ex. Vi o post sobre IA, contato mútuo",
+    connGoal: "Seu objetivo",
+    gNetworking: "Networking", gCollaboration: "Colaboração", gLearn: "Aprender", gHiring: "Contratação",
+    fuName: "Nome", fuNamePh: "ex. Marco",
+    fuContext: "Como se conectaram", fuContextPh: "ex. Nos conhecemos em conferência, conectamos semana passada",
+    fuAsk: "O que deseja?", fuAskPh: "ex. Ligação de 15 min, conselho sobre mudança de carreira",
+    tyName: "Nome", tyNamePh: "ex. Jennifer",
+    tyContext: "Contexto", tyContextPh: "ex. Entrevista, café, ligação de conselho",
+    tyTakeaway: "Principal aprendizado da conversa", tyTakeawayPh: "ex. Adorei aprender sobre a abordagem deles para escalar equipes",
+    replyLabel: "💬 Cole o comentário que quer responder",
+    replyPh: "Cole o comentário do LinkedIn aqui...",
+    replyStyleLabel: "🎯 Estilo de resposta",
+    rSupportive: "Apoio", rValue: "Agregar valor", rQuestion: "Fazer pergunta", rDisagree: "Discordar com respeito",
+    copy: "📋 Copiar", copied: "✅ Copiado!", regenerate: "🔄 Regenerar",
+    words: "Palavras", characters: "Caracteres",
+    paywallTitle: "Você usou todos os créditos gratuitos hoje",
+    paywallDesc: 'Atualize para <b>LinkedGenie Pro</b> para acesso ilimitado a todas as ferramentas, templates exclusivos e geração prioritária.',
+    paywallBtn: "🚀 Atualizar para Pro — $7/mês", paywallCancel: "Cancele quando quiser",
+    featPosts: "Posts Inteligentes", featPostsDesc: "8 templates incluindo Atualização de Carreira e Vaga",
+    featProfile: "Otimizador de Perfil", featProfileDesc: "Título, seção Sobre e descrições de Experiência",
+    featMessages: "Mensagens e Respostas", featMessagesDesc: "Pedidos de conexão, follow-ups e respostas a comentários",
+    footer: "LinkedGenie © 2025 · Feito com ❤️ e IA",
+    modalTitle: "ℹ️ Sobre o LinkedGenie",
+    modalDesc: 'LinkedGenie é seu kit completo de IA para criar conteúdo no LinkedIn.<br><br><b>Plano Grátis:</b> Login com Google — 3 gerações por dia.<br><b>Plano Pro:</b> $7/mês — acesso ilimitado a todas as ferramentas.<br><br><b>Ferramentas:</b><br>✍️ Gerador de posts (8 estilos + reescrita + ganchos)<br>👤 Otimizador de perfil (título, sobre, experiência)<br>📩 Criador de mensagens (conexão, follow-up, agradecimento)<br>💬 Gerador de respostas a comentários',
+    modalUpgrade: "Atualizar para Pro", modalGotIt: "Entendi!"
+  },
+  french: {
+    heroBadge: "Suite de Contenu LinkedIn propulsée par l'IA",
+    heroTitle: 'Votre boîte à outils complète pour le <em>contenu LinkedIn</em>',
+    heroDesc: "Générez des publications, optimisez votre profil, rédigez des messages et écrivez des réponses — le tout avec l'IA.",
+    loginPrompt: "Connectez-vous avec Google pour créer du contenu LinkedIn",
+    tabPost: "✍️ Post", tabProfile: "👤 Profil", tabMessage: "📩 Message", tabReply: "💬 Réponse",
+    subWrite: "✍️ Écrire", subRewrite: "🔄 Réécrire", subHooks: "🎣 Accroches",
+    subHeadline: "💫 Titre", subAbout: "📝 À propos", subExperience: "💼 Expérience",
+    subConnection: "🤝 Connexion", subFollowup: "📨 Suivi", subThankyou: "🙏 Remerciement",
+    ideaLabel: "💡 Votre idée ou sujet",
+    ideaPh: "ex. Pourquoi j'ai refusé une offre à 200K$ pour rester dans ma startup...\nex. 5 erreurs que j'ai faites en tant que nouveau manager\nex. Comment l'IA change le recrutement",
+    ideaHint: "Soyez précis pour de meilleurs résultats",
+    rewriteLabel: "🔄 Collez votre publication ou brouillon",
+    rewritePh: "Collez votre publication LinkedIn ou brouillon ici...\n\nL'IA la réécrira avec de meilleures accroches, mise en forme et éléments d'engagement.",
+    rewriteHint: "Collez votre brouillon — l'IA l'améliorera",
+    hooksLabel: "🎣 De quoi parle votre publication ?",
+    hooksPh: "ex. La plus grande erreur des nouveaux managers\nex. Pourquoi le télétravail est là pour rester\nex. Leçons de la croissance d'une startup à 1M$ ARR",
+    hooksHint: "Nous générerons 5 accroches irrésistibles",
+    styleLabel: "🎨 Style d'écriture",
+    sStory: "Histoire", sStorySub: "Récit personnel",
+    sTips: "Conseils", sTipsSub: "Cadres et listes",
+    sMotivational: "Motivant", sMotivationalSub: "Inspirer l'action",
+    sHotTake: "Prise de Position", sHotTakeSub: "Opinion audacieuse",
+    sCareer: "Évolution Pro", sCareerSub: "Nouveau poste / promo",
+    sAchievement: "Accomplissement", sAchievementSub: "Jalon atteint",
+    sJobPost: "Offre d'Emploi", sJobPostSub: "Annonce de recrutement",
+    sOpenToWork: "En Recherche", sOpenToWorkSub: "Recherche d'emploi",
+    toneLabel: "🎭 Ton",
+    tProfessional: "Professionnel", tCasual: "Décontracté", tBold: "Audacieux", tHumorous: "Humoristique", tConversational: "Conversationnel",
+    generate: "⚡ Générer", generating: "Génération...",
+    genMessage: "⚡ Générer Message", genReplies: "⚡ Générer Réponses",
+    kbHint: "pour générer",
+    hlRole: "Poste actuel", hlRolePh: "ex. Product Manager",
+    hlSkill: "Compétence clé", hlSkillPh: "ex. IA/ML, Growth, Design",
+    hlValue: "Quelle valeur apportez-vous ?", hlValuePh: "ex. J'aide les startups à atteindre 1M$ ARR",
+    hlAudience: "Public cible", hlAudiencePh: "ex. Recruteurs, Clients, Fondateurs",
+    aboutBg: "Parcours professionnel (1-2 phrases)", aboutBgPh: "ex. 6 ans en marketing SaaS B2B, dirigé la stratégie de contenu dans 3 startups",
+    aboutAch: "Réalisations principales (2-3)", aboutAchPh: "ex. Généré 12M$ en pipeline\nDéveloppé la base d'abonnés de 0 à 100K\nConstruit une équipe de 15 marketeurs",
+    aboutExp: "Domaines d'expertise", aboutExpPh: "ex. SEO, Stratégie de Contenu, IA",
+    aboutGoal: "Que recherchez-vous ?", aboutGoalPh: "ex. Nouveaux clients, Recrutement, Collaboration",
+    expTitle: "Poste", expTitlePh: "ex. Senior Product Manager",
+    expCompany: "Entreprise", expCompanyPh: "ex. Acme AI (Startup Série B)",
+    expDetails: "Responsabilités et réalisations", expDetailsPh: "ex. Dirigé la stratégie produit pour la plateforme IA\nDéveloppé les utilisateurs de 5K à 150K\nLancé 12 fonctionnalités, augmentant la rétention de 34%",
+    connName: "Nom et poste", connNamePh: "ex. Sarah, VP Marketing chez Acme",
+    connCommon: "Ce que vous avez en commun", connCommonPh: "ex. J'ai vu leur post sur l'IA, contact mutuel",
+    connGoal: "Votre objectif",
+    gNetworking: "Réseautage", gCollaboration: "Collaboration", gLearn: "Apprendre", gHiring: "Recrutement",
+    fuName: "Leur nom", fuNamePh: "ex. Marc",
+    fuContext: "Comment vous êtes connectés", fuContextPh: "ex. Rencontrés en conférence, connectés la semaine dernière",
+    fuAsk: "Que souhaitez-vous ?", fuAskPh: "ex. Appel de 15 min, conseil sur changement de carrière",
+    tyName: "Leur nom", tyNamePh: "ex. Jennifer",
+    tyContext: "Contexte", tyContextPh: "ex. Entretien, café, appel conseil",
+    tyTakeaway: "Point clé de la conversation", tyTakeawayPh: "ex. J'ai adoré découvrir leur approche pour développer les équipes",
+    replyLabel: "💬 Collez le commentaire auquel répondre",
+    replyPh: "Collez le commentaire LinkedIn ici...",
+    replyStyleLabel: "🎯 Style de réponse",
+    rSupportive: "Soutien", rValue: "Apporter valeur", rQuestion: "Poser question", rDisagree: "Désaccord respectueux",
+    copy: "📋 Copier", copied: "✅ Copié !", regenerate: "🔄 Régénérer",
+    words: "Mots", characters: "Caractères",
+    paywallTitle: "Vous avez utilisé tous vos crédits gratuits aujourd'hui",
+    paywallDesc: "Passez à <b>LinkedGenie Pro</b> pour un accès illimité à tous les outils, modèles exclusifs et génération prioritaire.",
+    paywallBtn: "🚀 Passer à Pro — 7$/mois", paywallCancel: "Annulez à tout moment",
+    featPosts: "Posts Intelligents", featPostsDesc: "8 modèles dont Évolution Pro et Offre d'Emploi",
+    featProfile: "Optimiseur de Profil", featProfileDesc: "Titre, section À propos et descriptions d'Expérience",
+    featMessages: "Messages et Réponses", featMessagesDesc: "Demandes de connexion, suivis et réponses aux commentaires",
+    footer: "LinkedGenie © 2025 · Fait avec ❤️ et IA",
+    modalTitle: "ℹ️ À propos de LinkedGenie",
+    modalDesc: "LinkedGenie est votre boîte à outils IA complète pour créer du contenu LinkedIn.<br><br><b>Plan Gratuit :</b> Connectez-vous avec Google — 3 générations par jour.<br><b>Plan Pro :</b> 7$/mois — accès illimité à tous les outils.<br><br><b>Outils inclus :</b><br>✍️ Générateur de posts (8 styles + réécriture + accroches)<br>👤 Optimiseur de profil (titre, à propos, expérience)<br>📩 Rédacteur de messages (connexion, suivi, remerciement)<br>💬 Générateur de réponses aux commentaires",
+    modalUpgrade: "Passer à Pro", modalGotIt: "Compris !"
+  },
+  german: {
+    heroBadge: "KI-gestützte LinkedIn Content Suite",
+    heroTitle: 'Ihr komplettes Toolkit für <em>LinkedIn Content</em>',
+    heroDesc: "Erstellen Sie Beiträge, optimieren Sie Ihr Profil, verfassen Sie Nachrichten und schreiben Sie Antworten — alles mit KI.",
+    loginPrompt: "Mit Google anmelden, um LinkedIn-Inhalte zu erstellen",
+    tabPost: "✍️ Beitrag", tabProfile: "👤 Profil", tabMessage: "📩 Nachricht", tabReply: "💬 Antwort",
+    subWrite: "✍️ Schreiben", subRewrite: "🔄 Umschreiben", subHooks: "🎣 Hooks",
+    subHeadline: "💫 Überschrift", subAbout: "📝 Über mich", subExperience: "💼 Erfahrung",
+    subConnection: "🤝 Vernetzung", subFollowup: "📨 Follow-up", subThankyou: "🙏 Danke",
+    ideaLabel: "💡 Ihre Idee oder Ihr Thema",
+    ideaPh: "z.B. Warum ich ein 200K$-Angebot abgelehnt habe, um bei meinem Startup zu bleiben...\nz.B. 5 Fehler, die ich als neuer Manager gemacht habe\nz.B. Wie KI den Einstellungsprozess verändert",
+    ideaHint: "Seien Sie spezifisch für bessere Ergebnisse",
+    rewriteLabel: "🔄 Fügen Sie Ihren Beitrag oder Entwurf ein",
+    rewritePh: "Fügen Sie Ihren LinkedIn-Beitrag oder Entwurf hier ein...\n\nDie KI wird ihn mit besseren Hooks, Formatierung und Engagement-Elementen umschreiben.",
+    rewriteHint: "Entwurf einfügen — KI verbessert ihn",
+    hooksLabel: "🎣 Worum geht es in Ihrem Beitrag?",
+    hooksPh: "z.B. Der größte Fehler neuer Manager\nz.B. Warum Remote-Arbeit bleiben wird\nz.B. Lektionen vom Skalieren eines Startups auf 1M$ ARR",
+    hooksHint: "Wir generieren 5 unwiderstehliche Hooks",
+    styleLabel: "🎨 Schreibstil",
+    sStory: "Geschichte", sStorySub: "Persönliche Erzählung",
+    sTips: "Tipps", sTipsSub: "Frameworks & Listen",
+    sMotivational: "Motivierend", sMotivationalSub: "Zum Handeln inspirieren",
+    sHotTake: "Meinungsstark", sHotTakeSub: "Mutige Meinung",
+    sCareer: "Karriere-Update", sCareerSub: "Neue Rolle / Beförderung",
+    sAchievement: "Erfolg", sAchievementSub: "Meilenstein erreicht",
+    sJobPost: "Stellenanzeige", sJobPostSub: "Jobangebot",
+    sOpenToWork: "Offen für Arbeit", sOpenToWorkSub: "Jobsuche",
+    toneLabel: "🎭 Ton",
+    tProfessional: "Professionell", tCasual: "Locker", tBold: "Mutig", tHumorous: "Humorvoll", tConversational: "Gesprächig",
+    generate: "⚡ Generieren", generating: "Wird generiert...",
+    genMessage: "⚡ Nachricht generieren", genReplies: "⚡ Antworten generieren",
+    kbHint: "zum Generieren",
+    hlRole: "Aktuelle Position", hlRolePh: "z.B. Product Manager",
+    hlSkill: "Kernkompetenz", hlSkillPh: "z.B. KI/ML, Growth, Design",
+    hlValue: "Welchen Mehrwert bieten Sie?", hlValuePh: "z.B. Ich helfe Startups auf 1M$ ARR zu skalieren",
+    hlAudience: "Zielgruppe", hlAudiencePh: "z.B. Recruiter, Kunden, Gründer",
+    aboutBg: "Beruflicher Werdegang (1-2 Sätze)", aboutBgPh: "z.B. 6 Jahre B2B SaaS Marketing, Content-Strategie in 3 Startups geleitet",
+    aboutAch: "Top-Erfolge (2-3)", aboutAchPh: "z.B. 12M$ Pipeline generiert\nAbonnenten von 0 auf 100K gesteigert\nTeam von 15 Marketern aufgebaut",
+    aboutExp: "Fachgebiete", aboutExpPh: "z.B. SEO, Content-Strategie, KI",
+    aboutGoal: "Was suchen Sie?", aboutGoalPh: "z.B. Neue Kunden, Einstellungen, Zusammenarbeit",
+    expTitle: "Position", expTitlePh: "z.B. Senior Product Manager",
+    expCompany: "Unternehmen", expCompanyPh: "z.B. Acme AI (Serie B Startup)",
+    expDetails: "Verantwortlichkeiten & Erfolge", expDetailsPh: "z.B. Produktstrategie für KI-Plattform geleitet\nNutzer von 5K auf 150K gesteigert\n12 Features geliefert, Retention um 34% erhöht",
+    connName: "Name und Position", connNamePh: "z.B. Sarah, VP Marketing bei Acme",
+    connCommon: "Gemeinsamkeiten", connCommonPh: "z.B. Ihren Beitrag über KI gesehen, gemeinsamer Kontakt",
+    connGoal: "Ihr Ziel",
+    gNetworking: "Networking", gCollaboration: "Zusammenarbeit", gLearn: "Lernen", gHiring: "Einstellung",
+    fuName: "Name", fuNamePh: "z.B. Markus",
+    fuContext: "Wie Sie verbunden sind", fuContextPh: "z.B. Auf Konferenz getroffen, letzte Woche vernetzt",
+    fuAsk: "Was möchten Sie?", fuAskPh: "z.B. 15-Min-Anruf, Karriereberatung",
+    tyName: "Name", tyNamePh: "z.B. Jennifer",
+    tyContext: "Kontext", tyContextPh: "z.B. Interview, Kaffee-Chat, Beratungsgespräch",
+    tyTakeaway: "Wichtigste Erkenntnis aus dem Gespräch", tyTakeawayPh: "z.B. Beeindruckt von ihrem Ansatz zum Teamaufbau",
+    replyLabel: "💬 Kommentar einfügen, auf den Sie antworten möchten",
+    replyPh: "LinkedIn-Kommentar hier einfügen...",
+    replyStyleLabel: "🎯 Antwortstil",
+    rSupportive: "Unterstützend", rValue: "Mehrwert", rQuestion: "Frage stellen", rDisagree: "Respektvoller Widerspruch",
+    copy: "📋 Kopieren", copied: "✅ Kopiert!", regenerate: "🔄 Neu generieren",
+    words: "Wörter", characters: "Zeichen",
+    paywallTitle: "Sie haben heute alle kostenlosen Credits verbraucht",
+    paywallDesc: 'Upgraden Sie auf <b>LinkedGenie Pro</b> für unbegrenzten Zugang zu allen Tools, exklusiven Vorlagen und priorisierter Generierung.',
+    paywallBtn: "🚀 Auf Pro upgraden — 7$/Monat", paywallCancel: "Jederzeit kündbar",
+    featPosts: "Smarte Beiträge", featPostsDesc: "8 Vorlagen inkl. Karriere-Update & Stellenanzeige",
+    featProfile: "Profil-Optimierer", featProfileDesc: "Überschrift, Über-mich-Bereich & Erfahrungsbeschreibungen",
+    featMessages: "Nachrichten & Antworten", featMessagesDesc: "Vernetzungsanfragen, Follow-ups & Kommentarantworten",
+    footer: "LinkedGenie © 2025 · Mit ❤️ und KI erstellt",
+    modalTitle: "ℹ️ Über LinkedGenie",
+    modalDesc: 'LinkedGenie ist Ihr komplettes KI-Toolkit für LinkedIn Content.<br><br><b>Kostenlos:</b> Mit Google anmelden — 3 Generierungen pro Tag.<br><b>Pro:</b> 7$/Monat — unbegrenzter Zugang zu allen Tools.<br><br><b>Tools:</b><br>✍️ Beitragsgenerator (8 Stile + Umschreiben + Hooks)<br>👤 Profil-Optimierer (Überschrift, Über mich, Erfahrung)<br>📩 Nachrichtenverfasser (Vernetzung, Follow-up, Dank)<br>💬 Kommentarantwort-Generator',
+    modalUpgrade: "Auf Pro upgraden", modalGotIt: "Verstanden!"
+  },
+  arabic: {
+    heroBadge: "مجموعة محتوى LinkedIn مدعومة بالذكاء الاصطناعي",
+    heroTitle: 'أدواتك المتكاملة لـ<em>محتوى LinkedIn</em>',
+    heroDesc: "أنشئ منشورات، حسّن ملفك الشخصي، اكتب رسائل وردود — كل ذلك بالذكاء الاصطناعي.",
+    loginPrompt: "سجّل الدخول بحساب Google لبدء إنشاء محتوى LinkedIn",
+    tabPost: "✍️ منشور", tabProfile: "👤 الملف الشخصي", tabMessage: "📩 رسالة", tabReply: "💬 رد",
+    subWrite: "✍️ كتابة", subRewrite: "🔄 إعادة كتابة", subHooks: "🎣 عناوين جذب",
+    subHeadline: "💫 العنوان", subAbout: "📝 نبذة عني", subExperience: "💼 الخبرة",
+    subConnection: "🤝 طلب تواصل", subFollowup: "📨 متابعة", subThankyou: "🙏 شكر",
+    ideaLabel: "💡 فكرتك أو موضوعك",
+    ideaPh: "مثال: لماذا رفضت عرض بـ200 ألف دولار لأبقى في شركتي الناشئة...\nمثال: 5 أخطاء ارتكبتها كمدير جديد\nمثال: كيف يغيّر الذكاء الاصطناعي عملية التوظيف",
+    ideaHint: "كن محدداً للحصول على نتائج أفضل",
+    rewriteLabel: "🔄 الصق منشورك أو مسودتك",
+    rewritePh: "الصق منشور LinkedIn أو مسودتك هنا...\n\nسيعيد الذكاء الاصطناعي كتابته بعناوين أفضل وتنسيق وعناصر تفاعل محسّنة مع الحفاظ على رسالتك الأساسية.",
+    rewriteHint: "الصق مسودتك — الذكاء الاصطناعي سيحسّنها",
+    hooksLabel: "🎣 ما موضوع منشورك؟",
+    hooksPh: "مثال: أكبر خطأ يرتكبه المدراء الجدد\nمثال: لماذا العمل عن بُعد باقٍ\nمثال: دروس من تنمية شركة ناشئة إلى مليون دولار",
+    hooksHint: "سننشئ 5 عناوين جذب لا تُقاوم",
+    styleLabel: "🎨 أسلوب الكتابة",
+    sStory: "قصة", sStorySub: "سرد شخصي",
+    sTips: "نصائح", sTipsSub: "أطر عمل وقوائم",
+    sMotivational: "تحفيزي", sMotivationalSub: "إلهام للعمل",
+    sHotTake: "رأي جريء", sHotTakeSub: "وجهة نظر مختلفة",
+    sCareer: "تحديث مهني", sCareerSub: "منصب جديد / ترقية",
+    sAchievement: "إنجاز", sAchievementSub: "معلم مهني",
+    sJobPost: "إعلان وظيفة", sJobPostSub: "توظيف",
+    sOpenToWork: "أبحث عن عمل", sOpenToWorkSub: "بحث وظيفي",
+    toneLabel: "🎭 النبرة",
+    tProfessional: "مهني", tCasual: "عفوي", tBold: "جريء", tHumorous: "فكاهي", tConversational: "حواري",
+    generate: "⚡ إنشاء", generating: "جارٍ الإنشاء...",
+    genMessage: "⚡ إنشاء رسالة", genReplies: "⚡ إنشاء ردود",
+    kbHint: "للإنشاء",
+    hlRole: "المنصب الحالي", hlRolePh: "مثال: مدير منتجات",
+    hlSkill: "المهارة الرئيسية", hlSkillPh: "مثال: ذكاء اصطناعي، نمو، تصميم",
+    hlValue: "ما القيمة التي تقدمها؟", hlValuePh: "مثال: أساعد الشركات الناشئة على النمو",
+    hlAudience: "الجمهور المستهدف", hlAudiencePh: "مثال: مسؤولو توظيف، عملاء، مؤسسون",
+    aboutBg: "الخلفية المهنية (جملة أو جملتين)", aboutBgPh: "مثال: 6 سنوات في تسويق SaaS، قدت استراتيجية المحتوى في 3 شركات ناشئة",
+    aboutAch: "أبرز الإنجازات (2-3)", aboutAchPh: "مثال: حققت 12 مليون$ في المبيعات\nنميت قاعدة المشتركين من 0 إلى 100 ألف\nبنيت فريق من 15 مسوّق",
+    aboutExp: "مجالات الخبرة", aboutExpPh: "مثال: SEO، استراتيجية المحتوى، الذكاء الاصطناعي",
+    aboutGoal: "ماذا تبحث عنه؟", aboutGoalPh: "مثال: عملاء جدد، توظيف، تعاون",
+    expTitle: "المسمى الوظيفي", expTitlePh: "مثال: مدير منتجات أول",
+    expCompany: "الشركة", expCompanyPh: "مثال: شركة Acme AI (سلسلة B)",
+    expDetails: "المسؤوليات والإنجازات", expDetailsPh: "مثال: قدت استراتيجية المنتج لمنصة الذكاء الاصطناعي\nنميت المستخدمين من 5 آلاف إلى 150 ألف\nأطلقت 12 ميزة، وزادت نسبة الاحتفاظ 34%",
+    connName: "الاسم والمنصب", connNamePh: "مثال: سارة، نائب رئيس التسويق في Acme",
+    connCommon: "ما المشترك بينكما", connCommonPh: "مثال: رأيت منشورهم عن الذكاء الاصطناعي، معرفة مشتركة",
+    connGoal: "هدفك",
+    gNetworking: "تواصل مهني", gCollaboration: "تعاون", gLearn: "تعلّم", gHiring: "توظيف",
+    fuName: "اسمهم", fuNamePh: "مثال: أحمد",
+    fuContext: "كيف تواصلتم", fuContextPh: "مثال: التقينا في مؤتمر، تواصلنا الأسبوع الماضي",
+    fuAsk: "ماذا تريد؟", fuAskPh: "مثال: مكالمة 15 دقيقة، نصيحة مهنية",
+    tyName: "اسمهم", tyNamePh: "مثال: محمد",
+    tyContext: "السياق", tyContextPh: "مثال: مقابلة، لقاء، مكالمة استشارية",
+    tyTakeaway: "أهم ما استفدته من المحادثة", tyTakeawayPh: "مثال: أعجبني أسلوبهم في بناء الفرق",
+    replyLabel: "💬 الصق التعليق الذي تريد الرد عليه",
+    replyPh: "الصق تعليق LinkedIn هنا...",
+    replyStyleLabel: "🎯 أسلوب الرد",
+    rSupportive: "داعم", rValue: "إضافة قيمة", rQuestion: "طرح سؤال", rDisagree: "اختلاف باحترام",
+    copy: "📋 نسخ", copied: "✅ تم النسخ!", regenerate: "🔄 إعادة إنشاء",
+    words: "كلمات", characters: "أحرف",
+    paywallTitle: "لقد استخدمت جميع الرصيد المجاني اليوم",
+    paywallDesc: 'قم بالترقية إلى <b>LinkedGenie Pro</b> للوصول غير المحدود لجميع الأدوات والقوالب الحصرية.',
+    paywallBtn: "🚀 ترقية إلى Pro — 7$/شهرياً", paywallCancel: "إلغاء في أي وقت",
+    featPosts: "منشورات ذكية", featPostsDesc: "8 قوالب تشمل تحديث مهني وإعلان وظيفة",
+    featProfile: "محسّن الملف الشخصي", featProfileDesc: "العنوان، نبذة عني، ووصف الخبرة",
+    featMessages: "رسائل وردود", featMessagesDesc: "طلبات تواصل، متابعات، وردود على التعليقات",
+    footer: "LinkedGenie © 2025 · صُنع بـ ❤️ والذكاء الاصطناعي",
+    modalTitle: "ℹ️ عن LinkedGenie",
+    modalDesc: 'LinkedGenie هو مجموعة أدوات الذكاء الاصطناعي المتكاملة لإنشاء محتوى LinkedIn.<br><br><b>الخطة المجانية:</b> سجّل بحساب Google — 3 عمليات إنشاء يومياً.<br><b>خطة Pro:</b> 7$/شهرياً — وصول غير محدود لجميع الأدوات.<br><br><b>الأدوات:</b><br>✍️ منشئ المنشورات (8 أساليب + إعادة كتابة + عناوين جذب)<br>👤 محسّن الملف الشخصي (العنوان، نبذة عني، الخبرة)<br>📩 كاتب الرسائل (تواصل، متابعة، شكر)<br>💬 منشئ ردود التعليقات',
+    modalUpgrade: "ترقية إلى Pro", modalGotIt: "فهمت!"
+  }
+};
+
+function applyLanguage(lang) {
+  const t = T[lang] || T.english;
+  const isRTL = lang === 'arabic';
+  document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
+  document.documentElement.setAttribute('lang', isRTL ? 'ar' : lang.slice(0,2));
+
+  // Helper
+  const txt = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = t[key]; };
+  const htm = (id, key) => { const el = document.getElementById(id); if (el) el.innerHTML = t[key]; };
+  const ph = (id, key) => { const el = document.getElementById(id); if (el) el.placeholder = t[key]; };
+
+  // Hero
+  htm('heroBadgeText', 'heroBadge');
+  htm('heroTitleText', 'heroTitle');
+  txt('heroDescText', 'heroDesc');
+  txt('loginPromptText', 'loginPrompt');
+
+  // Main tabs
+  document.querySelectorAll('.main-tab').forEach(tab => {
+    const key = 'tab' + tab.dataset.tab.charAt(0).toUpperCase() + tab.dataset.tab.slice(1);
+    tab.textContent = t[key];
+  });
+
+  // Post sub-tabs
+  const postSubs = document.querySelectorAll('#tabPost > .sub-tabs .sub-tab');
+  if (postSubs[0]) postSubs[0].textContent = t.subWrite;
+  if (postSubs[1]) postSubs[1].textContent = t.subRewrite;
+  if (postSubs[2]) postSubs[2].textContent = t.subHooks;
+
+  // Profile sub-tabs
+  const profSubs = document.querySelectorAll('#tabProfile > .sub-tabs .sub-tab');
+  if (profSubs[0]) profSubs[0].textContent = t.subHeadline;
+  if (profSubs[1]) profSubs[1].textContent = t.subAbout;
+  if (profSubs[2]) profSubs[2].textContent = t.subExperience;
+
+  // Message sub-tabs
+  const msgSubs = document.querySelectorAll('#tabMessage > .sub-tabs .sub-tab');
+  if (msgSubs[0]) msgSubs[0].textContent = t.subConnection;
+  if (msgSubs[1]) msgSubs[1].textContent = t.subFollowup;
+  if (msgSubs[2]) msgSubs[2].textContent = t.subThankyou;
+
+  // Post inputs
+  htm('labelIdea', 'ideaLabel'); ph('ideaInput', 'ideaPh'); txt('hintIdea', 'ideaHint');
+  htm('labelRewrite', 'rewriteLabel'); ph('rewriteInput', 'rewritePh'); txt('hintRewrite', 'rewriteHint');
+  htm('labelHooks', 'hooksLabel'); ph('hooksInput', 'hooksPh'); txt('hintHooks', 'hooksHint');
+
+  // Styles
+  htm('labelStyle', 'styleLabel');
+  const styles = [
+    ['storytelling','sStory','sStorySub'], ['educational','sTips','sTipsSub'], ['motivational','sMotivational','sMotivationalSub'],
+    ['contrarian','sHotTake','sHotTakeSub'], ['career_update','sCareer','sCareerSub'], ['achievement','sAchievement','sAchievementSub'],
+    ['job_posting','sJobPost','sJobPostSub'], ['open_to_work','sOpenToWork','sOpenToWorkSub']
+  ];
+  styles.forEach(([ds, tKey, sKey]) => {
+    const card = document.querySelector(`.style-card[data-style="${ds}"]`);
+    if (card) { card.querySelector('.style-title').textContent = t[tKey]; card.querySelector('.style-sub').textContent = t[sKey]; }
+  });
+
+  // Tones (Post)
+  htm('labelTonePost', 'toneLabel');
+  document.querySelectorAll('#tabPost .tone-chip[data-tone]').forEach(c => {
+    const m = { professional: 'tProfessional', casual: 'tCasual', bold: 'tBold', humorous: 'tHumorous' };
+    if (m[c.dataset.tone]) c.textContent = t[m[c.dataset.tone]];
+  });
+
+  // Tones (Profile)
+  htm('labelToneProfile', 'toneLabel');
+  document.querySelectorAll('#tabProfile .tone-chip[data-tone]').forEach(c => {
+    const m = { professional: 'tProfessional', casual: 'tConversational', bold: 'tBold' };
+    if (m[c.dataset.tone]) c.textContent = t[m[c.dataset.tone]];
+  });
+
+  // Generate buttons
+  txt('genBtnText', 'generate');
+  txt('genBtnProfile', 'generate');
+  txt('genBtnMessage', 'genMessage');
+  txt('genBtnReply', 'genReplies');
+
+  // Keyboard hints
+  document.querySelectorAll('.kb-hint').forEach(el => { el.innerHTML = `<kbd>Ctrl</kbd>+<kbd>Enter</kbd> ${t.kbHint}`; });
+
+  // Profile fields
+  txt('labelHlRole', 'hlRole'); ph('hlRole', 'hlRolePh');
+  txt('labelHlSkill', 'hlSkill'); ph('hlSkill', 'hlSkillPh');
+  txt('labelHlValue', 'hlValue'); ph('hlValue', 'hlValuePh');
+  txt('labelHlAudience', 'hlAudience'); ph('hlAudience', 'hlAudiencePh');
+  txt('labelAboutBg', 'aboutBg'); ph('aboutBg', 'aboutBgPh');
+  txt('labelAboutAch', 'aboutAch'); ph('aboutAchievements', 'aboutAchPh');
+  txt('labelAboutExp', 'aboutExp'); ph('aboutExpertise', 'aboutExpPh');
+  txt('labelAboutGoal', 'aboutGoal'); ph('aboutGoal', 'aboutGoalPh');
+  txt('labelExpTitle', 'expTitle'); ph('expTitle', 'expTitlePh');
+  txt('labelExpCompany', 'expCompany'); ph('expCompany', 'expCompanyPh');
+  txt('labelExpDetails', 'expDetails'); ph('expDetails', 'expDetailsPh');
+
+  // Message fields
+  txt('labelConnName', 'connName'); ph('connName', 'connNamePh');
+  txt('labelConnCommon', 'connCommon'); ph('connCommon', 'connCommonPh');
+  txt('labelConnGoal', 'connGoal');
+  document.querySelectorAll('#msgConnection .tone-chip[data-goal]').forEach(c => {
+    const m = { networking: 'gNetworking', collaboration: 'gCollaboration', learning: 'gLearn', hiring: 'gHiring' };
+    if (m[c.dataset.goal]) c.textContent = t[m[c.dataset.goal]];
+  });
+  txt('labelFuName', 'fuName'); ph('fuName', 'fuNamePh');
+  txt('labelFuContext', 'fuContext'); ph('fuContext', 'fuContextPh');
+  txt('labelFuAsk', 'fuAsk'); ph('fuAsk', 'fuAskPh');
+  txt('labelTyName', 'tyName'); ph('tyName', 'tyNamePh');
+  txt('labelTyContext', 'tyContext'); ph('tyContext', 'tyContextPh');
+  txt('labelTyTakeaway', 'tyTakeaway'); ph('tyTakeaway', 'tyTakeawayPh');
+
+  // Reply
+  htm('labelReplyComment', 'replyLabel'); ph('replyComment', 'replyPh');
+  htm('labelReplyStyle', 'replyStyleLabel');
+  document.querySelectorAll('#tabReply .tone-chip[data-replystyle]').forEach(c => {
+    const m = { supportive: 'rSupportive', insightful: 'rValue', question: 'rQuestion', disagree: 'rDisagree' };
+    if (m[c.dataset.replystyle]) c.textContent = t[m[c.dataset.replystyle]];
+  });
+
+  // Output
+  txt('copyBtnText', 'copy'); txt('regenBtnText', 'regenerate');
+  htm('statWordsLabel', 'words'); htm('statCharsLabel', 'characters');
+
+  // Paywall
+  txt('paywallTitleText', 'paywallTitle');
+  htm('paywallDescText', 'paywallDesc');
+  txt('paywallBtnText', 'paywallBtn');
+  txt('paywallCancelText', 'paywallCancel');
+
+  // Features
+  txt('featPostsTitle', 'featPosts'); txt('featPostsDesc', 'featPostsDesc');
+  txt('featProfileTitle', 'featProfile'); txt('featProfileDesc', 'featProfileDesc');
+  txt('featMessagesTitle', 'featMessages'); txt('featMessagesDesc', 'featMessagesDesc');
+
+  // Footer
+  htm('footerText', 'footer');
+
+  // Modal
+  txt('modalTitleText', 'modalTitle');
+  htm('modalDescText', 'modalDesc');
+  txt('modalUpgradeBtn', 'modalUpgrade');
+  txt('modalGotItBtn', 'modalGotIt');
+}
 
 // ============ TAB SWITCHING ============
 function switchTab(tab) {
@@ -1107,7 +1696,7 @@ function pickStyle(el) {
   document.querySelectorAll('.style-card').forEach(c => c.classList.remove('active'));
   el.classList.add('active'); currentStyle = el.dataset.style;
 }
-function pickLang(val) { currentLang = val; }
+function pickLang(val) { currentLang = val; applyLanguage(val); }
 function pickTone(el) {
   const row = el.parentElement;
   row.querySelectorAll('.tone-chip').forEach(c => c.classList.remove('active'));
@@ -1300,7 +1889,8 @@ async function handleGenerate() {
   const btn = document.getElementById('genBtn');
   const btnText = document.getElementById('genBtnText');
   if (btn) btn.disabled = true;
-  if (btnText) btnText.innerHTML = '<span class="spinner"></span> Generating...';
+  const t = T[currentLang] || T.english;
+  if (btnText) btnText.innerHTML = `<span class="spinner"></span> ${t.generating}`;
   document.getElementById('paywallCard').classList.remove('visible');
   document.getElementById('outputCard').classList.remove('visible');
   document.getElementById('multiOutput').classList.remove('visible');
@@ -1346,8 +1936,9 @@ async function handleGenerate() {
 function resetBtn() {
   const btn = document.getElementById('genBtn');
   const btnText = document.getElementById('genBtnText');
+  const t = T[currentLang] || T.english;
   if (btn) btn.disabled = false;
-  if (btnText) btnText.innerHTML = '⚡ Generate';
+  if (btnText) btnText.textContent = t.generate;
 }
 
 function showOutput(text, title) {
@@ -1376,10 +1967,11 @@ function showMultiOutput(items, title) {
 }
 
 function copyResult() {
+  const t = T[currentLang] || T.english;
   navigator.clipboard.writeText(resultText).then(() => {
-    const btn = document.getElementById('copyBtn');
-    btn.classList.add('copied'); btn.textContent = '✅ Copied!';
-    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '📋 Copy'; }, 2000);
+    const btn = document.getElementById('copyBtnText');
+    btn.textContent = t.copied;
+    setTimeout(() => { btn.textContent = t.copy; }, 2000);
   });
 }
 
