@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LinkedGenie — AI LinkedIn Post Generator | Create Viral Posts in Seconds</title>
-<meta name="description" content="Generate professional, engaging LinkedIn posts in seconds with AI. Turn any idea into viral content. Free to use.">
-<meta name="keywords" content="LinkedIn post generator, AI content writer, LinkedIn content, social media tool, viral posts">
-<meta property="og:title" content="LinkedGenie — AI LinkedIn Post Generator">
-<meta property="og:description" content="Turn any idea into a viral LinkedIn post in seconds with AI.">
+<title>LinkedGenie — AI LinkedIn Content Suite | Posts, Profile, Messages</title>
+<meta name="description" content="Generate LinkedIn posts, optimize your profile, craft connection messages, and reply to comments — all with AI.">
+<meta name="keywords" content="LinkedIn post generator, AI content writer, LinkedIn profile optimizer, LinkedIn messages, social media tool">
+<meta property="og:title" content="LinkedGenie — AI LinkedIn Content Suite">
+<meta property="og:description" content="Your complete AI toolkit for LinkedIn content creation.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -48,7 +48,7 @@
     overflow-x: hidden;
   }
 
-  /* === BACKGROUND EFFECTS === */
+  /* === BACKGROUND === */
   .bg-grid {
     position: fixed; inset: 0; z-index: 0;
     background-image:
@@ -110,7 +110,6 @@
   }
   .usage-indicator.warn { background: var(--orange); box-shadow: 0 0 8px rgba(251,191,36,0.5); }
   .usage-indicator.out { background: var(--red); box-shadow: 0 0 8px rgba(248,113,113,0.5); }
-
   .settings-btn {
     width: 36px; height: 36px;
     background: var(--surface2);
@@ -124,11 +123,40 @@
   }
   .settings-btn:hover { border-color: var(--accent); color: var(--text); }
 
-  /* === HERO === */
-  .hero {
-    text-align: center;
-    padding: 48px 0 32px;
+  /* === AUTH === */
+  .auth-area { display: flex; align-items: center; gap: 10px; }
+  .user-info {
+    display: flex; align-items: center; gap: 8px;
+    padding: 4px 12px 4px 4px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    cursor: pointer; transition: all 0.2s;
   }
+  .user-info:hover { border-color: var(--border-light); }
+  .user-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+  .user-name { font-size: 12px; font-weight: 500; color: var(--text2); }
+  .signout-btn {
+    padding: 6px 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .signout-btn:hover { border-color: var(--red); color: var(--red); }
+  .pro-badge {
+    padding: 2px 8px;
+    background: linear-gradient(135deg, var(--orange), #f97316);
+    border-radius: 100px;
+    font-size: 10px; font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  /* === HERO === */
+  .hero { text-align: center; padding: 40px 0 24px; }
   .hero-badge {
     display: inline-flex; align-items: center; gap: 6px;
     padding: 6px 16px;
@@ -137,16 +165,14 @@
     border-radius: 100px;
     font-size: 12px; font-weight: 500;
     color: var(--accent2);
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
   .hero-badge-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent2); }
   .hero h1 {
     font-family: 'Instrument Serif', serif;
-    font-size: clamp(32px, 5vw, 48px);
-    font-weight: 400;
-    line-height: 1.15;
-    margin-bottom: 14px;
-    color: var(--text);
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 400; line-height: 1.15;
+    margin-bottom: 10px;
   }
   .hero h1 em {
     font-style: italic;
@@ -154,72 +180,126 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-  .hero p {
-    font-size: 16px; line-height: 1.6;
-    color: var(--text-dim);
-    max-width: 460px; margin: 0 auto;
+  .hero p { font-size: 15px; line-height: 1.6; color: var(--text-dim); max-width: 460px; margin: 0 auto; }
+
+  /* === MAIN TABS === */
+  .main-tabs {
+    display: flex; gap: 4px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 4px;
+    margin-bottom: 16px;
   }
+  .main-tab {
+    flex: 1; padding: 10px 8px;
+    background: transparent;
+    border: none; border-radius: 10px;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    text-align: center;
+  }
+  .main-tab:hover { color: var(--text-dim); background: var(--surface2); }
+  .main-tab.active {
+    color: var(--text);
+    background: var(--accent-glow);
+    border: 1px solid rgba(99,102,241,0.2);
+  }
+  @media (max-width: 520px) { .main-tab { font-size: 12px; padding: 8px 4px; } }
 
   /* === GENERATOR CARD === */
   .gen-card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 16px;
-    padding: 28px;
-    margin-bottom: 20px;
+    padding: 24px;
+    margin-bottom: 16px;
   }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
 
+  /* === SUB TABS === */
+  .sub-tabs {
+    display: flex; gap: 4px;
+    margin-bottom: 18px;
+    background: var(--bg2);
+    border-radius: 10px;
+    padding: 3px;
+  }
+  .sub-tab {
+    padding: 7px 16px;
+    background: transparent;
+    border: none; border-radius: 8px;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .sub-tab:hover { color: var(--text-dim); }
+  .sub-tab.active { color: var(--accent2); background: var(--surface2); }
+  .sub-tab .pro-lock { font-size: 10px; margin-left: 4px; }
+
+  /* === FORM ELEMENTS === */
   .field-label {
     display: flex; align-items: center; gap: 8px;
     font-size: 13px; font-weight: 600;
     color: var(--text2);
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
   .field-label-icon { font-size: 15px; }
 
-  .idea-textarea {
-    width: 100%; height: 100px;
-    padding: 14px 16px;
+  .idea-textarea, .form-input {
+    width: 100%;
+    padding: 12px 14px;
     background: var(--bg2);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 10px;
     color: var(--text);
     font-family: 'DM Sans', sans-serif;
     font-size: 14px; line-height: 1.6;
-    resize: vertical;
     outline: none;
     transition: all 0.25s;
   }
-  .idea-textarea:focus {
+  .idea-textarea { height: 100px; resize: vertical; }
+  .idea-textarea.large { height: 180px; }
+  .idea-textarea:focus, .form-input:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--accent-glow);
   }
-  .idea-textarea::placeholder { color: var(--text-muted); }
+  .idea-textarea::placeholder, .form-input::placeholder { color: var(--text-muted); }
 
   .textarea-footer {
     display: flex; justify-content: space-between; align-items: center;
-    margin-top: 6px; margin-bottom: 20px;
+    margin-top: 6px; margin-bottom: 16px;
   }
   .char-info { font-size: 11px; color: var(--text-muted); }
 
-  /* Style Cards */
+  .form-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 520px) { .form-row { grid-template-columns: 1fr; } }
+  .form-group { margin-bottom: 16px; }
+  .form-group:last-child { margin-bottom: 0; }
+
+  /* === STYLE CARDS === */
   .styles-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin-bottom: 20px;
+    gap: 6px;
+    margin-bottom: 16px;
   }
   @media (max-width: 520px) { .styles-grid { grid-template-columns: repeat(2, 1fr); } }
-
   .style-card {
-    padding: 14px 8px;
+    padding: 12px 6px;
     background: var(--bg2);
     border: 1.5px solid var(--border);
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.25s;
-    text-align: center;
-    user-select: none;
+    border-radius: 10px;
+    cursor: pointer; transition: all 0.25s;
+    text-align: center; user-select: none;
+    position: relative;
   }
   .style-card:hover { border-color: var(--border-light); background: var(--surface2); }
   .style-card.active {
@@ -227,32 +307,37 @@
     background: var(--accent-glow);
     box-shadow: 0 0 0 3px var(--accent-glow2);
   }
-  .style-icon { font-size: 22px; margin-bottom: 6px; }
-  .style-title { font-size: 12px; font-weight: 600; color: var(--text); }
-  .style-sub { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
-
-  /* Options */
-  .options-row {
-    display: flex; gap: 8px; margin-bottom: 20px;
+  .style-card.pro-only { opacity: 0.6; }
+  .style-card.pro-only::after {
+    content: 'PRO';
+    position: absolute; top: 4px; right: 4px;
+    padding: 1px 5px; border-radius: 4px;
+    background: var(--orange); color: #1a1a1a;
+    font-size: 8px; font-weight: 700;
   }
+  .style-icon { font-size: 20px; margin-bottom: 4px; }
+  .style-title { font-size: 11px; font-weight: 600; color: var(--text); }
+  .style-sub { font-size: 9px; color: var(--text-muted); margin-top: 2px; }
+
+  /* === OPTIONS === */
+  .options-row { display: flex; gap: 6px; margin-bottom: 16px; }
   .opt-btn {
-    flex: 1; padding: 10px;
+    flex: 1; padding: 8px;
     background: var(--bg2);
     border: 1.5px solid var(--border);
-    border-radius: 10px;
+    border-radius: 8px;
     color: var(--text-dim);
     font-family: 'DM Sans', sans-serif;
-    font-size: 13px; font-weight: 500;
+    font-size: 12px; font-weight: 500;
     cursor: pointer; transition: all 0.2s;
     text-align: center;
   }
   .opt-btn:hover { border-color: var(--border-light); }
   .opt-btn.active { border-color: var(--accent); background: var(--accent-glow); color: var(--text); }
 
-  /* Tone select */
-  .tone-row { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .tone-row { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
   .tone-chip {
-    padding: 6px 14px;
+    padding: 5px 12px;
     background: var(--bg2);
     border: 1px solid var(--border);
     border-radius: 100px;
@@ -264,16 +349,15 @@
   .tone-chip:hover { border-color: var(--border-light); }
   .tone-chip.active { border-color: var(--accent); background: var(--accent-glow); color: var(--accent2); }
 
-  /* Generate Button */
+  /* === GENERATE BUTTON === */
   .gen-btn {
-    width: 100%; padding: 14px;
+    width: 100%; padding: 13px;
     background: linear-gradient(135deg, var(--accent), #8b5cf6);
     border: none; border-radius: 12px;
     color: white;
     font-family: 'DM Sans', sans-serif;
-    font-size: 15px; font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: all 0.3s;
     display: flex; align-items: center; justify-content: center; gap: 8px;
     position: relative; overflow: hidden;
   }
@@ -294,8 +378,8 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 16px;
-    padding: 24px 28px;
-    margin-bottom: 20px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
     display: none;
   }
   .output-card.visible { display: block; animation: slideUp 0.4s ease; }
@@ -303,11 +387,9 @@
     from { opacity: 0; transform: translateY(16px); }
     to { opacity: 1; transform: translateY(0); }
   }
-
   .output-top {
     display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 14px;
-    flex-wrap: wrap; gap: 8px;
+    margin-bottom: 12px; flex-wrap: wrap; gap: 8px;
   }
   .output-badge {
     display: flex; align-items: center; gap: 6px;
@@ -316,7 +398,7 @@
   .output-badge-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px rgba(52,211,153,0.4); }
   .output-actions { display: flex; gap: 6px; }
   .act-btn {
-    padding: 7px 14px;
+    padding: 6px 12px;
     background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -328,61 +410,101 @@
   }
   .act-btn:hover { border-color: var(--accent); color: var(--text); }
   .act-btn.copied { border-color: var(--green); color: var(--green); background: var(--green-dim); }
-
   .output-text {
-    padding: 18px;
+    padding: 16px;
     background: var(--bg2);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 10px;
     font-size: 14px; line-height: 1.8;
     color: var(--text2);
     white-space: pre-wrap;
-    max-height: 380px;
+    max-height: 360px;
     overflow-y: auto;
   }
   .output-text::-webkit-scrollbar { width: 4px; }
   .output-text::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-
   .output-stats {
-    display: flex; gap: 16px; margin-top: 12px;
-    padding: 10px 16px;
+    display: flex; gap: 16px; margin-top: 10px;
+    padding: 8px 14px;
     background: var(--surface2);
-    border-radius: 10px;
-    flex-wrap: wrap;
+    border-radius: 8px; flex-wrap: wrap;
   }
   .stat-item { font-size: 11px; color: var(--text-muted); }
   .stat-item b { color: var(--text-dim); font-weight: 600; }
+
+  /* === HOOKS OUTPUT === */
+  .hooks-output { display: none; }
+  .hooks-output.visible { display: block; animation: slideUp 0.4s ease; }
+  .hook-card {
+    padding: 14px 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+  }
+  .hook-text { font-size: 14px; line-height: 1.6; color: var(--text2); flex: 1; white-space: pre-wrap; }
+  .hook-actions { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+  .hook-btn {
+    padding: 5px 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px; font-weight: 500;
+    cursor: pointer; transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .hook-btn:hover { border-color: var(--accent); color: var(--text); }
+
+  /* === MULTI OUTPUT (Profile headlines, Reply options) === */
+  .multi-output { display: none; }
+  .multi-output.visible { display: block; animation: slideUp 0.4s ease; }
+  .multi-card {
+    padding: 14px 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    position: relative;
+  }
+  .multi-card-text { font-size: 14px; line-height: 1.7; color: var(--text2); white-space: pre-wrap; margin-bottom: 8px; }
+  .multi-card-actions { display: flex; gap: 6px; }
 
   /* === PAYWALL === */
   .paywall-card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 16px;
-    padding: 40px 28px;
+    padding: 36px 24px;
     text-align: center;
     display: none;
   }
   .paywall-card.visible { display: block; animation: slideUp 0.4s ease; }
-  .paywall-icon { font-size: 48px; margin-bottom: 16px; }
-  .paywall-title {
-    font-family: 'Instrument Serif', serif;
-    font-size: 26px; margin-bottom: 10px;
-  }
-  .paywall-desc { font-size: 14px; color: var(--text-dim); line-height: 1.6; margin-bottom: 24px; }
+  .paywall-icon { font-size: 48px; margin-bottom: 14px; }
+  .paywall-title { font-family: 'Instrument Serif', serif; font-size: 24px; margin-bottom: 8px; }
+  .paywall-desc { font-size: 14px; color: var(--text-dim); line-height: 1.6; margin-bottom: 20px; }
   .upgrade-btn {
-    width: 100%; padding: 14px;
+    width: 100%; padding: 13px;
     background: linear-gradient(135deg, var(--orange), #f97316);
     border: none; border-radius: 12px;
     color: #1a1a1a; font-family: 'DM Sans', sans-serif;
     font-size: 15px; font-weight: 700;
     cursor: pointer; transition: all 0.3s;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
   .upgrade-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(251,191,36,0.3); }
   .paywall-price { font-size: 12px; color: var(--text-muted); }
-  .paywall-price b { color: var(--text-dim); }
 
-  /* === SETTINGS MODAL === */
+  /* === LOGIN === */
+  .login-prompt {
+    text-align: center; padding: 40px 20px;
+    color: var(--text-dim); font-size: 14px;
+  }
+  .login-prompt p { margin-bottom: 16px; }
+
+  /* === MODAL === */
   .modal-overlay {
     position: fixed; inset: 0;
     background: rgba(0,0,0,0.7);
@@ -397,31 +519,13 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 16px;
-    padding: 28px;
+    padding: 24px;
     width: 100%; max-width: 440px;
     animation: slideUp 0.3s ease;
   }
-  .modal-title {
-    font-family: 'Instrument Serif', serif;
-    font-size: 22px; margin-bottom: 6px;
-  }
-  .modal-desc { font-size: 13px; color: var(--text-dim); margin-bottom: 20px; line-height: 1.5; }
-  .modal-field { margin-bottom: 16px; }
-  .modal-label { font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 6px; display: block; }
-  .modal-input {
-    width: 100%; padding: 10px 14px;
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    outline: none; transition: all 0.2s;
-  }
-  .modal-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
-  .modal-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
-  .modal-hint a { color: var(--accent2); text-decoration: none; }
-  .modal-actions { display: flex; gap: 8px; margin-top: 20px; }
+  .modal-title { font-family: 'Instrument Serif', serif; font-size: 22px; margin-bottom: 6px; }
+  .modal-desc { font-size: 13px; color: var(--text-dim); margin-bottom: 16px; line-height: 1.5; }
+  .modal-actions { display: flex; gap: 8px; margin-top: 16px; }
   .modal-btn {
     flex: 1; padding: 10px;
     border-radius: 10px;
@@ -433,99 +537,47 @@
   .modal-btn-secondary:hover { border-color: var(--border-light); color: var(--text); }
   .modal-btn-primary { background: var(--accent); border: none; color: white; }
   .modal-btn-primary:hover { background: var(--accent2); }
-  .modal-status { margin-top: 12px; font-size: 12px; text-align: center; }
-  .modal-status.success { color: var(--green); }
-  .modal-status.error { color: var(--red); }
 
   /* === FEATURES === */
   .features {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin: 32px 0 40px;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 10px; margin: 28px 0 36px;
   }
   @media (max-width: 520px) { .features { grid-template-columns: 1fr; } }
   .feature-card {
-    padding: 20px 16px;
+    padding: 18px 14px;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 14px;
-    text-align: center;
-    transition: all 0.3s;
+    text-align: center; transition: all 0.3s;
   }
   .feature-card:hover { border-color: var(--border-light); transform: translateY(-2px); }
-  .feature-icon { font-size: 24px; margin-bottom: 8px; }
-  .feature-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-  .feature-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+  .feature-icon { font-size: 22px; margin-bottom: 6px; }
+  .feature-title { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .feature-desc { font-size: 10px; color: var(--text-muted); line-height: 1.4; }
 
   /* === FOOTER === */
   .footer {
-    padding: 24px 0;
+    padding: 20px 0;
     border-top: 1px solid var(--border);
     text-align: center;
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-top: 20px;
+    font-size: 12px; color: var(--text-muted);
+    margin-top: 16px;
   }
   .footer a { color: var(--accent2); text-decoration: none; }
 
-  /* === AUTH === */
-  .auth-area { display: flex; align-items: center; gap: 10px; }
-  .user-info {
-    display: flex; align-items: center; gap: 8px;
-    padding: 4px 12px 4px 4px;
+  /* === KEYBOARD HINT === */
+  .kb-hint {
+    font-size: 10px; color: var(--text-muted);
+    text-align: center; margin-top: 8px;
+  }
+  .kb-hint kbd {
+    padding: 1px 5px;
     background: var(--surface2);
     border: 1px solid var(--border);
-    border-radius: 100px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .user-info:hover { border-color: var(--border-light); }
-  .user-avatar {
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  .user-name { font-size: 12px; font-weight: 500; color: var(--text2); }
-  .signout-btn {
-    padding: 6px 12px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text-muted);
+    border-radius: 4px;
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .signout-btn:hover { border-color: var(--red); color: var(--red); }
-  .login-prompt {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--text-dim);
-    font-size: 14px;
-  }
-  .login-prompt p { margin-bottom: 16px; }
-  .google-btn {
-    display: inline-flex; align-items: center; gap: 10px;
-    padding: 12px 28px;
-    background: white;
-    border: none; border-radius: 12px;
-    color: #333;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px; font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  }
-  .google-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
-  .google-btn img { width: 20px; height: 20px; }
-  .pro-badge {
-    padding: 2px 8px;
-    background: linear-gradient(135deg, var(--orange), #f97316);
-    border-radius: 100px;
-    font-size: 10px; font-weight: 700;
-    color: #1a1a1a;
+    font-size: 10px;
   }
 </style>
 </head>
@@ -550,7 +602,7 @@
       <div class="auth-area" id="authArea">
         <div id="googleBtnNav"></div>
       </div>
-      <button class="settings-btn" onclick="showInfo()" title="Info">ℹ️</button>
+      <button class="settings-btn" onclick="toggleSettings()" title="Info">ℹ️</button>
     </div>
   </nav>
 
@@ -558,134 +610,405 @@
   <section class="hero">
     <div class="hero-badge">
       <div class="hero-badge-dot"></div>
-      Powered by GPT-4o AI
+      AI-Powered LinkedIn Content Suite
     </div>
-    <h1>Turn any idea into a <em>viral LinkedIn post</em></h1>
-    <p>Just describe your topic — LinkedGenie crafts a professional, engaging post ready to publish in seconds.</p>
+    <h1>Your complete toolkit for <em>LinkedIn content</em></h1>
+    <p>Generate posts, optimize your profile, craft messages, and write replies — all with AI.</p>
   </section>
 
-  <!-- Login Prompt (shown when not signed in) -->
+  <!-- Login Prompt -->
   <div class="gen-card" id="loginPromptCard">
     <div class="login-prompt">
-      <p>Sign in with Google to start generating LinkedIn posts</p>
+      <p>Sign in with Google to start creating LinkedIn content</p>
       <div id="googleBtnMain" style="display:inline-block;"></div>
     </div>
   </div>
 
-  <!-- Generator (hidden until signed in) -->
-  <div class="gen-card" id="genCard" style="display:none;">
-    <div class="field-label">
-      <span class="field-label-icon">💡</span> Your idea or topic
-    </div>
-    <textarea class="idea-textarea" id="ideaInput" placeholder="e.g. Why I turned down a $200K offer to stay at my startup...&#10;e.g. 5 mistakes I made as a first-time manager&#10;e.g. How AI is changing the hiring process" maxlength="500"></textarea>
-    <div class="textarea-footer">
-      <span class="char-info">Be specific for better results</span>
-      <span class="char-info"><span id="charCount">0</span>/500</span>
+  <!-- App (hidden until signed in) -->
+  <div id="appContent" style="display:none;">
+
+    <!-- Main Tabs -->
+    <div class="main-tabs">
+      <button class="main-tab active" data-tab="post" onclick="switchTab('post')">✍️ Post</button>
+      <button class="main-tab" data-tab="profile" onclick="switchTab('profile')">👤 Profile</button>
+      <button class="main-tab" data-tab="message" onclick="switchTab('message')">📩 Message</button>
+      <button class="main-tab" data-tab="reply" onclick="switchTab('reply')">💬 Reply</button>
     </div>
 
-    <div class="field-label">
-      <span class="field-label-icon">🎨</span> Writing style
-    </div>
-    <div class="styles-grid">
-      <div class="style-card active" data-style="storytelling" onclick="pickStyle(this)">
-        <div class="style-icon">📖</div>
-        <div class="style-title">Story</div>
-        <div class="style-sub">Personal narrative</div>
+    <!-- ==================== TAB: POST ==================== -->
+    <div class="gen-card">
+      <div class="tab-content active" id="tabPost">
+        <!-- Sub tabs -->
+        <div class="sub-tabs">
+          <button class="sub-tab active" onclick="switchPostMode('write')">✍️ Write</button>
+          <button class="sub-tab" onclick="switchPostMode('rewrite')">🔄 Rewrite</button>
+          <button class="sub-tab" onclick="switchPostMode('hooks')">🎣 Hooks</button>
+        </div>
+
+        <!-- Write mode input -->
+        <div id="postWriteInput">
+          <div class="field-label"><span class="field-label-icon">💡</span> Your idea or topic</div>
+          <textarea class="idea-textarea" id="ideaInput" placeholder="e.g. Why I turned down a $200K offer to stay at my startup...&#10;e.g. 5 mistakes I made as a first-time manager&#10;e.g. How AI is changing the hiring process" maxlength="500"></textarea>
+          <div class="textarea-footer">
+            <span class="char-info">Be specific for better results</span>
+            <span class="char-info"><span id="charCount">0</span>/500</span>
+          </div>
+        </div>
+
+        <!-- Rewrite mode input -->
+        <div id="postRewriteInput" style="display:none;">
+          <div class="field-label"><span class="field-label-icon">🔄</span> Paste your post or draft</div>
+          <textarea class="idea-textarea large" id="rewriteInput" placeholder="Paste your existing LinkedIn post or rough draft here...&#10;&#10;The AI will rewrite it with better hooks, formatting, and engagement elements while keeping your core message." maxlength="2000"></textarea>
+          <div class="textarea-footer">
+            <span class="char-info">Paste your draft — AI will improve it</span>
+            <span class="char-info"><span id="rewriteCharCount">0</span>/2000</span>
+          </div>
+        </div>
+
+        <!-- Hooks mode input -->
+        <div id="postHooksInput" style="display:none;">
+          <div class="field-label"><span class="field-label-icon">🎣</span> What's your post about?</div>
+          <textarea class="idea-textarea" id="hooksInput" placeholder="e.g. The biggest mistake new managers make&#10;e.g. Why remote work is here to stay&#10;e.g. Lessons from scaling a startup to $1M ARR" maxlength="300" style="height:70px;"></textarea>
+          <div class="textarea-footer">
+            <span class="char-info">We'll generate 5 scroll-stopping hooks</span>
+            <span class="char-info"><span id="hooksCharCount">0</span>/300</span>
+          </div>
+        </div>
+
+        <!-- Style cards (shown in Write & Rewrite modes) -->
+        <div id="postStyleSection">
+          <div class="field-label"><span class="field-label-icon">🎨</span> Writing style</div>
+          <div class="styles-grid">
+            <div class="style-card active" data-style="storytelling" onclick="pickStyle(this)">
+              <div class="style-icon">📖</div>
+              <div class="style-title">Story</div>
+              <div class="style-sub">Personal narrative</div>
+            </div>
+            <div class="style-card" data-style="educational" onclick="pickStyle(this)">
+              <div class="style-icon">🎓</div>
+              <div class="style-title">Tips</div>
+              <div class="style-sub">Frameworks & lists</div>
+            </div>
+            <div class="style-card" data-style="motivational" onclick="pickStyle(this)">
+              <div class="style-icon">🔥</div>
+              <div class="style-title">Motivational</div>
+              <div class="style-sub">Inspire action</div>
+            </div>
+            <div class="style-card" data-style="contrarian" onclick="pickStyle(this)">
+              <div class="style-icon">🤔</div>
+              <div class="style-title">Hot Take</div>
+              <div class="style-sub">Bold opinion</div>
+            </div>
+            <div class="style-card" data-style="career_update" onclick="pickStyle(this)">
+              <div class="style-icon">🎉</div>
+              <div class="style-title">Career Update</div>
+              <div class="style-sub">New role / promo</div>
+            </div>
+            <div class="style-card" data-style="achievement" onclick="pickStyle(this)">
+              <div class="style-icon">🏆</div>
+              <div class="style-title">Achievement</div>
+              <div class="style-sub">Milestone win</div>
+            </div>
+            <div class="style-card pro-only" data-style="job_posting" onclick="pickStyle(this)">
+              <div class="style-icon">💼</div>
+              <div class="style-title">Job Post</div>
+              <div class="style-sub">Hiring ad</div>
+            </div>
+            <div class="style-card pro-only" data-style="open_to_work" onclick="pickStyle(this)">
+              <div class="style-icon">🔍</div>
+              <div class="style-title">Open to Work</div>
+              <div class="style-sub">Job search</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Language & Tone (shown in all post modes) -->
+        <div class="field-label"><span class="field-label-icon">🌐</span> Language</div>
+        <div class="options-row">
+          <button class="opt-btn active" data-lang="english" onclick="pickLang(this)">🇺🇸 English</button>
+          <button class="opt-btn" data-lang="arabic" onclick="pickLang(this)">🇸🇦 العربية</button>
+        </div>
+
+        <div class="field-label"><span class="field-label-icon">🎭</span> Tone</div>
+        <div class="tone-row">
+          <div class="tone-chip active" data-tone="professional" onclick="pickTone(this)">Professional</div>
+          <div class="tone-chip" data-tone="casual" onclick="pickTone(this)">Casual</div>
+          <div class="tone-chip" data-tone="bold" onclick="pickTone(this)">Bold</div>
+          <div class="tone-chip" data-tone="humorous" onclick="pickTone(this)">Humorous</div>
+        </div>
+
+        <button class="gen-btn" id="genBtn" onclick="handleGenerate()">
+          <span class="shimmer"></span>
+          <span id="genBtnText">⚡ Generate</span>
+        </button>
+        <div class="kb-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> to generate</div>
       </div>
-      <div class="style-card" data-style="educational" onclick="pickStyle(this)">
-        <div class="style-icon">🎓</div>
-        <div class="style-title">Educational</div>
-        <div class="style-sub">Tips & frameworks</div>
+
+      <!-- ==================== TAB: PROFILE ==================== -->
+      <div class="tab-content" id="tabProfile">
+        <div class="sub-tabs">
+          <button class="sub-tab active" onclick="switchProfileMode('headline')">💫 Headline</button>
+          <button class="sub-tab" onclick="switchProfileMode('about')">📝 About</button>
+          <button class="sub-tab" onclick="switchProfileMode('experience')">💼 Experience</button>
+        </div>
+
+        <!-- Headline -->
+        <div id="profileHeadline">
+          <div class="form-row">
+            <div class="form-group">
+              <div class="field-label">Current role / title</div>
+              <input class="form-input" id="hlRole" placeholder="e.g. Product Manager">
+            </div>
+            <div class="form-group">
+              <div class="field-label">Key skill or specialty</div>
+              <input class="form-input" id="hlSkill" placeholder="e.g. AI/ML, Growth, Design">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <div class="field-label">What value do you provide?</div>
+              <input class="form-input" id="hlValue" placeholder="e.g. Helping startups scale to $1M ARR">
+            </div>
+            <div class="form-group">
+              <div class="field-label">Target audience</div>
+              <input class="form-input" id="hlAudience" placeholder="e.g. Recruiters, Clients, Founders">
+            </div>
+          </div>
+        </div>
+
+        <!-- About -->
+        <div id="profileAbout" style="display:none;">
+          <div class="form-group">
+            <div class="field-label">Career background (1-2 sentences)</div>
+            <textarea class="idea-textarea" id="aboutBg" placeholder="e.g. 6 years in B2B SaaS marketing, led content strategy at 3 startups from seed to Series B" style="height:60px;"></textarea>
+          </div>
+          <div class="form-group">
+            <div class="field-label">Top achievements (2-3)</div>
+            <textarea class="idea-textarea" id="aboutAchievements" placeholder="e.g. Generated $12M in pipeline&#10;Grew subscriber base from 0 to 100K&#10;Built a team of 15 marketers" style="height:70px;"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <div class="field-label">Areas of expertise</div>
+              <input class="form-input" id="aboutExpertise" placeholder="e.g. SEO, Content Strategy, AI">
+            </div>
+            <div class="form-group">
+              <div class="field-label">What are you looking for?</div>
+              <input class="form-input" id="aboutGoal" placeholder="e.g. New clients, Hiring, Collaboration">
+            </div>
+          </div>
+        </div>
+
+        <!-- Experience -->
+        <div id="profileExperience" style="display:none;">
+          <div class="form-row">
+            <div class="form-group">
+              <div class="field-label">Job title</div>
+              <input class="form-input" id="expTitle" placeholder="e.g. Senior Product Manager">
+            </div>
+            <div class="form-group">
+              <div class="field-label">Company</div>
+              <input class="form-input" id="expCompany" placeholder="e.g. Acme AI (Series B Startup)">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="field-label">Key responsibilities & achievements</div>
+            <textarea class="idea-textarea" id="expDetails" placeholder="e.g. Led product strategy for core AI platform&#10;Grew users from 5K to 150K&#10;Shipped 12 features, increasing retention by 34%&#10;Built team from 2 to 8 people" style="height:100px;"></textarea>
+          </div>
+        </div>
+
+        <!-- Language & Tone for Profile -->
+        <div class="field-label" style="margin-top:8px;"><span class="field-label-icon">🌐</span> Language</div>
+        <div class="options-row">
+          <button class="opt-btn active" data-lang="english" onclick="pickLang(this)">🇺🇸 English</button>
+          <button class="opt-btn" data-lang="arabic" onclick="pickLang(this)">🇸🇦 العربية</button>
+        </div>
+
+        <div class="field-label"><span class="field-label-icon">🎭</span> Tone</div>
+        <div class="tone-row">
+          <div class="tone-chip active" data-tone="professional" onclick="pickTone(this)">Professional</div>
+          <div class="tone-chip" data-tone="casual" onclick="pickTone(this)">Conversational</div>
+          <div class="tone-chip" data-tone="bold" onclick="pickTone(this)">Bold</div>
+        </div>
+
+        <button class="gen-btn" onclick="handleGenerate()">
+          <span class="shimmer"></span>
+          <span>⚡ Generate</span>
+        </button>
+        <div class="kb-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> to generate</div>
       </div>
-      <div class="style-card" data-style="motivational" onclick="pickStyle(this)">
-        <div class="style-icon">🔥</div>
-        <div class="style-title">Motivational</div>
-        <div class="style-sub">Inspire action</div>
+
+      <!-- ==================== TAB: MESSAGE ==================== -->
+      <div class="tab-content" id="tabMessage">
+        <div class="sub-tabs">
+          <button class="sub-tab active" onclick="switchMessageMode('connection')">🤝 Connection</button>
+          <button class="sub-tab" onclick="switchMessageMode('followup')">📨 Follow-up</button>
+          <button class="sub-tab" onclick="switchMessageMode('thankyou')">🙏 Thank You</button>
+        </div>
+
+        <!-- Connection Request -->
+        <div id="msgConnection">
+          <div class="form-row">
+            <div class="form-group">
+              <div class="field-label">Their name & role</div>
+              <input class="form-input" id="connName" placeholder="e.g. Sarah, VP of Marketing at Acme">
+            </div>
+            <div class="form-group">
+              <div class="field-label">What you have in common</div>
+              <input class="form-input" id="connCommon" placeholder="e.g. Saw their post about AI, mutual connection">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="field-label">Your goal</div>
+            <div class="tone-row">
+              <div class="tone-chip active" data-goal="networking" onclick="pickGoal(this)">Networking</div>
+              <div class="tone-chip" data-goal="collaboration" onclick="pickGoal(this)">Collaboration</div>
+              <div class="tone-chip" data-goal="learning" onclick="pickGoal(this)">Learn from them</div>
+              <div class="tone-chip" data-goal="hiring" onclick="pickGoal(this)">Hiring</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Follow-up -->
+        <div id="msgFollowup" style="display:none;">
+          <div class="form-row">
+            <div class="form-group">
+              <div class="field-label">Their name</div>
+              <input class="form-input" id="fuName" placeholder="e.g. Mark">
+            </div>
+            <div class="form-group">
+              <div class="field-label">How you connected</div>
+              <input class="form-input" id="fuContext" placeholder="e.g. Met at conference, connected last week">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="field-label">What do you want?</div>
+            <input class="form-input" id="fuAsk" placeholder="e.g. 15-min call, advice on career move, job opportunity">
+          </div>
+        </div>
+
+        <!-- Thank You -->
+        <div id="msgThankyou" style="display:none;">
+          <div class="form-row">
+            <div class="form-group">
+              <div class="field-label">Their name</div>
+              <input class="form-input" id="tyName" placeholder="e.g. Jennifer">
+            </div>
+            <div class="form-group">
+              <div class="field-label">Context</div>
+              <input class="form-input" id="tyContext" placeholder="e.g. Interview, coffee chat, advice call">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="field-label">Key takeaway from the conversation</div>
+            <input class="form-input" id="tyTakeaway" placeholder="e.g. Loved learning about their approach to scaling teams">
+          </div>
+        </div>
+
+        <!-- Language for Message -->
+        <div class="field-label" style="margin-top:8px;"><span class="field-label-icon">🌐</span> Language</div>
+        <div class="options-row">
+          <button class="opt-btn active" data-lang="english" onclick="pickLang(this)">🇺🇸 English</button>
+          <button class="opt-btn" data-lang="arabic" onclick="pickLang(this)">🇸🇦 العربية</button>
+        </div>
+
+        <button class="gen-btn" onclick="handleGenerate()">
+          <span class="shimmer"></span>
+          <span>⚡ Generate Message</span>
+        </button>
+        <div class="kb-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> to generate</div>
       </div>
-      <div class="style-card" data-style="contrarian" onclick="pickStyle(this)">
-        <div class="style-icon">🤔</div>
-        <div class="style-title">Hot Take</div>
-        <div class="style-sub">Bold opinion</div>
+
+      <!-- ==================== TAB: REPLY ==================== -->
+      <div class="tab-content" id="tabReply">
+        <div class="form-group">
+          <div class="field-label"><span class="field-label-icon">💬</span> Paste the comment you want to reply to</div>
+          <textarea class="idea-textarea large" id="replyComment" placeholder="Paste the LinkedIn comment here..." maxlength="1000"></textarea>
+        </div>
+
+        <div class="field-label"><span class="field-label-icon">🎯</span> Reply style</div>
+        <div class="tone-row">
+          <div class="tone-chip active" data-replystyle="supportive" onclick="pickReplyStyle(this)">Supportive</div>
+          <div class="tone-chip" data-replystyle="insightful" onclick="pickReplyStyle(this)">Add value</div>
+          <div class="tone-chip" data-replystyle="question" onclick="pickReplyStyle(this)">Ask question</div>
+          <div class="tone-chip" data-replystyle="disagree" onclick="pickReplyStyle(this)">Respectful disagree</div>
+        </div>
+
+        <div class="field-label"><span class="field-label-icon">🌐</span> Language</div>
+        <div class="options-row">
+          <button class="opt-btn active" data-lang="english" onclick="pickLang(this)">🇺🇸 English</button>
+          <button class="opt-btn" data-lang="arabic" onclick="pickLang(this)">🇸🇦 العربية</button>
+        </div>
+
+        <button class="gen-btn" onclick="handleGenerate()">
+          <span class="shimmer"></span>
+          <span>⚡ Generate Replies</span>
+        </button>
+        <div class="kb-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> to generate</div>
       </div>
     </div>
 
-    <div class="field-label">
-      <span class="field-label-icon">🌐</span> Language
-    </div>
-    <div class="options-row">
-      <button class="opt-btn active" data-lang="english" onclick="pickLang(this)">🇺🇸 English</button>
-      <button class="opt-btn" data-lang="arabic" onclick="pickLang(this)">🇸🇦 العربية</button>
-    </div>
-
-    <div class="field-label">
-      <span class="field-label-icon">🎭</span> Tone
-    </div>
-    <div class="tone-row">
-      <div class="tone-chip active" data-tone="professional" onclick="pickTone(this)">Professional</div>
-      <div class="tone-chip" data-tone="casual" onclick="pickTone(this)">Casual</div>
-      <div class="tone-chip" data-tone="bold" onclick="pickTone(this)">Bold</div>
-      <div class="tone-chip" data-tone="humorous" onclick="pickTone(this)">Humorous</div>
-    </div>
-
-    <button class="gen-btn" id="genBtn" onclick="handleGenerate()">
-      <span class="shimmer"></span>
-      <span id="genBtnText">⚡ Generate Post</span>
-    </button>
-  </div>
-
-  <!-- Output -->
-  <div class="output-card" id="outputCard">
-    <div class="output-top">
-      <div class="output-badge">
-        <div class="output-badge-dot"></div>
-        Your LinkedIn Post
+    <!-- Output (single text) -->
+    <div class="output-card" id="outputCard">
+      <div class="output-top">
+        <div class="output-badge">
+          <div class="output-badge-dot"></div>
+          <span id="outputTitle">Your LinkedIn Post</span>
+        </div>
+        <div class="output-actions">
+          <button class="act-btn" id="copyBtn" onclick="copyResult()">📋 Copy</button>
+          <button class="act-btn" onclick="handleGenerate()">🔄 Regenerate</button>
+        </div>
       </div>
-      <div class="output-actions">
-        <button class="act-btn" id="copyBtn" onclick="copyResult()">📋 Copy</button>
-        <button class="act-btn" onclick="handleGenerate()">🔄 Regenerate</button>
+      <div class="output-text" id="outputText"></div>
+      <div class="output-stats" id="outputStats">
+        <div class="stat-item">Words: <b id="statWords">0</b></div>
+        <div class="stat-item">Characters: <b id="statChars">0</b></div>
       </div>
     </div>
-    <div class="output-text" id="outputText"></div>
-    <div class="output-stats">
-      <div class="stat-item">Words: <b id="statWords">0</b></div>
-      <div class="stat-item">Characters: <b id="statChars">0</b></div>
-      <div class="stat-item">Read time: <b id="statTime">0s</b></div>
-      <div class="stat-item">Emoji count: <b id="statEmoji">0</b></div>
-    </div>
-  </div>
 
-  <!-- Paywall -->
-  <div class="paywall-card" id="paywallCard">
-    <div class="paywall-icon">✨</div>
-    <div class="paywall-title">You've used all free posts today</div>
-    <div class="paywall-desc">
-      Upgrade to <b>LinkedGenie Pro</b> for unlimited AI-generated posts,
-      priority generation, and exclusive writing styles.
+    <!-- Multi output (hooks, headlines, replies) -->
+    <div class="multi-output" id="multiOutput">
+      <div class="output-top">
+        <div class="output-badge">
+          <div class="output-badge-dot"></div>
+          <span id="multiTitle">Your Hooks</span>
+        </div>
+      </div>
+      <div id="multiCards"></div>
     </div>
-    <button class="upgrade-btn" onclick="openUpgrade()">🚀 Upgrade to Pro — $7/month</button>
-    <div class="paywall-price">Cancel anytime · <b>3 subscribers = we break even!</b></div>
+
+    <!-- Paywall -->
+    <div class="paywall-card" id="paywallCard">
+      <div class="paywall-icon">✨</div>
+      <div class="paywall-title">You've used all free credits today</div>
+      <div class="paywall-desc">
+        Upgrade to <b>LinkedGenie Pro</b> for unlimited access to all tools,
+        exclusive templates, and priority generation.
+      </div>
+      <button class="upgrade-btn" onclick="openUpgrade()">🚀 Upgrade to Pro — $7/month</button>
+      <div class="paywall-price">Cancel anytime</div>
+    </div>
   </div>
 
   <!-- Features -->
   <div class="features">
     <div class="feature-card">
-      <div class="feature-icon">⚡</div>
-      <div class="feature-title">Instant Generation</div>
-      <div class="feature-desc">Posts generated in under 5 seconds using GPT-4o AI</div>
+      <div class="feature-icon">✍️</div>
+      <div class="feature-title">Smart Posts</div>
+      <div class="feature-desc">8 templates including Career Update & Job Posting</div>
     </div>
     <div class="feature-card">
-      <div class="feature-icon">🎯</div>
-      <div class="feature-title">4 Writing Styles</div>
-      <div class="feature-desc">Story, Educational, Motivational, or Hot Take</div>
+      <div class="feature-icon">👤</div>
+      <div class="feature-title">Profile Optimizer</div>
+      <div class="feature-desc">Headline, About section & Experience descriptions</div>
     </div>
     <div class="feature-card">
-      <div class="feature-icon">🌍</div>
-      <div class="feature-title">Bilingual</div>
-      <div class="feature-desc">Full support for English & Arabic content</div>
+      <div class="feature-icon">📩</div>
+      <div class="feature-title">Messages & Replies</div>
+      <div class="feature-desc">Connection requests, follow-ups & comment replies</div>
     </div>
   </div>
 
-  <!-- Footer -->
   <footer class="footer">
     LinkedGenie © 2025 · Built with ❤️ and AI
   </footer>
@@ -696,12 +1019,16 @@
   <div class="modal">
     <div class="modal-title">ℹ️ About LinkedGenie</div>
     <div class="modal-desc">
-      LinkedGenie uses advanced AI (GPT-4o) to generate professional LinkedIn posts instantly.
+      LinkedGenie is your complete AI toolkit for LinkedIn content creation.
       <br><br>
-      <b>Free plan:</b> Sign in with Google — 3 posts per day.<br>
-      <b>Pro plan:</b> $7/month — unlimited posts, priority generation.
+      <b>Free plan:</b> Sign in with Google — 3 generations per day.<br>
+      <b>Pro plan:</b> $7/month — unlimited access to all tools and templates.
       <br><br>
-      Your usage is tracked per account so it syncs across all your devices and browsers.
+      <b>Tools included:</b><br>
+      ✍️ Post generator (8 styles + rewrite + hooks)<br>
+      👤 Profile optimizer (headline, about, experience)<br>
+      📩 Message crafter (connection, follow-up, thank you)<br>
+      💬 Comment reply generator
       <br><br>
       <span style="color:var(--text-muted);font-size:11px;">Built by <a href="https://github.com/sctadnan" style="color:var(--accent2);">sctadnan</a></span>
     </div>
@@ -714,14 +1041,111 @@
 
 <script>
 // ============ STATE ============
+let currentTab = 'post';
+let currentPostMode = 'write';
+let currentProfileMode = 'headline';
+let currentMessageMode = 'connection';
 let currentStyle = 'storytelling';
 let currentLang = 'english';
 let currentTone = 'professional';
+let currentGoal = 'networking';
+let currentReplyStyle = 'supportive';
 let resultText = '';
 let idToken = null;
 let currentUser = null;
 const FREE_LIMIT = 3;
 const GOOGLE_CLIENT_ID = '518315582553-qg3onsjs8r7d6u5kue1fugppan66a2k9.apps.googleusercontent.com';
+
+// ============ TAB SWITCHING ============
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.main-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+  // Hide outputs when switching tabs
+  document.getElementById('outputCard').classList.remove('visible');
+  document.getElementById('multiOutput').classList.remove('visible');
+  document.getElementById('paywallCard').classList.remove('visible');
+}
+
+function switchPostMode(mode) {
+  currentPostMode = mode;
+  document.querySelectorAll('#tabPost .sub-tab').forEach((t, i) => t.classList.toggle('active', ['write','rewrite','hooks'][i] === mode));
+  document.getElementById('postWriteInput').style.display = mode === 'write' ? '' : 'none';
+  document.getElementById('postRewriteInput').style.display = mode === 'rewrite' ? '' : 'none';
+  document.getElementById('postHooksInput').style.display = mode === 'hooks' ? '' : 'none';
+  document.getElementById('postStyleSection').style.display = mode === 'hooks' ? 'none' : '';
+}
+
+function switchProfileMode(mode) {
+  currentProfileMode = mode;
+  document.querySelectorAll('#tabProfile .sub-tab').forEach((t, i) => t.classList.toggle('active', ['headline','about','experience'][i] === mode));
+  document.getElementById('profileHeadline').style.display = mode === 'headline' ? '' : 'none';
+  document.getElementById('profileAbout').style.display = mode === 'about' ? '' : 'none';
+  document.getElementById('profileExperience').style.display = mode === 'experience' ? '' : 'none';
+}
+
+function switchMessageMode(mode) {
+  currentMessageMode = mode;
+  document.querySelectorAll('#tabMessage .sub-tab').forEach((t, i) => t.classList.toggle('active', ['connection','followup','thankyou'][i] === mode));
+  document.getElementById('msgConnection').style.display = mode === 'connection' ? '' : 'none';
+  document.getElementById('msgFollowup').style.display = mode === 'followup' ? '' : 'none';
+  document.getElementById('msgThankyou').style.display = mode === 'thankyou' ? '' : 'none';
+}
+
+// ============ PICKERS ============
+function pickStyle(el) {
+  if (el.classList.contains('pro-only') && currentUser && !currentUser.isPro) {
+    openUpgrade(); return;
+  }
+  document.querySelectorAll('.style-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active'); currentStyle = el.dataset.style;
+}
+function pickLang(el) {
+  const row = el.parentElement;
+  row.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active'); currentLang = el.dataset.lang;
+}
+function pickTone(el) {
+  const row = el.parentElement;
+  row.querySelectorAll('.tone-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active'); currentTone = el.dataset.tone;
+}
+function pickGoal(el) {
+  el.parentElement.querySelectorAll('.tone-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active'); currentGoal = el.dataset.goal;
+}
+function pickReplyStyle(el) {
+  el.parentElement.querySelectorAll('.tone-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active'); currentReplyStyle = el.dataset.replystyle;
+}
+
+// ============ CHAR COUNTERS ============
+document.getElementById('ideaInput').addEventListener('input', function() {
+  document.getElementById('charCount').textContent = this.value.length;
+  localStorage.setItem('lg_draft_write', this.value);
+});
+document.getElementById('rewriteInput').addEventListener('input', function() {
+  document.getElementById('rewriteCharCount').textContent = this.value.length;
+});
+document.getElementById('hooksInput').addEventListener('input', function() {
+  document.getElementById('hooksCharCount').textContent = this.value.length;
+});
+
+// ============ AUTO-SAVE DRAFT ============
+const savedDraft = localStorage.getItem('lg_draft_write');
+if (savedDraft) {
+  document.getElementById('ideaInput').value = savedDraft;
+  document.getElementById('charCount').textContent = savedDraft.length;
+}
+
+// ============ KEYBOARD SHORTCUT ============
+document.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+    e.preventDefault();
+    handleGenerate();
+  }
+});
 
 // ============ GOOGLE AUTH ============
 function renderGoogleButtons() {
@@ -733,45 +1157,28 @@ function renderGoogleButtons() {
 }
 
 function isTokenExpired(token) {
-  try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return Date.now() >= payload.exp * 1000;
-  } catch { return true; }
+  try { const p = JSON.parse(atob(token.split('.')[1])); return Date.now() >= p.exp * 1000; } catch { return true; }
 }
 
 function handleCredentialResponse(response) {
   idToken = response.credential;
-  // Save to sessionStorage so it survives refresh
   sessionStorage.setItem('gsi_token', idToken);
-  // Decode JWT to get user info (for UI only, server verifies separately)
   const payload = JSON.parse(atob(idToken.split('.')[1]));
-  currentUser = {
-    email: payload.email,
-    name: payload.name,
-    picture: payload.picture
-  };
+  currentUser = { email: payload.email, name: payload.name, picture: payload.picture };
   onSignIn();
 }
 
 function restoreSession() {
   const saved = sessionStorage.getItem('gsi_token');
-  if (!saved || isTokenExpired(saved)) {
-    sessionStorage.removeItem('gsi_token');
-    return false;
-  }
+  if (!saved || isTokenExpired(saved)) { sessionStorage.removeItem('gsi_token'); return false; }
   idToken = saved;
   const payload = JSON.parse(atob(idToken.split('.')[1]));
-  currentUser = {
-    email: payload.email,
-    name: payload.name,
-    picture: payload.picture
-  };
+  currentUser = { email: payload.email, name: payload.name, picture: payload.picture };
   onSignIn();
   return true;
 }
 
 function onSignIn() {
-  // Update navbar
   const authArea = document.getElementById('authArea');
   authArea.innerHTML = `
     <div class="user-info">
@@ -781,61 +1188,39 @@ function onSignIn() {
     </div>
     <button class="signout-btn" onclick="signOut()">Sign out</button>
   `;
-
-  // Show generator, hide login prompt
   document.getElementById('loginPromptCard').style.display = 'none';
-  document.getElementById('genCard').style.display = 'block';
-
-  // Fetch user status from server
+  document.getElementById('appContent').style.display = '';
   fetchUserStatus();
 }
 
 async function fetchUserStatus() {
   try {
-    const res = await fetch('/api/user', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${idToken}`
-      }
-    });
-    if (!res.ok) {
-      console.error('User API error:', res.status);
-      return;
-    }
-    let data;
-    try { data = await res.json(); } catch { return; }
+    const res = await fetch('/api/user', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` } });
+    if (!res.ok) return;
+    let data; try { data = await res.json(); } catch { return; }
     currentUser.isPro = data.isPro;
     updateUsageUI(data.remaining, data.isPro ? 'unlimited' : FREE_LIMIT);
-
-    // Update Pro badge
     if (data.isPro) {
+      document.querySelectorAll('.style-card.pro-only').forEach(c => c.classList.remove('pro-only'));
       const info = document.querySelector('.user-info');
       if (info && !info.querySelector('.pro-badge')) {
-        const badge = document.createElement('span');
-        badge.className = 'pro-badge';
-        badge.textContent = 'PRO';
-        info.appendChild(badge);
+        const badge = document.createElement('span'); badge.className = 'pro-badge'; badge.textContent = 'PRO'; info.appendChild(badge);
       }
     }
-  } catch (e) {
-    console.error('Failed to fetch user status:', e);
-  }
+  } catch (e) { console.error('Failed to fetch user status:', e); }
 }
 
 function signOut() {
   google.accounts.id.disableAutoSelect();
-  idToken = null;
-  currentUser = null;
+  idToken = null; currentUser = null;
   sessionStorage.removeItem('gsi_token');
-
-  // Reset UI
   const authArea = document.getElementById('authArea');
   authArea.innerHTML = `<div id="googleBtnNav"></div>`;
   renderGoogleButtons();
   document.getElementById('loginPromptCard').style.display = 'block';
-  document.getElementById('genCard').style.display = 'none';
+  document.getElementById('appContent').style.display = 'none';
   document.getElementById('outputCard').classList.remove('visible');
+  document.getElementById('multiOutput').classList.remove('visible');
   document.getElementById('paywallCard').classList.remove('visible');
   document.getElementById('usageLabel').textContent = '—';
   document.getElementById('usageIndicator').className = 'usage-indicator';
@@ -845,127 +1230,147 @@ function updateUsageUI(remaining, limit) {
   const label = document.getElementById('usageLabel');
   const dot = document.getElementById('usageIndicator');
   dot.className = 'usage-indicator';
-
-  if (limit === 'unlimited') {
-    label.textContent = 'Unlimited (Pro)';
-    return;
-  }
-
+  if (limit === 'unlimited') { label.textContent = 'Unlimited (Pro)'; return; }
   label.textContent = `${remaining}/${limit} free today`;
   if (remaining === 0) dot.classList.add('out');
   else if (remaining === 1) dot.classList.add('warn');
 }
 
-// ============ MODAL ============
-function showInfo() { toggleSettings(); }
-function toggleSettings() {
-  document.getElementById('settingsModal').classList.toggle('visible');
+// ============ BUILD REQUEST ============
+function buildRequest() {
+  if (currentTab === 'post') {
+    if (currentPostMode === 'write') {
+      const idea = document.getElementById('ideaInput').value.trim();
+      if (!idea) return null;
+      return { type: 'post', mode: 'write', idea, style: currentStyle, tone: currentTone, lang: currentLang };
+    } else if (currentPostMode === 'rewrite') {
+      const draft = document.getElementById('rewriteInput').value.trim();
+      if (!draft) return null;
+      return { type: 'post', mode: 'rewrite', idea: draft, style: currentStyle, tone: currentTone, lang: currentLang };
+    } else if (currentPostMode === 'hooks') {
+      const topic = document.getElementById('hooksInput').value.trim();
+      if (!topic) return null;
+      return { type: 'post', mode: 'hooks', idea: topic, lang: currentLang };
+    }
+  } else if (currentTab === 'profile') {
+    if (currentProfileMode === 'headline') {
+      const role = document.getElementById('hlRole').value.trim();
+      if (!role) return null;
+      return { type: 'profile', mode: 'headline', inputs: { role, skill: document.getElementById('hlSkill').value.trim(), value: document.getElementById('hlValue').value.trim(), audience: document.getElementById('hlAudience').value.trim() }, tone: currentTone, lang: currentLang };
+    } else if (currentProfileMode === 'about') {
+      const bg = document.getElementById('aboutBg').value.trim();
+      if (!bg) return null;
+      return { type: 'profile', mode: 'about', inputs: { background: bg, achievements: document.getElementById('aboutAchievements').value.trim(), expertise: document.getElementById('aboutExpertise').value.trim(), goal: document.getElementById('aboutGoal').value.trim() }, tone: currentTone, lang: currentLang };
+    } else if (currentProfileMode === 'experience') {
+      const title = document.getElementById('expTitle').value.trim();
+      if (!title) return null;
+      return { type: 'profile', mode: 'experience', inputs: { title, company: document.getElementById('expCompany').value.trim(), details: document.getElementById('expDetails').value.trim() }, tone: currentTone, lang: currentLang };
+    }
+  } else if (currentTab === 'message') {
+    if (currentMessageMode === 'connection') {
+      const name = document.getElementById('connName').value.trim();
+      if (!name) return null;
+      return { type: 'message', mode: 'connection', inputs: { name, common: document.getElementById('connCommon').value.trim(), goal: currentGoal }, lang: currentLang };
+    } else if (currentMessageMode === 'followup') {
+      const name = document.getElementById('fuName').value.trim();
+      if (!name) return null;
+      return { type: 'message', mode: 'followup', inputs: { name, context: document.getElementById('fuContext').value.trim(), ask: document.getElementById('fuAsk').value.trim() }, lang: currentLang };
+    } else if (currentMessageMode === 'thankyou') {
+      const name = document.getElementById('tyName').value.trim();
+      if (!name) return null;
+      return { type: 'message', mode: 'thankyou', inputs: { name, context: document.getElementById('tyContext').value.trim(), takeaway: document.getElementById('tyTakeaway').value.trim() }, lang: currentLang };
+    }
+  } else if (currentTab === 'reply') {
+    const comment = document.getElementById('replyComment').value.trim();
+    if (!comment) return null;
+    return { type: 'reply', mode: currentReplyStyle, idea: comment, lang: currentLang };
+  }
+  return null;
 }
-
-// ============ UI HANDLERS ============
-function pickStyle(el) {
-  document.querySelectorAll('.style-card').forEach(c => c.classList.remove('active'));
-  el.classList.add('active'); currentStyle = el.dataset.style;
-}
-function pickLang(el) {
-  document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active'); currentLang = el.dataset.lang;
-}
-function pickTone(el) {
-  document.querySelectorAll('.tone-chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active'); currentTone = el.dataset.tone;
-}
-document.getElementById('ideaInput').addEventListener('input', function() {
-  document.getElementById('charCount').textContent = this.value.length;
-});
 
 // ============ GENERATE ============
 async function handleGenerate() {
-  if (!idToken) {
-    google.accounts.id.prompt();
-    return;
-  }
+  if (!idToken) return;
 
-  const idea = document.getElementById('ideaInput').value.trim();
-  if (!idea) {
-    const ta = document.getElementById('ideaInput');
-    ta.style.borderColor = 'var(--red)'; ta.focus();
-    setTimeout(() => ta.style.borderColor = 'var(--border)', 1500);
-    return;
-  }
+  const reqBody = buildRequest();
+  if (!reqBody) return;
 
   const btn = document.getElementById('genBtn');
   const btnText = document.getElementById('genBtnText');
-  btn.disabled = true;
-  btnText.innerHTML = '<span class="spinner"></span> Generating with AI...';
+  if (btn) btn.disabled = true;
+  if (btnText) btnText.innerHTML = '<span class="spinner"></span> Generating...';
   document.getElementById('paywallCard').classList.remove('visible');
+  document.getElementById('outputCard').classList.remove('visible');
+  document.getElementById('multiOutput').classList.remove('visible');
 
   try {
     const response = await fetch('/api/generate', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${idToken}`
-      },
-      body: JSON.stringify({ idea, style: currentStyle, tone: currentTone, lang: currentLang })
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
+      body: JSON.stringify(reqBody)
     });
 
     let data;
-    try {
-      data = await response.json();
-    } catch {
-      throw new Error(`Server error (${response.status})`);
-    }
+    try { data = await response.json(); } catch { throw new Error(`Server error (${response.status})`); }
 
     if (response.status === 429) {
-      // Daily limit reached
       document.getElementById('paywallCard').classList.add('visible');
-      document.getElementById('outputCard').classList.remove('visible');
       updateUsageUI(0, FREE_LIMIT);
-      btn.disabled = false;
-      btnText.innerHTML = '⚡ Generate Post';
-      return;
+      resetBtn(); return;
     }
-
-    if (response.status === 401) {
-      // Token expired, re-login
-      signOut();
-      btn.disabled = false;
-      btnText.innerHTML = '⚡ Generate Post';
-      return;
-    }
-
+    if (response.status === 401) { signOut(); resetBtn(); return; }
     if (!response.ok) throw new Error(data.error || 'Server error');
 
-    resultText = data.post;
-    showOutput(data.post);
+    // Handle multi-output (hooks, headlines, replies)
+    if (data.items) {
+      showMultiOutput(data.items, data.title || 'Results');
+    } else {
+      resultText = data.post;
+      showOutput(data.post, data.outputTitle);
+    }
+
     if (data.remaining !== undefined) {
       updateUsageUI(data.remaining, currentUser.isPro ? 'unlimited' : FREE_LIMIT);
     }
   } catch (err) {
     console.error('Generate error:', err);
-    const msg = err.message || 'Unknown error';
-    btnText.textContent = `❌ ${msg}`;
-    setTimeout(() => { btnText.innerHTML = '⚡ Generate Post'; btn.disabled = false; }, 3000);
+    if (btnText) btnText.textContent = `❌ ${err.message || 'Error'}`;
+    setTimeout(resetBtn, 3000);
     return;
   }
-  btn.disabled = false;
-  btnText.innerHTML = '⚡ Generate Post';
+  resetBtn();
 }
 
-function showOutput(text) {
-  const card = document.getElementById('outputCard');
+function resetBtn() {
+  const btn = document.getElementById('genBtn');
+  const btnText = document.getElementById('genBtnText');
+  if (btn) btn.disabled = false;
+  if (btnText) btnText.innerHTML = '⚡ Generate';
+}
+
+function showOutput(text, title) {
+  document.getElementById('outputTitle').textContent = title || 'Your Content';
   document.getElementById('outputText').textContent = text;
-  card.classList.add('visible');
   const words = text.split(/\s+/).filter(w => w).length;
-  const chars = text.length;
-  const readSec = Math.ceil(words / 3.5);
-  const emojiCount = (text.match(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE00}-\u{FE0F}\u{1F900}-\u{1F9FF}\u{200D}\u{20E3}♻️📈🤝💡●→←•✨⚡🔥📖🎓🤔]/gu) || []).length;
   document.getElementById('statWords').textContent = words;
-  document.getElementById('statChars').textContent = chars.toLocaleString();
-  document.getElementById('statTime').textContent = readSec > 60 ? `${Math.floor(readSec/60)}m ${readSec%60}s` : `${readSec}s`;
-  document.getElementById('statEmoji').textContent = emojiCount;
-  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  document.getElementById('statChars').textContent = text.length.toLocaleString();
+  document.getElementById('outputCard').classList.add('visible');
+  document.getElementById('outputCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function showMultiOutput(items, title) {
+  document.getElementById('multiTitle').textContent = title;
+  const container = document.getElementById('multiCards');
+  container.innerHTML = items.map((item, i) => `
+    <div class="hook-card">
+      <div class="hook-text">${item}</div>
+      <div class="hook-actions">
+        <button class="hook-btn" onclick="copyItem(this, ${i})">📋 Copy</button>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('multiOutput').classList.add('visible');
+  document.getElementById('multiOutput').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 function copyResult() {
@@ -976,9 +1381,15 @@ function copyResult() {
   });
 }
 
-function openUpgrade() {
-  window.open('/api/checkout', '_blank');
+function copyItem(btn, index) {
+  const text = document.querySelectorAll('.hook-text')[index].textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✅'; setTimeout(() => { btn.textContent = '📋 Copy'; }, 1500);
+  });
 }
+
+function openUpgrade() { window.open('/api/checkout', '_blank'); }
+function toggleSettings() { document.getElementById('settingsModal').classList.toggle('visible'); }
 
 // ============ INIT GOOGLE ============
 let googleInitialized = false;
@@ -987,48 +1398,32 @@ function initGoogleAuth() {
   if (googleInitialized) return;
   if (typeof google === 'undefined' || !google.accounts) return;
   googleInitialized = true;
-  console.log('Google Identity Services loaded successfully');
-
   google.accounts.id.initialize({
     client_id: GOOGLE_CLIENT_ID,
     callback: handleCredentialResponse,
     auto_select: true,
     use_fedcm_for_prompt: false
   });
-
-  // Try to restore saved session first
-  if (!restoreSession()) {
-    // No saved session, show Google buttons
-    renderGoogleButtons();
-    google.accounts.id.prompt();
-  }
+  if (!restoreSession()) { renderGoogleButtons(); google.accounts.id.prompt(); }
 }
 
-// Fallback: if onload on script tag didn't fire, retry every 500ms for up to 5 seconds
 window.onload = function() {
   if (googleInitialized) return;
-  initGoogleAuth(); // Try immediately
-
+  initGoogleAuth();
   if (!googleInitialized) {
     let attempts = 0;
     const interval = setInterval(function() {
-      attempts++;
-      initGoogleAuth();
+      attempts++; initGoogleAuth();
       if (googleInitialized || attempts >= 10) {
         clearInterval(interval);
         if (!googleInitialized) {
-          console.error('Google Identity Services failed to load');
-          // Show fallback message
           const mainBtn = document.getElementById('googleBtnMain');
-          if (mainBtn) {
-            mainBtn.innerHTML = '<p style="color:var(--red);font-size:13px;">Failed to load Google Sign-In. Please disable ad blocker or try a different browser.</p>';
-          }
+          if (mainBtn) mainBtn.innerHTML = '<p style="color:var(--red);font-size:13px;">Failed to load Google Sign-In. Please disable ad blocker or try a different browser.</p>';
         }
       }
     }, 500);
   }
 };
 </script>
-
 </body>
 </html>
