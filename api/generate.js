@@ -47,14 +47,10 @@ function langInstruction(lang) {
   const langMap = {
     english: "Write the entire output in English.",
     spanish: "Write the entire output in Spanish. Use professional, modern Spanish.",
-    chinese: "Write the entire output in Simplified Chinese (Mandarin). Use professional, modern Chinese.",
-    arabic: "Write the entire output in Arabic. Use modern, professional Arabic suitable for LinkedIn.",
-    hindi: "Write the entire output in Hindi. Use modern, professional Hindi suitable for LinkedIn.",
     portuguese: "Write the entire output in Portuguese. Use modern, professional Portuguese.",
     french: "Write the entire output in French. Use modern, professional French.",
-    japanese: "Write the entire output in Japanese. Use modern, professional Japanese suitable for LinkedIn.",
-    russian: "Write the entire output in Russian. Use modern, professional Russian.",
-    german: "Write the entire output in German. Use modern, professional German."
+    german: "Write the entire output in German. Use modern, professional German.",
+    arabic: "Write the entire output in Arabic. Use modern, professional Arabic suitable for LinkedIn."
   };
   return langMap[lang] || langMap.english;
 }

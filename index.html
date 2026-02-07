@@ -183,14 +183,35 @@
   .hero p { font-size: 15px; line-height: 1.6; color: var(--text-dim); max-width: 460px; margin: 0 auto; }
 
   /* === MAIN TABS === */
+  .tabs-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px;
+  }
   .main-tabs {
+    flex: 1;
     display: flex; gap: 4px;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 14px;
     padding: 4px;
-    margin-bottom: 16px;
   }
+  .global-lang {
+    padding: 8px 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%2399a' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 24px;
+  }
+  .global-lang:hover { border-color: var(--border-light); color: var(--text); }
+  .global-lang:focus { border-color: var(--accent); outline: none; }
   .main-tab {
     flex: 1; padding: 10px 8px;
     background: transparent;
@@ -334,24 +355,6 @@
   }
   .opt-btn:hover { border-color: var(--border-light); }
   .opt-btn.active { border-color: var(--accent); background: var(--accent-glow); color: var(--text); }
-
-  .lang-select {
-    width: 100%; padding: 10px 12px;
-    background: var(--bg2);
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px; font-weight: 500;
-    cursor: pointer; transition: all 0.2s;
-    appearance: none; -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2399a' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    margin-bottom: 16px;
-  }
-  .lang-select:hover { border-color: var(--border-light); }
-  .lang-select:focus { border-color: var(--accent); outline: none; background-color: var(--bg2); }
 
   .tone-row { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
   .tone-chip {
@@ -645,12 +648,22 @@
   <!-- App (hidden until signed in) -->
   <div id="appContent" style="display:none;">
 
-    <!-- Main Tabs -->
-    <div class="main-tabs">
-      <button class="main-tab active" data-tab="post" onclick="switchTab('post')">✍️ Post</button>
-      <button class="main-tab" data-tab="profile" onclick="switchTab('profile')">👤 Profile</button>
-      <button class="main-tab" data-tab="message" onclick="switchTab('message')">📩 Message</button>
-      <button class="main-tab" data-tab="reply" onclick="switchTab('reply')">💬 Reply</button>
+    <!-- Main Tabs + Global Language -->
+    <div class="tabs-row">
+      <div class="main-tabs">
+        <button class="main-tab active" data-tab="post" onclick="switchTab('post')">✍️ Post</button>
+        <button class="main-tab" data-tab="profile" onclick="switchTab('profile')">👤 Profile</button>
+        <button class="main-tab" data-tab="message" onclick="switchTab('message')">📩 Message</button>
+        <button class="main-tab" data-tab="reply" onclick="switchTab('reply')">💬 Reply</button>
+      </div>
+      <select class="global-lang" id="globalLang" onchange="pickLang(this.value)">
+        <option value="english">🌐 EN</option>
+        <option value="spanish">🌐 ES</option>
+        <option value="portuguese">🌐 PT</option>
+        <option value="french">🌐 FR</option>
+        <option value="german">🌐 DE</option>
+        <option value="arabic">🌐 AR</option>
+      </select>
     </div>
 
     <!-- ==================== TAB: POST ==================== -->
@@ -740,21 +753,7 @@
           </div>
         </div>
 
-        <!-- Language & Tone (shown in all post modes) -->
-        <div class="field-label"><span class="field-label-icon">🌐</span> Language</div>
-        <select class="lang-select" onchange="pickLang(this.value)">
-          <option value="english">English</option>
-          <option value="spanish">Spanish</option>
-          <option value="chinese">Chinese (Mandarin)</option>
-          <option value="arabic">Arabic</option>
-          <option value="hindi">Hindi</option>
-          <option value="portuguese">Portuguese</option>
-          <option value="french">French</option>
-          <option value="japanese">Japanese</option>
-          <option value="russian">Russian</option>
-          <option value="german">German</option>
-        </select>
-
+        <!-- Tone (shown in all post modes) -->
         <div class="field-label"><span class="field-label-icon">🎭</span> Tone</div>
         <div class="tone-row">
           <div class="tone-chip active" data-tone="professional" onclick="pickTone(this)">Professional</div>
@@ -842,22 +841,8 @@
           </div>
         </div>
 
-        <!-- Language & Tone for Profile -->
-        <div class="field-label" style="margin-top:8px;"><span class="field-label-icon">🌐</span> Language</div>
-        <select class="lang-select" onchange="pickLang(this.value)">
-          <option value="english">English</option>
-          <option value="spanish">Spanish</option>
-          <option value="chinese">Chinese (Mandarin)</option>
-          <option value="arabic">Arabic</option>
-          <option value="hindi">Hindi</option>
-          <option value="portuguese">Portuguese</option>
-          <option value="french">French</option>
-          <option value="japanese">Japanese</option>
-          <option value="russian">Russian</option>
-          <option value="german">German</option>
-        </select>
-
-        <div class="field-label"><span class="field-label-icon">🎭</span> Tone</div>
+        <!-- Tone for Profile -->
+        <div class="field-label" style="margin-top:8px;"><span class="field-label-icon">🎭</span> Tone</div>
         <div class="tone-row">
           <div class="tone-chip active" data-tone="professional" onclick="pickTone(this)">Professional</div>
           <div class="tone-chip" data-tone="casual" onclick="pickTone(this)">Conversational</div>
@@ -938,21 +923,6 @@
           </div>
         </div>
 
-        <!-- Language for Message -->
-        <div class="field-label" style="margin-top:8px;"><span class="field-label-icon">🌐</span> Language</div>
-        <select class="lang-select" onchange="pickLang(this.value)">
-          <option value="english">English</option>
-          <option value="spanish">Spanish</option>
-          <option value="chinese">Chinese (Mandarin)</option>
-          <option value="arabic">Arabic</option>
-          <option value="hindi">Hindi</option>
-          <option value="portuguese">Portuguese</option>
-          <option value="french">French</option>
-          <option value="japanese">Japanese</option>
-          <option value="russian">Russian</option>
-          <option value="german">German</option>
-        </select>
-
         <button class="gen-btn" onclick="handleGenerate()">
           <span class="shimmer"></span>
           <span>⚡ Generate Message</span>
@@ -974,20 +944,6 @@
           <div class="tone-chip" data-replystyle="question" onclick="pickReplyStyle(this)">Ask question</div>
           <div class="tone-chip" data-replystyle="disagree" onclick="pickReplyStyle(this)">Respectful disagree</div>
         </div>
-
-        <div class="field-label"><span class="field-label-icon">🌐</span> Language</div>
-        <select class="lang-select" onchange="pickLang(this.value)">
-          <option value="english">English</option>
-          <option value="spanish">Spanish</option>
-          <option value="chinese">Chinese (Mandarin)</option>
-          <option value="arabic">Arabic</option>
-          <option value="hindi">Hindi</option>
-          <option value="portuguese">Portuguese</option>
-          <option value="french">French</option>
-          <option value="japanese">Japanese</option>
-          <option value="russian">Russian</option>
-          <option value="german">German</option>
-        </select>
 
         <button class="gen-btn" onclick="handleGenerate()">
           <span class="shimmer"></span>
@@ -1151,10 +1107,7 @@ function pickStyle(el) {
   document.querySelectorAll('.style-card').forEach(c => c.classList.remove('active'));
   el.classList.add('active'); currentStyle = el.dataset.style;
 }
-function syncLangSelects() {
-  document.querySelectorAll('.lang-select').forEach(s => s.value = currentLang);
-}
-function pickLang(val) { currentLang = val; syncLangSelects(); }
+function pickLang(val) { currentLang = val; }
 function pickTone(el) {
   const row = el.parentElement;
   row.querySelectorAll('.tone-chip').forEach(c => c.classList.remove('active'));
