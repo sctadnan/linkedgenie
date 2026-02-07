@@ -729,8 +729,17 @@ function renderGoogleButtons() {
   if (mainBtn) google.accounts.id.renderButton(mainBtn, { ...options, size: 'large', width: 280 });
 }
 
+function isTokenExpired(token) {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return Date.now() >= payload.exp * 1000;
+  } catch { return true; }
+}
+
 function handleCredentialResponse(response) {
   idToken = response.credential;
+  // Save to sessionStorage so it survives refresh
+  sessionStorage.setItem('gsi_token', idToken);
   // Decode JWT to get user info (for UI only, server verifies separately)
   const payload = JSON.parse(atob(idToken.split('.')[1]));
   currentUser = {
@@ -739,6 +748,23 @@ function handleCredentialResponse(response) {
     picture: payload.picture
   };
   onSignIn();
+}
+
+function restoreSession() {
+  const saved = sessionStorage.getItem('gsi_token');
+  if (!saved || isTokenExpired(saved)) {
+    sessionStorage.removeItem('gsi_token');
+    return false;
+  }
+  idToken = saved;
+  const payload = JSON.parse(atob(idToken.split('.')[1]));
+  currentUser = {
+    email: payload.email,
+    name: payload.name,
+    picture: payload.picture
+  };
+  onSignIn();
+  return true;
 }
 
 function onSignIn() {
@@ -794,6 +820,7 @@ function signOut() {
   google.accounts.id.disableAutoSelect();
   idToken = null;
   currentUser = null;
+  sessionStorage.removeItem('gsi_token');
 
   // Reset UI
   const authArea = document.getElementById('authArea');
@@ -891,7 +918,8 @@ async function handleGenerate() {
     if (response.status === 401) {
       // Token expired, re-login
       signOut();
-      google.accounts.id.prompt();
+      btn.disabled = false;
+      btnText.innerHTML = '⚡ Generate Post';
       return;
     }
 
@@ -903,9 +931,10 @@ async function handleGenerate() {
       updateUsageUI(data.remaining, currentUser.isPro ? 'unlimited' : FREE_LIMIT);
     }
   } catch (err) {
-    console.error(err);
-    btnText.textContent = '❌ Error — please try again';
-    setTimeout(() => { btnText.innerHTML = '⚡ Generate Post'; btn.disabled = false; }, 2500);
+    console.error('Generate error:', err);
+    const msg = err.message || 'Unknown error';
+    btnText.textContent = `❌ ${msg}`;
+    setTimeout(() => { btnText.innerHTML = '⚡ Generate Post'; btn.disabled = false; }, 3000);
     return;
   }
   btn.disabled = false;
@@ -954,8 +983,13 @@ function initGoogleAuth() {
     auto_select: true,
     use_fedcm_for_prompt: false
   });
-  renderGoogleButtons();
-  google.accounts.id.prompt();
+
+  // Try to restore saved session first
+  if (!restoreSession()) {
+    // No saved session, show Google buttons
+    renderGoogleButtons();
+    google.accounts.id.prompt();
+  }
 }
 
 // Fallback: if onload on script tag didn't fire, retry every 500ms for up to 5 seconds
