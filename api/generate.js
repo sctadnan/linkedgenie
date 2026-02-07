@@ -43,6 +43,14 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
+    // Check required env vars
+    if (!KV_URL || !KV_TOKEN) {
+      return res.status(500).json({ error: 'Database not configured', missing: !KV_URL ? 'KV_URL' : 'KV_TOKEN' });
+    }
+    if (!process.env.GOOGLE_CLIENT_ID) {
+      return res.status(500).json({ error: 'Google Client ID not configured' });
+    }
+
     // Verify Google token
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -172,6 +180,6 @@ Output ONLY the post text. Nothing else.`;
 
   } catch (error) {
     console.error('Server error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: error.message || 'Internal server error' });
   }
 }
