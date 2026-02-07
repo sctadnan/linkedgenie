@@ -11,7 +11,7 @@
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://accounts.google.com/gsi/client" async defer onload="initGoogleAuth()"></script>
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -940,15 +940,46 @@ function openUpgrade() {
 }
 
 // ============ INIT GOOGLE ============
+let googleInitialized = false;
+
+function initGoogleAuth() {
+  if (googleInitialized) return;
+  if (typeof google === 'undefined' || !google.accounts) return;
+  googleInitialized = true;
+  console.log('Google Identity Services loaded successfully');
+
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleCredentialResponse,
+    auto_select: true,
+    use_fedcm_for_prompt: false
+  });
+  renderGoogleButtons();
+  google.accounts.id.prompt();
+}
+
+// Fallback: if onload on script tag didn't fire, retry every 500ms for up to 5 seconds
 window.onload = function() {
-  if (typeof google !== 'undefined') {
-    google.accounts.id.initialize({
-      client_id: GOOGLE_CLIENT_ID,
-      callback: handleCredentialResponse,
-      auto_select: true
-    });
-    renderGoogleButtons();
-    google.accounts.id.prompt();
+  if (googleInitialized) return;
+  initGoogleAuth(); // Try immediately
+
+  if (!googleInitialized) {
+    let attempts = 0;
+    const interval = setInterval(function() {
+      attempts++;
+      initGoogleAuth();
+      if (googleInitialized || attempts >= 10) {
+        clearInterval(interval);
+        if (!googleInitialized) {
+          console.error('Google Identity Services failed to load');
+          // Show fallback message
+          const mainBtn = document.getElementById('googleBtnMain');
+          if (mainBtn) {
+            mainBtn.innerHTML = '<p style="color:var(--red);font-size:13px;">Failed to load Google Sign-In. Please disable ad blocker or try a different browser.</p>';
+          }
+        }
+      }
+    }, 500);
   }
 };
 </script>
