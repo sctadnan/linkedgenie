@@ -19,13 +19,13 @@ async function kvGet(key) {
 }
 
 async function kvSet(key, value) {
-  await fetch(`${KV_URL}/set/${key}`, {
+  await fetch(KV_URL, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${KV_TOKEN}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ value: JSON.stringify(value) })
+    body: JSON.stringify(["SET", key, JSON.stringify(value)])
   });
 }
 
@@ -41,44 +41,50 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'No token provided' });
-  }
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'No token provided' });
+    }
 
-  const idToken = authHeader.split('Bearer ')[1];
-  const googleUser = await verifyGoogleToken(idToken);
-  if (!googleUser) {
-    return res.status(401).json({ error: 'Invalid token' });
-  }
+    const idToken = authHeader.split('Bearer ')[1];
+    const googleUser = await verifyGoogleToken(idToken);
+    if (!googleUser) {
+      return res.status(401).json({ error: 'Invalid token' });
+    }
 
-  const key = `user:${googleUser.email}`;
-  let userData = await kvGet(key);
+    const key = `user:${googleUser.email}`;
+    let userData = await kvGet(key);
 
-  if (!userData) {
-    userData = {
+    if (!userData) {
+      userData = {
+        email: googleUser.email,
+        name: googleUser.name,
+        usage: { date: todayStr(), count: 0 },
+        isPro: false
+      };
+      await kvSet(key, userData);
+    }
+
+    // Reset daily count if new day
+    if (userData.usage.date !== todayStr()) {
+      userData.usage = { date: todayStr(), count: 0 };
+      await kvSet(key, userData);
+    }
+
+    const FREE_LIMIT = 3;
+    const remaining = userData.isPro ? 999 : Math.max(0, FREE_LIMIT - userData.usage.count);
+
+    return res.status(200).json({
       email: googleUser.email,
       name: googleUser.name,
-      usage: { date: todayStr(), count: 0 },
-      isPro: false
-    };
-    await kvSet(key, userData);
+      isPro: userData.isPro,
+      remaining,
+      limit: userData.isPro ? 'unlimited' : FREE_LIMIT
+    });
+
+  } catch (error) {
+    console.error('User API error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
   }
-
-  // Reset daily count if new day
-  if (userData.usage.date !== todayStr()) {
-    userData.usage = { date: todayStr(), count: 0 };
-    await kvSet(key, userData);
-  }
-
-  const FREE_LIMIT = 3;
-  const remaining = userData.isPro ? 999 : Math.max(0, FREE_LIMIT - userData.usage.count);
-
-  return res.status(200).json({
-    email: googleUser.email,
-    name: googleUser.name,
-    isPro: userData.isPro,
-    remaining,
-    limit: userData.isPro ? 'unlimited' : FREE_LIMIT
-  });
 }

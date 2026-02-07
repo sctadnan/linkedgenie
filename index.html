@@ -696,14 +696,17 @@
   <div class="modal">
     <div class="modal-title">ℹ️ About LinkedGenie</div>
     <div class="modal-desc">
-      LinkedGenie uses advanced AI to generate professional LinkedIn posts instantly.
+      LinkedGenie uses advanced AI (GPT-4o) to generate professional LinkedIn posts instantly.
       <br><br>
-      <b>Free plan:</b> 3 posts per day — no signup needed!<br>
-      <b>Pro plan:</b> $7/month — unlimited posts.
+      <b>Free plan:</b> Sign in with Google — 3 posts per day.<br>
+      <b>Pro plan:</b> $7/month — unlimited posts, priority generation.
       <br><br>
-      Your data is never stored. Each generation is independent and private.
+      Your usage is tracked per account so it syncs across all your devices and browsers.
+      <br><br>
+      <span style="color:var(--text-muted);font-size:11px;">Built by <a href="https://github.com/sctadnan" style="color:var(--accent2);">sctadnan</a></span>
     </div>
     <div class="modal-actions">
+      <button class="modal-btn modal-btn-secondary" onclick="openUpgrade()" style="flex:1">Upgrade to Pro</button>
       <button class="modal-btn modal-btn-primary" onclick="toggleSettings()" style="flex:1">Got it!</button>
     </div>
   </div>
@@ -796,8 +799,12 @@ async function fetchUserStatus() {
         'Authorization': `Bearer ${idToken}`
       }
     });
-    if (!res.ok) return;
-    const data = await res.json();
+    if (!res.ok) {
+      console.error('User API error:', res.status);
+      return;
+    }
+    let data;
+    try { data = await res.json(); } catch { return; }
     currentUser.isPro = data.isPro;
     updateUsageUI(data.remaining, data.isPro ? 'unlimited' : FREE_LIMIT);
 
@@ -903,7 +910,12 @@ async function handleGenerate() {
       body: JSON.stringify({ idea, style: currentStyle, tone: currentTone, lang: currentLang })
     });
 
-    const data = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch {
+      throw new Error(`Server error (${response.status})`);
+    }
 
     if (response.status === 429) {
       // Daily limit reached

@@ -11,13 +11,13 @@ async function kvGet(key) {
 }
 
 async function kvSet(key, value) {
-  await fetch(`${KV_URL}/set/${key}`, {
+  await fetch(KV_URL, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${KV_TOKEN}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ value: JSON.stringify(value) })
+    body: JSON.stringify(["SET", key, JSON.stringify(value)])
   });
 }
 
@@ -37,10 +37,6 @@ export default async function handler(req, res) {
     if (!signature) {
       return res.status(401).json({ error: 'No signature' });
     }
-    // For production: verify HMAC signature
-    // const crypto = require('crypto');
-    // const hmac = crypto.createHmac('sha256', secret).update(JSON.stringify(req.body)).digest('hex');
-    // if (hmac !== signature) return res.status(401).json({ error: 'Invalid signature' });
   }
 
   try {

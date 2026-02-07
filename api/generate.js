@@ -20,13 +20,13 @@ async function kvGet(key) {
 }
 
 async function kvSet(key, value) {
-  await fetch(`${KV_URL}/set/${key}`, {
+  await fetch(KV_URL, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${KV_TOKEN}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ value: JSON.stringify(value) })
+    body: JSON.stringify(["SET", key, JSON.stringify(value)])
   });
 }
 
@@ -42,47 +42,47 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  // Verify Google token
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Please sign in to generate posts' });
-  }
-
-  const idToken = authHeader.split('Bearer ')[1];
-  const googleUser = await verifyGoogleToken(idToken);
-  if (!googleUser) {
-    return res.status(401).json({ error: 'Invalid or expired token. Please sign in again.' });
-  }
-
-  // Check usage in KV
-  const key = `user:${googleUser.email}`;
-  let userData = await kvGet(key);
-
-  if (!userData) {
-    userData = {
-      email: googleUser.email,
-      name: googleUser.name,
-      usage: { date: todayStr(), count: 0 },
-      isPro: false
-    };
-  }
-
-  // Reset daily count if new day
-  if (userData.usage.date !== todayStr()) {
-    userData.usage = { date: todayStr(), count: 0 };
-  }
-
-  // Check limit (Pro = unlimited)
-  if (!userData.isPro && userData.usage.count >= FREE_LIMIT) {
-    return res.status(429).json({ error: 'Daily limit reached', remaining: 0 });
-  }
-
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    return res.status(500).json({ error: 'API key not configured' });
-  }
-
   try {
+    // Verify Google token
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Please sign in to generate posts' });
+    }
+
+    const idToken = authHeader.split('Bearer ')[1];
+    const googleUser = await verifyGoogleToken(idToken);
+    if (!googleUser) {
+      return res.status(401).json({ error: 'Invalid or expired token. Please sign in again.' });
+    }
+
+    // Check usage in KV
+    const key = `user:${googleUser.email}`;
+    let userData = await kvGet(key);
+
+    if (!userData) {
+      userData = {
+        email: googleUser.email,
+        name: googleUser.name,
+        usage: { date: todayStr(), count: 0 },
+        isPro: false
+      };
+    }
+
+    // Reset daily count if new day
+    if (userData.usage.date !== todayStr()) {
+      userData.usage = { date: todayStr(), count: 0 };
+    }
+
+    // Check limit (Pro = unlimited)
+    if (!userData.isPro && userData.usage.count >= FREE_LIMIT) {
+      return res.status(429).json({ error: 'Daily limit reached', remaining: 0 });
+    }
+
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({ error: 'API key not configured' });
+    }
+
     const { idea, style, tone, lang } = req.body;
 
     if (!idea || !style || !tone || !lang) {
