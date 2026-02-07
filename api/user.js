@@ -63,12 +63,12 @@ export default async function handler(req, res) {
     const key = `user:${googleUser.email}`;
     let userData = await kvGet(key);
 
-    if (!userData) {
+    if (!userData || !userData.usage) {
       userData = {
         email: googleUser.email,
         name: googleUser.name,
         usage: { date: todayStr(), count: 0 },
-        isPro: false
+        isPro: userData?.isPro || false
       };
       await kvSet(key, userData);
     }
