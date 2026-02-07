@@ -335,6 +335,24 @@
   .opt-btn:hover { border-color: var(--border-light); }
   .opt-btn.active { border-color: var(--accent); background: var(--accent-glow); color: var(--text); }
 
+  .lang-select {
+    width: 100%; padding: 10px 12px;
+    background: var(--bg2);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: all 0.2s;
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2399a' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    margin-bottom: 16px;
+  }
+  .lang-select:hover { border-color: var(--border-light); }
+  .lang-select:focus { border-color: var(--accent); outline: none; background-color: var(--bg2); }
+
   .tone-row { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
   .tone-chip {
     padding: 5px 12px;
@@ -724,10 +742,18 @@
 
         <!-- Language & Tone (shown in all post modes) -->
         <div class="field-label"><span class="field-label-icon">🌐</span> Language</div>
-        <div class="options-row">
-          <button class="opt-btn active" data-lang="english" onclick="pickLang(this)">🇺🇸 English</button>
-          <button class="opt-btn" data-lang="arabic" onclick="pickLang(this)">🇸🇦 العربية</button>
-        </div>
+        <select class="lang-select" onchange="pickLang(this.value)">
+          <option value="english">English</option>
+          <option value="spanish">Spanish</option>
+          <option value="chinese">Chinese (Mandarin)</option>
+          <option value="arabic">Arabic</option>
+          <option value="hindi">Hindi</option>
+          <option value="portuguese">Portuguese</option>
+          <option value="french">French</option>
+          <option value="japanese">Japanese</option>
+          <option value="russian">Russian</option>
+          <option value="german">German</option>
+        </select>
 
         <div class="field-label"><span class="field-label-icon">🎭</span> Tone</div>
         <div class="tone-row">
@@ -818,10 +844,18 @@
 
         <!-- Language & Tone for Profile -->
         <div class="field-label" style="margin-top:8px;"><span class="field-label-icon">🌐</span> Language</div>
-        <div class="options-row">
-          <button class="opt-btn active" data-lang="english" onclick="pickLang(this)">🇺🇸 English</button>
-          <button class="opt-btn" data-lang="arabic" onclick="pickLang(this)">🇸🇦 العربية</button>
-        </div>
+        <select class="lang-select" onchange="pickLang(this.value)">
+          <option value="english">English</option>
+          <option value="spanish">Spanish</option>
+          <option value="chinese">Chinese (Mandarin)</option>
+          <option value="arabic">Arabic</option>
+          <option value="hindi">Hindi</option>
+          <option value="portuguese">Portuguese</option>
+          <option value="french">French</option>
+          <option value="japanese">Japanese</option>
+          <option value="russian">Russian</option>
+          <option value="german">German</option>
+        </select>
 
         <div class="field-label"><span class="field-label-icon">🎭</span> Tone</div>
         <div class="tone-row">
@@ -906,10 +940,18 @@
 
         <!-- Language for Message -->
         <div class="field-label" style="margin-top:8px;"><span class="field-label-icon">🌐</span> Language</div>
-        <div class="options-row">
-          <button class="opt-btn active" data-lang="english" onclick="pickLang(this)">🇺🇸 English</button>
-          <button class="opt-btn" data-lang="arabic" onclick="pickLang(this)">🇸🇦 العربية</button>
-        </div>
+        <select class="lang-select" onchange="pickLang(this.value)">
+          <option value="english">English</option>
+          <option value="spanish">Spanish</option>
+          <option value="chinese">Chinese (Mandarin)</option>
+          <option value="arabic">Arabic</option>
+          <option value="hindi">Hindi</option>
+          <option value="portuguese">Portuguese</option>
+          <option value="french">French</option>
+          <option value="japanese">Japanese</option>
+          <option value="russian">Russian</option>
+          <option value="german">German</option>
+        </select>
 
         <button class="gen-btn" onclick="handleGenerate()">
           <span class="shimmer"></span>
@@ -934,10 +976,18 @@
         </div>
 
         <div class="field-label"><span class="field-label-icon">🌐</span> Language</div>
-        <div class="options-row">
-          <button class="opt-btn active" data-lang="english" onclick="pickLang(this)">🇺🇸 English</button>
-          <button class="opt-btn" data-lang="arabic" onclick="pickLang(this)">🇸🇦 العربية</button>
-        </div>
+        <select class="lang-select" onchange="pickLang(this.value)">
+          <option value="english">English</option>
+          <option value="spanish">Spanish</option>
+          <option value="chinese">Chinese (Mandarin)</option>
+          <option value="arabic">Arabic</option>
+          <option value="hindi">Hindi</option>
+          <option value="portuguese">Portuguese</option>
+          <option value="french">French</option>
+          <option value="japanese">Japanese</option>
+          <option value="russian">Russian</option>
+          <option value="german">German</option>
+        </select>
 
         <button class="gen-btn" onclick="handleGenerate()">
           <span class="shimmer"></span>
@@ -1053,7 +1103,7 @@ let currentReplyStyle = 'supportive';
 let resultText = '';
 let idToken = null;
 let currentUser = null;
-const FREE_LIMIT = 3;
+const FREE_LIMIT = 50;
 const GOOGLE_CLIENT_ID = '518315582553-qg3onsjs8r7d6u5kue1fugppan66a2k9.apps.googleusercontent.com';
 
 // ============ TAB SWITCHING ============
@@ -1101,11 +1151,10 @@ function pickStyle(el) {
   document.querySelectorAll('.style-card').forEach(c => c.classList.remove('active'));
   el.classList.add('active'); currentStyle = el.dataset.style;
 }
-function pickLang(el) {
-  const row = el.parentElement;
-  row.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active'); currentLang = el.dataset.lang;
+function syncLangSelects() {
+  document.querySelectorAll('.lang-select').forEach(s => s.value = currentLang);
 }
+function pickLang(val) { currentLang = val; syncLangSelects(); }
 function pickTone(el) {
   const row = el.parentElement;
   row.querySelectorAll('.tone-chip').forEach(c => c.classList.remove('active'));

@@ -1,6 +1,6 @@
 const KV_URL = process.env.UPSTASH_REDIS_REST_KV_REST_API_URL;
 const KV_TOKEN = process.env.UPSTASH_REDIS_REST_KV_REST_API_TOKEN;
-const FREE_LIMIT = 3;
+const FREE_LIMIT = 50;
 
 async function verifyGoogleToken(idToken) {
   const res = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${idToken}`);
@@ -44,9 +44,19 @@ const toneMap = {
 };
 
 function langInstruction(lang) {
-  return lang === 'arabic'
-    ? "Write the entire output in Arabic. Use modern, professional Arabic suitable for LinkedIn."
-    : "Write the entire output in English.";
+  const langMap = {
+    english: "Write the entire output in English.",
+    spanish: "Write the entire output in Spanish. Use professional, modern Spanish.",
+    chinese: "Write the entire output in Simplified Chinese (Mandarin). Use professional, modern Chinese.",
+    arabic: "Write the entire output in Arabic. Use modern, professional Arabic suitable for LinkedIn.",
+    hindi: "Write the entire output in Hindi. Use modern, professional Hindi suitable for LinkedIn.",
+    portuguese: "Write the entire output in Portuguese. Use modern, professional Portuguese.",
+    french: "Write the entire output in French. Use modern, professional French.",
+    japanese: "Write the entire output in Japanese. Use modern, professional Japanese suitable for LinkedIn.",
+    russian: "Write the entire output in Russian. Use modern, professional Russian.",
+    german: "Write the entire output in German. Use modern, professional German."
+  };
+  return langMap[lang] || langMap.english;
 }
 
 const POST_SYSTEM = `You are a world-class LinkedIn content strategist who has helped thousands of professionals build their personal brand. You write posts that feel authentic, human, and engaging — never robotic or AI-generated.
