@@ -259,6 +259,11 @@ export default async function handler(req, res) {
       };
     }
 
+    // Dev account always PRO
+    if (process.env.DEV_EMAIL && googleUser.email === process.env.DEV_EMAIL) {
+      userData.isPro = true;
+    }
+
     if (userData.usage.date !== todayStr()) {
       userData.usage = { date: todayStr(), count: 0 };
     }

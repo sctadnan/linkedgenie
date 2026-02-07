@@ -212,6 +212,29 @@
   }
   .global-lang:hover { border-color: var(--border-light); color: var(--text); }
   .global-lang:focus { border-color: var(--accent); outline: none; }
+
+  .plan-banner {
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 12px; font-weight: 500;
+    text-align: center;
+    margin-bottom: 12px;
+    display: none;
+  }
+  .plan-banner.visible { display: block; }
+  .plan-banner.pro {
+    background: linear-gradient(135deg, rgba(249,115,22,0.1), rgba(234,179,8,0.1));
+    border: 1px solid rgba(249,115,22,0.3);
+    color: #f59e0b;
+  }
+  .plan-banner.free {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .plan-banner a { color: var(--accent); text-decoration: none; font-weight: 600; cursor: pointer; }
+  .plan-banner a:hover { text-decoration: underline; }
+
   .main-tab {
     flex: 1; padding: 10px 8px;
     background: transparent;
@@ -625,6 +648,35 @@
   }
   [dir="rtl"] .textarea-footer { flex-direction: row-reverse; }
   [dir="rtl"] .hero { text-align: center; }
+  [dir="rtl"] .plan-banner a { margin-right: 0; }
+
+  /* === HISTORY === */
+  .history-btn {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 6px 10px; cursor: pointer; font-size: 14px; transition: all 0.2s;
+    color: var(--text-dim);
+  }
+  .history-btn:hover { border-color: var(--accent); color: var(--text); }
+  .history-list { max-height: 400px; overflow-y: auto; }
+  .history-item {
+    padding: 12px; background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s;
+  }
+  .history-item:hover { border-color: var(--accent); }
+  .history-item-text {
+    font-size: 13px; color: var(--text2); line-height: 1.5;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .history-item-meta {
+    font-size: 10px; color: var(--text-muted); margin-top: 4px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .history-item-copy {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 4px;
+    padding: 2px 8px; font-size: 10px; color: var(--text-dim); cursor: pointer;
+  }
+  .history-item-copy:hover { border-color: var(--accent); color: var(--text); }
+  .history-empty { text-align: center; padding: 30px; color: var(--text-muted); font-size: 13px; }
 </style>
 </head>
 <body>
@@ -648,6 +700,7 @@
       <div class="auth-area" id="authArea">
         <div id="googleBtnNav"></div>
       </div>
+      <button class="history-btn" id="historyNavBtn" onclick="toggleHistory()" title="History" style="display:none;">📋</button>
       <button class="settings-btn" onclick="toggleSettings()" title="Info">ℹ️</button>
     </div>
   </nav>
@@ -690,6 +743,9 @@
         <option value="arabic">🌐 AR</option>
       </select>
     </div>
+
+    <!-- Plan Status Banner -->
+    <div class="plan-banner" id="planBanner"></div>
 
     <!-- ==================== TAB: POST ==================== -->
     <div class="gen-card">
@@ -1070,6 +1126,17 @@
   </div>
 </div>
 
+<!-- History Modal -->
+<div class="modal-overlay" id="historyModal">
+  <div class="modal">
+    <div class="modal-title" id="historyModalTitle">📋 History</div>
+    <div class="history-list" id="historyList"></div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-primary" onclick="toggleHistory()" style="flex:1" id="historyCloseBtn">Close</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ============ STATE ============
 let currentTab = 'post';
@@ -1159,7 +1226,10 @@ const T = {
     modalDesc: 'LinkedGenie is your complete AI toolkit for LinkedIn content creation.<br><br><b>Free plan:</b> Sign in with Google — 3 generations per day.<br><b>Pro plan:</b> $7/month — unlimited access to all tools and templates.<br><br><b>Tools included:</b><br>✍️ Post generator (8 styles + rewrite + hooks)<br>👤 Profile optimizer (headline, about, experience)<br>📩 Message crafter (connection, follow-up, thank you)<br>💬 Comment reply generator',
     modalUpgrade: "Upgrade to Pro", modalGotIt: "Got it!",
     hookOptionsTitle: "Hook Options", headlineOptionsTitle: "Headline Options", replyOptionsTitle: "Reply Options",
-    writeAboutThis: "✍️ Write", signOut: "Sign out"
+    writeAboutThis: "✍️ Write", signOut: "Sign out",
+    usagePro: "Pro", bannerPro: "⭐ You're on Pro — unlimited access",
+    bannerFree: "Free plan — {n}/{l} per day · <a onclick=\"openUpgrade()\">Upgrade</a>",
+    historyTitle: "History", historyEmpty: "No history yet", historyBtn: "📋"
   },
   spanish: {
     heroBadge: "Suite de Contenido LinkedIn con IA",
@@ -1231,7 +1301,10 @@ const T = {
     modalDesc: 'LinkedGenie es tu kit completo de IA para crear contenido en LinkedIn.<br><br><b>Plan Gratis:</b> Inicia sesión con Google — 3 generaciones por día.<br><b>Plan Pro:</b> $7/mes — acceso ilimitado a todas las herramientas.<br><br><b>Herramientas:</b><br>✍️ Generador de posts (8 estilos + reescritura + ganchos)<br>👤 Optimizador de perfil (titular, acerca de, experiencia)<br>📩 Redactor de mensajes (conexión, seguimiento, agradecimiento)<br>💬 Generador de respuestas a comentarios',
     modalUpgrade: "Actualizar a Pro", modalGotIt: "¡Entendido!",
     hookOptionsTitle: "Opciones de Gancho", headlineOptionsTitle: "Opciones de Titular", replyOptionsTitle: "Opciones de Respuesta",
-    writeAboutThis: "✍️ Escribir", signOut: "Cerrar sesión"
+    writeAboutThis: "✍️ Escribir", signOut: "Cerrar sesión",
+    usagePro: "Pro", bannerPro: "⭐ Estás en Pro — acceso ilimitado",
+    bannerFree: "Plan gratuito — {n}/{l} por día · <a onclick=\"openUpgrade()\">Mejorar</a>",
+    historyTitle: "Historial", historyEmpty: "Sin historial aún", historyBtn: "📋"
   },
   portuguese: {
     heroBadge: "Suite de Conteúdo LinkedIn com IA",
@@ -1303,7 +1376,10 @@ const T = {
     modalDesc: 'LinkedGenie é seu kit completo de IA para criar conteúdo no LinkedIn.<br><br><b>Plano Grátis:</b> Login com Google — 3 gerações por dia.<br><b>Plano Pro:</b> $7/mês — acesso ilimitado a todas as ferramentas.<br><br><b>Ferramentas:</b><br>✍️ Gerador de posts (8 estilos + reescrita + ganchos)<br>👤 Otimizador de perfil (título, sobre, experiência)<br>📩 Criador de mensagens (conexão, follow-up, agradecimento)<br>💬 Gerador de respostas a comentários',
     modalUpgrade: "Atualizar para Pro", modalGotIt: "Entendi!",
     hookOptionsTitle: "Opções de Gancho", headlineOptionsTitle: "Opções de Título", replyOptionsTitle: "Opções de Resposta",
-    writeAboutThis: "✍️ Escrever", signOut: "Sair"
+    writeAboutThis: "✍️ Escrever", signOut: "Sair",
+    usagePro: "Pro", bannerPro: "⭐ Você é Pro — acesso ilimitado",
+    bannerFree: "Plano gratuito — {n}/{l} por dia · <a onclick=\"openUpgrade()\">Atualizar</a>",
+    historyTitle: "Histórico", historyEmpty: "Nenhum histórico ainda", historyBtn: "📋"
   },
   french: {
     heroBadge: "Suite de Contenu LinkedIn propulsée par l'IA",
@@ -1375,7 +1451,10 @@ const T = {
     modalDesc: "LinkedGenie est votre boîte à outils IA complète pour créer du contenu LinkedIn.<br><br><b>Plan Gratuit :</b> Connectez-vous avec Google — 3 générations par jour.<br><b>Plan Pro :</b> 7$/mois — accès illimité à tous les outils.<br><br><b>Outils inclus :</b><br>✍️ Générateur de posts (8 styles + réécriture + accroches)<br>👤 Optimiseur de profil (titre, à propos, expérience)<br>📩 Rédacteur de messages (connexion, suivi, remerciement)<br>💬 Générateur de réponses aux commentaires",
     modalUpgrade: "Passer à Pro", modalGotIt: "Compris !",
     hookOptionsTitle: "Options d'Accroche", headlineOptionsTitle: "Options de Titre", replyOptionsTitle: "Options de Réponse",
-    writeAboutThis: "✍️ Écrire", signOut: "Se déconnecter"
+    writeAboutThis: "✍️ Écrire", signOut: "Se déconnecter",
+    usagePro: "Pro", bannerPro: "⭐ Vous êtes Pro — accès illimité",
+    bannerFree: "Plan gratuit — {n}/{l} par jour · <a onclick=\"openUpgrade()\">Améliorer</a>",
+    historyTitle: "Historique", historyEmpty: "Aucun historique", historyBtn: "📋"
   },
   german: {
     heroBadge: "KI-gestützte LinkedIn Content Suite",
@@ -1447,11 +1526,14 @@ const T = {
     modalDesc: 'LinkedGenie ist Ihr komplettes KI-Toolkit für LinkedIn Content.<br><br><b>Kostenlos:</b> Mit Google anmelden — 3 Generierungen pro Tag.<br><b>Pro:</b> 7$/Monat — unbegrenzter Zugang zu allen Tools.<br><br><b>Tools:</b><br>✍️ Beitragsgenerator (8 Stile + Umschreiben + Hooks)<br>👤 Profil-Optimierer (Überschrift, Über mich, Erfahrung)<br>📩 Nachrichtenverfasser (Vernetzung, Follow-up, Dank)<br>💬 Kommentarantwort-Generator',
     modalUpgrade: "Auf Pro upgraden", modalGotIt: "Verstanden!",
     hookOptionsTitle: "Hook-Optionen", headlineOptionsTitle: "Überschrift-Optionen", replyOptionsTitle: "Antwort-Optionen",
-    writeAboutThis: "✍️ Schreiben", signOut: "Abmelden"
+    writeAboutThis: "✍️ Schreiben", signOut: "Abmelden",
+    usagePro: "Pro", bannerPro: "⭐ Sie sind Pro — unbegrenzter Zugang",
+    bannerFree: "Kostenlos — {n}/{l} pro Tag · <a onclick=\"openUpgrade()\">Upgraden</a>",
+    historyTitle: "Verlauf", historyEmpty: "Noch kein Verlauf", historyBtn: "📋"
   },
   arabic: {
     heroBadge: "مجموعة محتوى LinkedIn مدعومة بالذكاء الاصطناعي",
-    heroTitle: 'أدواتك المتكاملة <em>لمحتوى LinkedIn</em>',
+    heroTitle: 'أدواتك المتكاملة لمحتوى LinkedIn',
     heroDesc: "أنشئ منشورات، حسّن ملفك الشخصي، اكتب رسائل وردود — كل ذلك بالذكاء الاصطناعي.",
     loginPrompt: "سجّل الدخول بحساب Google لبدء إنشاء محتوى LinkedIn",
     tabPost: "✍️ منشور", tabProfile: "👤 الملف الشخصي", tabMessage: "📩 رسالة", tabReply: "💬 رد",
@@ -1519,7 +1601,10 @@ const T = {
     modalDesc: 'LinkedGenie هو مجموعة أدوات الذكاء الاصطناعي المتكاملة لإنشاء محتوى LinkedIn.<br><br><b>الخطة المجانية:</b> سجّل بحساب Google — 3 عمليات إنشاء يومياً.<br><b>خطة Pro:</b> 7$/شهرياً — وصول غير محدود لجميع الأدوات.<br><br><b>الأدوات:</b><br>✍️ منشئ المنشورات (8 أساليب + إعادة كتابة + عناوين جذب)<br>👤 محسّن الملف الشخصي (العنوان، نبذة عني، الخبرة)<br>📩 كاتب الرسائل (تواصل، متابعة، شكر)<br>💬 منشئ ردود التعليقات',
     modalUpgrade: "ترقية إلى Pro", modalGotIt: "فهمت!",
     hookOptionsTitle: "خيارات العناوين الجاذبة", headlineOptionsTitle: "خيارات العنوان", replyOptionsTitle: "خيارات الرد",
-    writeAboutThis: "✍️ اكتب عنه", signOut: "تسجيل الخروج"
+    writeAboutThis: "✍️ اكتب عنه", signOut: "تسجيل الخروج",
+    usagePro: "Pro", bannerPro: "⭐ أنت على خطة Pro — وصول غير محدود",
+    bannerFree: "خطة مجانية — {n}/{l} يومياً · <a onclick=\"openUpgrade()\">ترقية</a>",
+    historyTitle: "السجل", historyEmpty: "لا يوجد سجل بعد", historyBtn: "📋"
   }
 };
 
@@ -1803,6 +1888,7 @@ function onSignIn() {
   `;
   document.getElementById('loginPromptCard').style.display = 'none';
   document.getElementById('appContent').style.display = '';
+  document.getElementById('historyNavBtn').style.display = '';
   fetchUserStatus();
 }
 
@@ -1837,14 +1923,26 @@ function signOut() {
   document.getElementById('paywallCard').classList.remove('visible');
   document.getElementById('usageLabel').textContent = '—';
   document.getElementById('usageIndicator').className = 'usage-indicator';
+  document.getElementById('historyNavBtn').style.display = 'none';
+  document.getElementById('planBanner').className = 'plan-banner';
 }
 
 function updateUsageUI(remaining, limit) {
+  const t = T[currentLang] || T.english;
   const label = document.getElementById('usageLabel');
   const dot = document.getElementById('usageIndicator');
+  const banner = document.getElementById('planBanner');
   dot.className = 'usage-indicator';
-  if (limit === 'unlimited') { label.textContent = 'Unlimited (Pro)'; return; }
-  label.textContent = `${remaining}/${limit} free today`;
+  banner.className = 'plan-banner visible';
+  if (limit === 'unlimited') {
+    label.textContent = t.usagePro || 'Pro';
+    banner.classList.add('pro');
+    banner.innerHTML = t.bannerPro || '⭐ You\'re on Pro — unlimited access';
+    return;
+  }
+  label.textContent = `${remaining}/${limit}`;
+  banner.classList.add('free');
+  banner.innerHTML = (t.bannerFree || 'Free plan — {n}/{l} per day · <a onclick="openUpgrade()">Upgrade</a>').replace('{n}', remaining).replace('{l}', limit);
   if (remaining === 0) dot.classList.add('out');
   else if (remaining === 1) dot.classList.add('warn');
 }
@@ -1938,9 +2036,11 @@ async function handleGenerate() {
     // Handle multi-output (hooks, headlines, replies)
     if (data.items) {
       showMultiOutput(data.items, data.title || 'Results');
+      saveToHistory(data.items.join('\n---\n'), reqBody.type, reqBody.mode);
     } else {
       resultText = data.post;
       showOutput(data.post, data.outputTitle);
+      saveToHistory(data.post, reqBody.type, reqBody.mode);
     }
 
     if (data.remaining !== undefined) {
@@ -2021,6 +2121,62 @@ function copyItem(btn, index) {
 
 function openUpgrade() { window.open('/api/checkout', '_blank'); }
 function toggleSettings() { document.getElementById('settingsModal').classList.toggle('visible'); }
+
+// ============ HISTORY ============
+function saveToHistory(text, type, mode) {
+  const history = JSON.parse(localStorage.getItem('lg_history') || '[]');
+  history.unshift({ text, type, mode, lang: currentLang, date: new Date().toISOString() });
+  if (history.length > 20) history.length = 20;
+  localStorage.setItem('lg_history', JSON.stringify(history));
+}
+
+function toggleHistory() {
+  const modal = document.getElementById('historyModal');
+  modal.classList.toggle('visible');
+  if (modal.classList.contains('visible')) renderHistory();
+}
+
+function renderHistory() {
+  const t = T[currentLang] || T.english;
+  document.getElementById('historyModalTitle').textContent = `📋 ${t.historyTitle}`;
+  document.getElementById('historyCloseBtn').textContent = t.modalGotIt;
+  const history = JSON.parse(localStorage.getItem('lg_history') || '[]');
+  const container = document.getElementById('historyList');
+  if (history.length === 0) {
+    container.innerHTML = `<div class="history-empty">${t.historyEmpty}</div>`;
+    return;
+  }
+  container.innerHTML = history.map((item, i) => {
+    const preview = item.text.replace(/\n/g, ' ').slice(0, 100) + (item.text.length > 100 ? '...' : '');
+    const date = new Date(item.date).toLocaleDateString(currentLang === 'arabic' ? 'ar' : undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    const badge = item.type || 'post';
+    return `<div class="history-item" onclick="loadHistoryItem(${i})">
+      <div class="history-item-text">${preview}</div>
+      <div class="history-item-meta">
+        <span>${badge} · ${date}</span>
+        <button class="history-item-copy" onclick="event.stopPropagation(); copyHistoryItem(${i})">${t.copy}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function copyHistoryItem(index) {
+  const history = JSON.parse(localStorage.getItem('lg_history') || '[]');
+  if (history[index]) {
+    navigator.clipboard.writeText(history[index].text);
+    const btns = document.querySelectorAll('.history-item-copy');
+    const t = T[currentLang] || T.english;
+    if (btns[index]) { btns[index].textContent = t.copied; setTimeout(() => { btns[index].textContent = t.copy; }, 1500); }
+  }
+}
+
+function loadHistoryItem(index) {
+  const history = JSON.parse(localStorage.getItem('lg_history') || '[]');
+  if (!history[index]) return;
+  resultText = history[index].text;
+  showOutput(history[index].text, (T[currentLang] || T.english).historyTitle);
+  toggleHistory();
+}
 
 // ============ INIT GOOGLE ============
 let googleInitialized = false;

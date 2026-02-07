@@ -79,6 +79,11 @@ export default async function handler(req, res) {
       await kvSet(key, userData);
     }
 
+    // Dev account always PRO
+    if (process.env.DEV_EMAIL && googleUser.email === process.env.DEV_EMAIL) {
+      userData.isPro = true;
+    }
+
     const FREE_LIMIT = 50;
     const remaining = userData.isPro ? 999 : Math.max(0, FREE_LIMIT - userData.usage.count);
 
