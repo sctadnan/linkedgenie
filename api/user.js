@@ -84,7 +84,7 @@ export default async function handler(req, res) {
       userData.isPro = true;
     }
 
-    const FREE_LIMIT = 50;
+    const FREE_LIMIT = 3;
     const remaining = userData.isPro ? 999 : Math.max(0, FREE_LIMIT - userData.usage.count);
 
     return res.status(200).json({

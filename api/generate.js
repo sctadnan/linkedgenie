@@ -1,6 +1,6 @@
 const KV_URL = process.env.UPSTASH_REDIS_REST_KV_REST_API_URL;
 const KV_TOKEN = process.env.UPSTASH_REDIS_REST_KV_REST_API_TOKEN;
-const FREE_LIMIT = 50;
+const FREE_LIMIT = 3;
 
 async function verifyGoogleToken(idToken) {
   const res = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${idToken}`);
