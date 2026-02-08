@@ -94,6 +94,27 @@
     color: var(--text);
   }
   .nav-right { display: flex; align-items: center; gap: 12px; }
+  .onboard-tip {
+    position: relative;
+    margin-bottom: 8px; padding: 10px 14px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(168,85,247,0.12));
+    border: 1px solid rgba(99,102,241,0.3);
+    border-radius: 10px;
+    font-size: 13px; color: var(--text); line-height: 1.5;
+    animation: pulse-tip 2s ease-in-out infinite;
+  }
+  .onboard-tip .tip-close {
+    position: absolute; top: 6px; right: 8px;
+    background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px;
+  }
+  @keyframes pulse-tip { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+  .streak-badge {
+    padding: 4px 10px; border-radius: 100px;
+    background: linear-gradient(135deg, rgba(249,115,22,0.15), rgba(234,179,8,0.15));
+    border: 1px solid rgba(249,115,22,0.3);
+    font-size: 12px; font-weight: 600; color: #f59e0b;
+    cursor: default;
+  }
   .usage-pill {
     display: flex; align-items: center; gap: 6px;
     padding: 6px 14px;
@@ -531,12 +552,15 @@
   .upgrade-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(251,191,36,0.3); }
   .paywall-price { font-size: 12px; color: var(--text-muted); }
 
-  /* === LOGIN === */
-  .login-prompt {
-    text-align: center; padding: 40px 20px;
-    color: var(--text-dim); font-size: 14px;
+  /* === DEMO BANNER === */
+  .demo-banner {
+    display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px;
+    padding: 10px 16px; margin-bottom: 12px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(168,85,247,0.1));
+    border: 1px solid rgba(99,102,241,0.25);
+    border-radius: 12px;
+    font-size: 13px; color: var(--text-dim);
   }
-  .login-prompt p { margin-bottom: 16px; }
 
   /* === MODAL === */
   .modal-overlay {
@@ -681,6 +705,7 @@
       <span class="nav-name">LinkedGenie</span>
     </a>
     <div class="nav-right">
+      <span class="streak-badge" id="streakBadge" style="display:none;"></span>
       <div class="usage-pill">
         <div class="usage-indicator" id="usageIndicator"></div>
         <span id="usageLabel">—</span>
@@ -703,16 +728,14 @@
     <p id="heroDescText">Generate posts, optimize your profile, craft messages, and write replies — all with AI.</p>
   </section>
 
-  <!-- Login Prompt -->
-  <div class="gen-card" id="loginPromptCard">
-    <div class="login-prompt">
-      <p id="loginPromptText">Sign in with Google to start creating LinkedIn content</p>
-      <div id="googleBtnMain" style="display:inline-block;"></div>
-    </div>
+  <!-- Login Banner (shown when not signed in) -->
+  <div class="demo-banner" id="loginPromptCard">
+    <span id="loginPromptText">Sign in with Google for 3 free generations per day</span>
+    <div id="googleBtnMain" style="display:inline-block;margin-left:12px;"></div>
   </div>
 
-  <!-- App (hidden until signed in) -->
-  <div id="appContent" style="display:none;">
+  <!-- App (always visible) -->
+  <div id="appContent">
 
     <!-- Main Tabs + Global Language -->
     <div class="tabs-row">
@@ -741,6 +764,12 @@
           <button class="sub-tab active" onclick="switchPostMode('write')">✍️ Write</button>
           <button class="sub-tab" onclick="switchPostMode('rewrite')">🔄 Rewrite</button>
           <button class="sub-tab" onclick="switchPostMode('hooks')">🎣 Hooks</button>
+        </div>
+
+        <!-- Onboarding tip (first visit only) -->
+        <div class="onboard-tip" id="onboardTip" style="display:none;">
+          <span id="onboardText">Start here — type your idea and we'll turn it into a professional LinkedIn post</span>
+          <button class="tip-close" onclick="dismissOnboard()">✕</button>
         </div>
 
         <!-- Write mode input -->
@@ -1150,13 +1179,21 @@ let currentUser = null;
 const FREE_LIMIT = 3;
 const GOOGLE_CLIENT_ID = '518315582553-qg3onsjs8r7d6u5kue1fugppan66a2k9.apps.googleusercontent.com';
 
+// Demo mode fingerprint
+function getDemoId() {
+  let id = localStorage.getItem('lg_demo_id');
+  if (!id) { id = crypto.randomUUID(); localStorage.setItem('lg_demo_id', id); }
+  return id;
+}
+let demoUsed = localStorage.getItem('lg_demo_date') === new Date().toISOString().slice(0, 10);
+
 // ============ TRANSLATIONS ============
 const T = {
   english: {
     heroBadge: "AI-Powered LinkedIn Content Suite",
     heroTitle: 'Your complete toolkit for <em>LinkedIn content</em>',
     heroDesc: "Generate posts, optimize your profile, craft messages, and write replies — all with AI.",
-    loginPrompt: "Sign in with Google to start creating LinkedIn content",
+    loginPrompt: "Sign in with Google for 3 free generations per day",
     tabPost: "✍️ Post", tabProfile: "👤 Profile", tabMessage: "📩 Message", tabReply: "💬 Reply",
     subWrite: "✍️ Write", subRewrite: "🔄 Rewrite", subHooks: "🎣 Hooks",
     subHeadline: "💫 Headline", subAbout: "📝 About", subExperience: "💼 Experience",
@@ -1224,13 +1261,15 @@ const T = {
     hookOptionsTitle: "Hook Options", headlineOptionsTitle: "Headline Options", replyOptionsTitle: "Reply Options",
     writeAboutThis: "✍️ Write", signOut: "Sign out",
     usagePro: "Pro", upgrade: "Upgrade",
-    historyTitle: "History", historyEmpty: "No history yet", historyBtn: "📋"
+    historyTitle: "History", historyEmpty: "No history yet", historyBtn: "📋",
+    streakTooltip: "{n} day streak!",
+    onboardTip: "Start here — type your idea and we'll turn it into a professional LinkedIn post"
   },
   spanish: {
     heroBadge: "Suite de Contenido LinkedIn con IA",
     heroTitle: 'Tu kit completo para <em>contenido en LinkedIn</em>',
     heroDesc: "Genera publicaciones, optimiza tu perfil, redacta mensajes y escribe respuestas — todo con IA.",
-    loginPrompt: "Inicia sesión con Google para crear contenido en LinkedIn",
+    loginPrompt: "Inicia sesión con Google para 3 generaciones gratis al día",
     tabPost: "✍️ Post", tabProfile: "👤 Perfil", tabMessage: "📩 Mensaje", tabReply: "💬 Respuesta",
     subWrite: "✍️ Escribir", subRewrite: "🔄 Reescribir", subHooks: "🎣 Ganchos",
     subHeadline: "💫 Titular", subAbout: "📝 Acerca de", subExperience: "💼 Experiencia",
@@ -1298,13 +1337,15 @@ const T = {
     hookOptionsTitle: "Opciones de Gancho", headlineOptionsTitle: "Opciones de Titular", replyOptionsTitle: "Opciones de Respuesta",
     writeAboutThis: "✍️ Escribir", signOut: "Cerrar sesión",
     usagePro: "Pro", upgrade: "Mejorar",
-    historyTitle: "Historial", historyEmpty: "Sin historial aún", historyBtn: "📋"
+    historyTitle: "Historial", historyEmpty: "Sin historial aún", historyBtn: "📋",
+    streakTooltip: "¡{n} días seguidos!",
+    onboardTip: "Empieza aquí — escribe tu idea y la convertiremos en un post profesional de LinkedIn"
   },
   portuguese: {
     heroBadge: "Suite de Conteúdo LinkedIn com IA",
     heroTitle: 'Seu kit completo para <em>conteúdo no LinkedIn</em>',
     heroDesc: "Gere posts, otimize seu perfil, crie mensagens e escreva respostas — tudo com IA.",
-    loginPrompt: "Faça login com Google para criar conteúdo no LinkedIn",
+    loginPrompt: "Faça login com Google para 3 gerações grátis por dia",
     tabPost: "✍️ Post", tabProfile: "👤 Perfil", tabMessage: "📩 Mensagem", tabReply: "💬 Resposta",
     subWrite: "✍️ Escrever", subRewrite: "🔄 Reescrever", subHooks: "🎣 Ganchos",
     subHeadline: "💫 Título", subAbout: "📝 Sobre", subExperience: "💼 Experiência",
@@ -1372,13 +1413,15 @@ const T = {
     hookOptionsTitle: "Opções de Gancho", headlineOptionsTitle: "Opções de Título", replyOptionsTitle: "Opções de Resposta",
     writeAboutThis: "✍️ Escrever", signOut: "Sair",
     usagePro: "Pro", upgrade: "Atualizar",
-    historyTitle: "Histórico", historyEmpty: "Nenhum histórico ainda", historyBtn: "📋"
+    historyTitle: "Histórico", historyEmpty: "Nenhum histórico ainda", historyBtn: "📋",
+    streakTooltip: "{n} dias seguidos!",
+    onboardTip: "Comece aqui — digite sua ideia e a transformaremos em um post profissional do LinkedIn"
   },
   french: {
     heroBadge: "Suite de Contenu LinkedIn propulsée par l'IA",
     heroTitle: 'Votre boîte à outils complète pour le <em>contenu LinkedIn</em>',
     heroDesc: "Générez des publications, optimisez votre profil, rédigez des messages et écrivez des réponses — le tout avec l'IA.",
-    loginPrompt: "Connectez-vous avec Google pour créer du contenu LinkedIn",
+    loginPrompt: "Connectez-vous avec Google pour 3 générations gratuites par jour",
     tabPost: "✍️ Post", tabProfile: "👤 Profil", tabMessage: "📩 Message", tabReply: "💬 Réponse",
     subWrite: "✍️ Écrire", subRewrite: "🔄 Réécrire", subHooks: "🎣 Accroches",
     subHeadline: "💫 Titre", subAbout: "📝 À propos", subExperience: "💼 Expérience",
@@ -1446,13 +1489,15 @@ const T = {
     hookOptionsTitle: "Options d'Accroche", headlineOptionsTitle: "Options de Titre", replyOptionsTitle: "Options de Réponse",
     writeAboutThis: "✍️ Écrire", signOut: "Se déconnecter",
     usagePro: "Pro", upgrade: "Améliorer",
-    historyTitle: "Historique", historyEmpty: "Aucun historique", historyBtn: "📋"
+    historyTitle: "Historique", historyEmpty: "Aucun historique", historyBtn: "📋",
+    streakTooltip: "{n} jours consécutifs !",
+    onboardTip: "Commencez ici — tapez votre idée et nous la transformerons en un post LinkedIn professionnel"
   },
   german: {
     heroBadge: "KI-gestützte LinkedIn Content Suite",
     heroTitle: 'Ihr komplettes Toolkit für <em>LinkedIn Content</em>',
     heroDesc: "Erstellen Sie Beiträge, optimieren Sie Ihr Profil, verfassen Sie Nachrichten und schreiben Sie Antworten — alles mit KI.",
-    loginPrompt: "Mit Google anmelden, um LinkedIn-Inhalte zu erstellen",
+    loginPrompt: "Mit Google anmelden für 3 kostenlose Generierungen pro Tag",
     tabPost: "✍️ Beitrag", tabProfile: "👤 Profil", tabMessage: "📩 Nachricht", tabReply: "💬 Antwort",
     subWrite: "✍️ Schreiben", subRewrite: "🔄 Umschreiben", subHooks: "🎣 Hooks",
     subHeadline: "💫 Überschrift", subAbout: "📝 Über mich", subExperience: "💼 Erfahrung",
@@ -1520,13 +1565,15 @@ const T = {
     hookOptionsTitle: "Hook-Optionen", headlineOptionsTitle: "Überschrift-Optionen", replyOptionsTitle: "Antwort-Optionen",
     writeAboutThis: "✍️ Schreiben", signOut: "Abmelden",
     usagePro: "Pro", upgrade: "Upgraden",
-    historyTitle: "Verlauf", historyEmpty: "Noch kein Verlauf", historyBtn: "📋"
+    historyTitle: "Verlauf", historyEmpty: "Noch kein Verlauf", historyBtn: "📋",
+    streakTooltip: "{n} Tage in Folge!",
+    onboardTip: "Starten Sie hier — geben Sie Ihre Idee ein und wir erstellen einen professionellen LinkedIn-Post"
   },
   arabic: {
     heroBadge: "مجموعة محتوى LinkedIn مدعومة بالذكاء الاصطناعي",
     heroTitle: 'أدواتك المتكاملة لمحتوى <em>LinkedIn</em>',
     heroDesc: "أنشئ منشورات، حسّن ملفك الشخصي، اكتب رسائل وردود — كل ذلك بالذكاء الاصطناعي.",
-    loginPrompt: "سجّل الدخول بحساب Google لبدء إنشاء محتوى LinkedIn",
+    loginPrompt: "سجّل الدخول بحساب Google للحصول على 3 توليدات مجانية يومياً",
     tabPost: "✍️ منشور", tabProfile: "👤 الملف الشخصي", tabMessage: "📩 رسالة", tabReply: "💬 رد",
     subWrite: "✍️ كتابة", subRewrite: "🔄 إعادة كتابة", subHooks: "🎣 عناوين جذب",
     subHeadline: "💫 العنوان", subAbout: "📝 نبذة عني", subExperience: "💼 الخبرة",
@@ -1594,7 +1641,9 @@ const T = {
     hookOptionsTitle: "خيارات العناوين الجاذبة", headlineOptionsTitle: "خيارات العنوان", replyOptionsTitle: "خيارات الرد",
     writeAboutThis: "✍️ اكتب عنه", signOut: "تسجيل الخروج",
     usagePro: "Pro", upgrade: "ترقية",
-    historyTitle: "السجل", historyEmpty: "لا يوجد سجل بعد", historyBtn: "📋"
+    historyTitle: "السجل", historyEmpty: "لا يوجد سجل بعد", historyBtn: "📋",
+    streakTooltip: "{n} أيام متتالية!",
+    onboardTip: "ابدأ هنا — اكتب فكرتك وسنحولها إلى منشور LinkedIn احترافي"
   }
 };
 
@@ -1804,6 +1853,7 @@ function pickReplyStyle(el) {
 document.getElementById('ideaInput').addEventListener('input', function() {
   document.getElementById('charCount').textContent = this.value.length;
   localStorage.setItem('lg_draft_write', this.value);
+  if (!localStorage.getItem('lg_onboarded')) dismissOnboard();
 });
 document.getElementById('rewriteInput').addEventListener('input', function() {
   document.getElementById('rewriteCharCount').textContent = this.value.length;
@@ -1877,7 +1927,6 @@ function onSignIn() {
     <button class="signout-btn" onclick="signOut()">${t.signOut}</button>
   `;
   document.getElementById('loginPromptCard').style.display = 'none';
-  document.getElementById('appContent').style.display = '';
   document.getElementById('historyNavBtn').style.display = '';
   fetchUserStatus();
 }
@@ -1906,8 +1955,7 @@ function signOut() {
   const authArea = document.getElementById('authArea');
   authArea.innerHTML = `<div id="googleBtnNav"></div>`;
   renderGoogleButtons();
-  document.getElementById('loginPromptCard').style.display = 'block';
-  document.getElementById('appContent').style.display = 'none';
+  document.getElementById('loginPromptCard').style.display = '';
   document.getElementById('outputCard').classList.remove('visible');
   document.getElementById('multiOutput').classList.remove('visible');
   document.getElementById('paywallCard').classList.remove('visible');
@@ -1989,7 +2037,14 @@ function buildRequest() {
 
 // ============ GENERATE ============
 async function handleGenerate() {
-  if (!idToken) return;
+  const isDemo = !idToken;
+
+  // If demo already used today, prompt sign-in
+  if (isDemo && demoUsed) {
+    document.getElementById('loginPromptCard').style.display = '';
+    document.getElementById('loginPromptCard').scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
 
   const reqBody = buildRequest();
   if (!reqBody) return;
@@ -2004,9 +2059,16 @@ async function handleGenerate() {
   document.getElementById('multiOutput').classList.remove('visible');
 
   try {
+    const headers = { 'Content-Type': 'application/json' };
+    if (idToken) {
+      headers['Authorization'] = `Bearer ${idToken}`;
+    } else {
+      headers['X-Demo-Id'] = getDemoId();
+    }
+
     const response = await fetch('/api/generate', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
+      headers,
       body: JSON.stringify(reqBody)
     });
 
@@ -2018,8 +2080,24 @@ async function handleGenerate() {
       updateUsageUI(0, FREE_LIMIT);
       resetBtn(); return;
     }
-    if (response.status === 401) { signOut(); resetBtn(); return; }
+    if (response.status === 401) {
+      if (data.error === 'demo_limit') {
+        demoUsed = true;
+        localStorage.setItem('lg_demo_date', new Date().toISOString().slice(0, 10));
+        document.getElementById('loginPromptCard').style.display = '';
+        document.getElementById('loginPromptCard').scrollIntoView({ behavior: 'smooth' });
+      } else if (idToken) {
+        signOut();
+      }
+      resetBtn(); return;
+    }
     if (!response.ok) throw new Error(data.error || 'Server error');
+
+    // Mark demo as used
+    if (data.demo) {
+      demoUsed = true;
+      localStorage.setItem('lg_demo_date', new Date().toISOString().slice(0, 10));
+    }
 
     // Handle multi-output (hooks, headlines, replies)
     if (data.items) {
@@ -2031,7 +2109,7 @@ async function handleGenerate() {
       saveToHistory(data.post, reqBody.type, reqBody.mode);
     }
 
-    if (data.remaining !== undefined) {
+    if (data.remaining !== undefined && currentUser) {
       updateUsageUI(data.remaining, currentUser.isPro ? 'unlimited' : FREE_LIMIT);
     }
   } catch (err) {
@@ -2150,6 +2228,45 @@ function saveToHistory(text, type, mode) {
   history.unshift({ text, type, mode, lang: currentLang, date: new Date().toISOString() });
   if (history.length > 20) history.length = 20;
   localStorage.setItem('lg_history', JSON.stringify(history));
+  updateStreak();
+}
+
+function updateStreak() {
+  const today = new Date().toISOString().slice(0, 10);
+  const data = JSON.parse(localStorage.getItem('lg_streak') || '{}');
+  if (data.lastDate === today) return; // already counted today
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  if (data.lastDate === yesterday) {
+    data.count = (data.count || 0) + 1;
+  } else {
+    data.count = 1;
+  }
+  data.lastDate = today;
+  localStorage.setItem('lg_streak', JSON.stringify(data));
+  showStreakBadge(data.count);
+}
+
+function showStreakBadge(count) {
+  const badge = document.getElementById('streakBadge');
+  if (!badge) return;
+  if (count >= 2) {
+    badge.textContent = `🔥 ${count}`;
+    badge.title = (T[currentLang] || T.english).streakTooltip?.replace('{n}', count) || `${count} day streak!`;
+    badge.style.display = '';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function initStreak() {
+  const data = JSON.parse(localStorage.getItem('lg_streak') || '{}');
+  const today = new Date().toISOString().slice(0, 10);
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  if (data.lastDate !== today && data.lastDate !== yesterday) {
+    data.count = 0;
+    localStorage.setItem('lg_streak', JSON.stringify(data));
+  }
+  if (data.count >= 2) showStreakBadge(data.count);
 }
 
 function toggleHistory() {
@@ -2216,7 +2333,24 @@ function initGoogleAuth() {
   if (!restoreSession()) { renderGoogleButtons(); google.accounts.id.prompt(); }
 }
 
+function initOnboarding() {
+  if (!localStorage.getItem('lg_onboarded')) {
+    const tip = document.getElementById('onboardTip');
+    if (tip) {
+      const t = T[currentLang] || T.english;
+      document.getElementById('onboardText').textContent = t.onboardTip || 'Start here — type your idea and we\'ll turn it into a professional LinkedIn post';
+      tip.style.display = '';
+    }
+  }
+}
+function dismissOnboard() {
+  document.getElementById('onboardTip').style.display = 'none';
+  localStorage.setItem('lg_onboarded', '1');
+}
+
 window.onload = function() {
+  initStreak();
+  initOnboarding();
   if (googleInitialized) return;
   initGoogleAuth();
   if (!googleInitialized) {

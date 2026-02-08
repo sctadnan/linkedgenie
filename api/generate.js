@@ -234,42 +234,63 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Google Client ID not configured' });
     }
 
-    // Verify Google token
+    // Check auth: signed-in user OR demo mode
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'Please sign in to generate content' });
+    let googleUser = null;
+    let isDemoMode = false;
+
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const idToken = authHeader.split('Bearer ')[1];
+      googleUser = await verifyGoogleToken(idToken);
+      if (!googleUser) {
+        return res.status(401).json({ error: 'Invalid or expired token. Please sign in again.' });
+      }
+    } else {
+      // Demo mode — 1 free try per day without sign-in
+      const demoId = req.headers['x-demo-id'];
+      if (!demoId || demoId.length < 8) {
+        return res.status(401).json({ error: 'Please sign in to generate content' });
+      }
+      isDemoMode = true;
+      const demoKey = `demo:${demoId}`;
+      const demoData = await kvGet(demoKey);
+      if (demoData && demoData.date === todayStr() && demoData.count >= 1) {
+        return res.status(401).json({ error: 'demo_limit', message: 'Sign in with Google to get 3 free generations per day!' });
+      }
     }
 
-    const idToken = authHeader.split('Bearer ')[1];
-    const googleUser = await verifyGoogleToken(idToken);
-    if (!googleUser) {
-      return res.status(401).json({ error: 'Invalid or expired token. Please sign in again.' });
-    }
+    let userData, key;
 
-    // Check usage in KV
-    const key = `user:${googleUser.email}`;
-    let userData = await kvGet(key);
+    if (isDemoMode) {
+      const demoId = req.headers['x-demo-id'];
+      key = `demo:${demoId}`;
+      userData = { usage: { date: todayStr(), count: 0 }, isPro: false };
+    } else {
+      // Signed-in user flow
+      key = `user:${googleUser.email}`;
+      userData = await kvGet(key);
 
-    if (!userData || !userData.usage) {
-      userData = {
-        email: googleUser.email,
-        name: googleUser.name,
-        usage: { date: todayStr(), count: 0 },
-        isPro: userData?.isPro || false
-      };
-    }
+      if (!userData || !userData.usage) {
+        userData = {
+          email: googleUser.email,
+          name: googleUser.name,
+          usage: { date: todayStr(), count: 0 },
+          isPro: userData?.isPro || false
+        };
+      }
 
-    // Dev account always PRO
-    if (process.env.DEV_EMAIL && googleUser.email === process.env.DEV_EMAIL) {
-      userData.isPro = true;
-    }
+      // Dev account always PRO
+      if (process.env.DEV_EMAIL && googleUser.email === process.env.DEV_EMAIL) {
+        userData.isPro = true;
+      }
 
-    if (userData.usage.date !== todayStr()) {
-      userData.usage = { date: todayStr(), count: 0 };
-    }
+      if (userData.usage.date !== todayStr()) {
+        userData.usage = { date: todayStr(), count: 0 };
+      }
 
-    if (!userData.isPro && userData.usage.count >= FREE_LIMIT) {
-      return res.status(429).json({ error: 'Daily limit reached', remaining: 0 });
+      if (!userData.isPro && userData.usage.count >= FREE_LIMIT) {
+        return res.status(429).json({ error: 'Daily limit reached', remaining: 0 });
+      }
     }
 
     // Input validation
@@ -339,19 +360,24 @@ export default async function handler(req, res) {
     }
 
     // Bump usage
-    userData.usage.count++;
-    await kvSet(key, userData);
+    if (isDemoMode) {
+      await kvSet(key, { date: todayStr(), count: 1 });
+    } else {
+      userData.usage.count++;
+      await kvSet(key, userData);
+    }
 
-    const remaining = userData.isPro ? 999 : Math.max(0, FREE_LIMIT - userData.usage.count);
+    const remaining = isDemoMode ? 0 : (userData.isPro ? 999 : Math.max(0, FREE_LIMIT - userData.usage.count));
+    const demo = isDemoMode ? true : undefined;
 
     // Multi-output (hooks, headlines, replies)
     if (prompt.multi) {
       const items = content.split(prompt.separator).map(s => s.trim()).filter(s => s.length > 0);
-      return res.status(200).json({ items, title: prompt.title, remaining });
+      return res.status(200).json({ items, title: prompt.title, remaining, demo });
     }
 
     // Single output
-    return res.status(200).json({ post: content, outputTitle: prompt.outputTitle, remaining });
+    return res.status(200).json({ post: content, outputTitle: prompt.outputTitle, remaining, demo });
 
   } catch (error) {
     console.error('Server error:', error);
