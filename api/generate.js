@@ -272,6 +272,24 @@ export default async function handler(req, res) {
       return res.status(429).json({ error: 'Daily limit reached', remaining: 0 });
     }
 
+    // Input validation
+    const { type, mode, idea, inputs } = req.body;
+    const MAX_INPUT = 3000;
+    if (idea && typeof idea === 'string' && idea.length > MAX_INPUT) {
+      return res.status(400).json({ error: `Input too long (max ${MAX_INPUT} characters)` });
+    }
+    if (inputs) {
+      for (const val of Object.values(inputs)) {
+        if (typeof val === 'string' && val.length > MAX_INPUT) {
+          return res.status(400).json({ error: `Input too long (max ${MAX_INPUT} characters)` });
+        }
+      }
+    }
+    const allowedTypes = ['post', 'profile', 'message', 'reply'];
+    if (type && !allowedTypes.includes(type)) {
+      return res.status(400).json({ error: 'Invalid content type' });
+    }
+
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
       return res.status(500).json({ error: 'API key not configured' });
@@ -283,32 +301,42 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Call OpenAI
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        max_tokens: 1024,
-        temperature: 0.9,
-        messages: [
-          { role: 'system', content: prompt.system },
-          { role: 'user', content: prompt.user }
-        ]
-      })
-    });
+    // Call OpenAI with retry
+    const maxRetries = 2;
+    let content;
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          max_tokens: 1024,
+          temperature: 0.9,
+          messages: [
+            { role: 'system', content: prompt.system },
+            { role: 'user', content: prompt.user }
+          ]
+        })
+      });
 
-    if (!response.ok) {
-      const errText = await response.text();
-      console.error('OpenAI error:', errText);
-      return res.status(502).json({ error: 'AI generation failed' });
+      if (response.ok) {
+        const data = await response.json();
+        content = data.choices[0].message.content;
+        break;
+      }
+
+      if (attempt === maxRetries) {
+        const errText = await response.text();
+        console.error('OpenAI error after retries:', errText);
+        return res.status(502).json({ error: 'AI generation failed. Please try again.' });
+      }
+
+      // Wait before retry (1s, 2s)
+      await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
     }
-
-    const data = await response.json();
-    const content = data.choices[0].message.content;
 
     // Bump usage
     userData.usage.count++;

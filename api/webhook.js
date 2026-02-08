@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 const KV_URL = process.env.UPSTASH_REDIS_REST_KV_REST_API_URL;
 const KV_TOKEN = process.env.UPSTASH_REDIS_REST_KV_REST_API_TOKEN;
 
@@ -25,22 +27,50 @@ function todayStr() {
   return new Date().toISOString().slice(0, 10);
 }
 
+function verifySignature(rawBody, signature, secret) {
+  const hmac = crypto.createHmac('sha256', secret);
+  const digest = hmac.update(rawBody).digest('hex');
+  return crypto.timingSafeEqual(Buffer.from(digest), Buffer.from(signature));
+}
+
+export const config = {
+  api: { bodyParser: false }
+};
+
+async function getRawBody(req) {
+  const chunks = [];
+  for await (const chunk of req) {
+    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+  }
+  return Buffer.concat(chunks);
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Verify webhook signature from LemonSqueezy
-  const secret = process.env.LEMONSQUEEZY_WEBHOOK_SECRET;
-  if (secret) {
-    const signature = req.headers['x-signature'];
-    if (!signature) {
-      return res.status(401).json({ error: 'No signature' });
-    }
-  }
-
   try {
-    const event = req.body;
+    const rawBody = await getRawBody(req);
+    const bodyStr = rawBody.toString('utf8');
+
+    // Verify webhook signature
+    const secret = process.env.LEMONSQUEEZY_WEBHOOK_SECRET;
+    if (secret) {
+      const signature = req.headers['x-signature'];
+      if (!signature) {
+        return res.status(401).json({ error: 'No signature' });
+      }
+      try {
+        if (!verifySignature(bodyStr, signature, secret)) {
+          return res.status(401).json({ error: 'Invalid signature' });
+        }
+      } catch {
+        return res.status(401).json({ error: 'Signature verification failed' });
+      }
+    }
+
+    const event = JSON.parse(bodyStr);
     const eventName = event.meta?.event_name;
     const email = event.data?.attributes?.user_email;
 
