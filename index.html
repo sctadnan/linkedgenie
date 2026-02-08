@@ -624,6 +624,60 @@
   }
   .footer a { color: var(--accent2); text-decoration: none; }
 
+  /* === NEWSLETTER === */
+  .newsletter {
+    margin-top: 24px; padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    text-align: center;
+  }
+  .newsletter h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .newsletter p { font-size: 12px; color: var(--text-dim); margin-bottom: 12px; }
+  .newsletter-form { display: flex; gap: 8px; max-width: 400px; margin: 0 auto; }
+  .newsletter-form input {
+    flex: 1; padding: 8px 12px;
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text); font-size: 13px; outline: none;
+  }
+  .newsletter-form input:focus { border-color: var(--accent); }
+  .newsletter-form button {
+    padding: 8px 16px;
+    background: var(--accent); color: #fff; border: none; border-radius: 8px;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: opacity .15s;
+  }
+  .newsletter-form button:hover { opacity: .85; }
+  .newsletter-success { color: var(--green); font-size: 13px; font-weight: 500; }
+
+  /* === GROWTH BADGE === */
+  .growth-overlay {
+    display: none; position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0,0,0,.7); backdrop-filter: blur(4px);
+    align-items: center; justify-content: center;
+  }
+  .growth-overlay.visible { display: flex; }
+  .growth-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+    padding: 32px; text-align: center; max-width: 340px; width: 90%;
+    animation: modalIn .3s ease;
+  }
+  .growth-card .badge-icon { font-size: 48px; margin-bottom: 12px; }
+  .growth-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .growth-card p { font-size: 13px; color: var(--text-dim); margin-bottom: 16px; }
+  .growth-card .badge-count { font-size: 28px; font-weight: 800; color: var(--accent2); }
+  .growth-share-btn {
+    display: inline-block; padding: 10px 20px; margin-top: 12px;
+    background: linear-gradient(135deg, var(--accent), #818cf8); color: #fff;
+    border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: opacity .15s;
+  }
+  .growth-share-btn:hover { opacity: .85; }
+  .growth-dismiss {
+    display: block; margin-top: 10px; background: none; border: none;
+    color: var(--text-muted); font-size: 12px; cursor: pointer;
+  }
+
   /* === KEYBOARD HINT === */
   .kb-hint {
     font-size: 10px; color: var(--text-muted);
@@ -1111,10 +1165,31 @@
     </div>
   </div>
 
+  <div class="newsletter" id="newsletterBox">
+    <h3 id="nlTitle">Get weekly LinkedIn content tips</h3>
+    <p id="nlDesc">Join our newsletter — strategies, trends & prompts delivered every Monday.</p>
+    <div class="newsletter-form" id="nlForm">
+      <input type="email" id="nlEmail" placeholder="your@email.com">
+      <button onclick="subscribeNewsletter()" id="nlBtn">Subscribe</button>
+    </div>
+  </div>
+
   <footer class="footer" id="footerText">
     LinkedGenie © 2026 · Built with ❤️ and AI
     <br><a href="#" onclick="showLegal('privacy')">Privacy Policy</a> · <a href="#" onclick="showLegal('terms')">Terms of Service</a>
   </footer>
+
+  <!-- Growth Badge Modal -->
+  <div class="growth-overlay" id="growthModal" onclick="if(event.target===this)closeGrowth()">
+    <div class="growth-card">
+      <div class="badge-icon" id="growthIcon">🏆</div>
+      <h3 id="growthTitle">Milestone Reached!</h3>
+      <div class="badge-count" id="growthCount">10</div>
+      <p id="growthDesc">LinkedIn posts created with LinkedGenie</p>
+      <button class="growth-share-btn" onclick="shareGrowth()" id="growthShareBtn">Share Your Achievement</button>
+      <button class="growth-dismiss" onclick="closeGrowth()" id="growthDismissBtn">Maybe later</button>
+    </div>
+  </div>
 
   <!-- Legal Modal -->
   <div class="modal-overlay" id="legalModal">
@@ -1263,7 +1338,14 @@ const T = {
     usagePro: "Pro", upgrade: "Upgrade",
     historyTitle: "History", historyEmpty: "No history yet", historyBtn: "📋",
     streakTooltip: "{n} day streak!",
-    onboardTip: "Start here — type your idea and we'll turn it into a professional LinkedIn post"
+    onboardTip: "Start here — type your idea and we'll turn it into a professional LinkedIn post",
+    nlTitle: "Get weekly LinkedIn content tips",
+    nlDesc: "Join our newsletter — strategies, trends & prompts delivered every Monday.",
+    nlBtn: "Subscribe",
+    growthTitle: "Milestone Reached!",
+    growthDesc: "{n} LinkedIn posts created with LinkedGenie",
+    growthShare: "Share Your Achievement",
+    growthDismiss: "Maybe later"
   },
   spanish: {
     heroBadge: "Suite de Contenido LinkedIn con IA",
@@ -1339,7 +1421,14 @@ const T = {
     usagePro: "Pro", upgrade: "Mejorar",
     historyTitle: "Historial", historyEmpty: "Sin historial aún", historyBtn: "📋",
     streakTooltip: "¡{n} días seguidos!",
-    onboardTip: "Empieza aquí — escribe tu idea y la convertiremos en un post profesional de LinkedIn"
+    onboardTip: "Empieza aquí — escribe tu idea y la convertiremos en un post profesional de LinkedIn",
+    nlTitle: "Recibe consejos semanales para LinkedIn",
+    nlDesc: "Únete a nuestro newsletter — estrategias, tendencias y prompts cada lunes.",
+    nlBtn: "Suscribirse",
+    growthTitle: "¡Meta alcanzada!",
+    growthDesc: "{n} publicaciones de LinkedIn creadas con LinkedGenie",
+    growthShare: "Comparte tu logro",
+    growthDismiss: "Quizás después"
   },
   portuguese: {
     heroBadge: "Suite de Conteúdo LinkedIn com IA",
@@ -1415,7 +1504,14 @@ const T = {
     usagePro: "Pro", upgrade: "Atualizar",
     historyTitle: "Histórico", historyEmpty: "Nenhum histórico ainda", historyBtn: "📋",
     streakTooltip: "{n} dias seguidos!",
-    onboardTip: "Comece aqui — digite sua ideia e a transformaremos em um post profissional do LinkedIn"
+    onboardTip: "Comece aqui — digite sua ideia e a transformaremos em um post profissional do LinkedIn",
+    nlTitle: "Receba dicas semanais para o LinkedIn",
+    nlDesc: "Inscreva-se — estratégias, tendências e prompts toda segunda-feira.",
+    nlBtn: "Inscrever-se",
+    growthTitle: "Meta alcançada!",
+    growthDesc: "{n} posts do LinkedIn criados com LinkedGenie",
+    growthShare: "Compartilhe sua conquista",
+    growthDismiss: "Talvez depois"
   },
   french: {
     heroBadge: "Suite de Contenu LinkedIn propulsée par l'IA",
@@ -1491,7 +1587,14 @@ const T = {
     usagePro: "Pro", upgrade: "Améliorer",
     historyTitle: "Historique", historyEmpty: "Aucun historique", historyBtn: "📋",
     streakTooltip: "{n} jours consécutifs !",
-    onboardTip: "Commencez ici — tapez votre idée et nous la transformerons en un post LinkedIn professionnel"
+    onboardTip: "Commencez ici — tapez votre idée et nous la transformerons en un post LinkedIn professionnel",
+    nlTitle: "Recevez des conseils LinkedIn chaque semaine",
+    nlDesc: "Rejoignez notre newsletter — stratégies, tendances et prompts chaque lundi.",
+    nlBtn: "S'abonner",
+    growthTitle: "Objectif atteint !",
+    growthDesc: "{n} publications LinkedIn créées avec LinkedGenie",
+    growthShare: "Partagez votre réussite",
+    growthDismiss: "Peut-être plus tard"
   },
   german: {
     heroBadge: "KI-gestützte LinkedIn Content Suite",
@@ -1567,7 +1670,14 @@ const T = {
     usagePro: "Pro", upgrade: "Upgraden",
     historyTitle: "Verlauf", historyEmpty: "Noch kein Verlauf", historyBtn: "📋",
     streakTooltip: "{n} Tage in Folge!",
-    onboardTip: "Starten Sie hier — geben Sie Ihre Idee ein und wir erstellen einen professionellen LinkedIn-Post"
+    onboardTip: "Starten Sie hier — geben Sie Ihre Idee ein und wir erstellen einen professionellen LinkedIn-Post",
+    nlTitle: "Wöchentliche LinkedIn-Tipps erhalten",
+    nlDesc: "Abonnieren Sie — Strategien, Trends & Prompts jeden Montag.",
+    nlBtn: "Abonnieren",
+    growthTitle: "Meilenstein erreicht!",
+    growthDesc: "{n} LinkedIn-Beiträge mit LinkedGenie erstellt",
+    growthShare: "Teile deine Leistung",
+    growthDismiss: "Vielleicht später"
   },
   arabic: {
     heroBadge: "مجموعة محتوى LinkedIn مدعومة بالذكاء الاصطناعي",
@@ -1643,7 +1753,14 @@ const T = {
     usagePro: "Pro", upgrade: "ترقية",
     historyTitle: "السجل", historyEmpty: "لا يوجد سجل بعد", historyBtn: "📋",
     streakTooltip: "{n} أيام متتالية!",
-    onboardTip: "ابدأ هنا — اكتب فكرتك وسنحولها إلى منشور LinkedIn احترافي"
+    onboardTip: "ابدأ هنا — اكتب فكرتك وسنحولها إلى منشور LinkedIn احترافي",
+    nlTitle: "نصائح أسبوعية لمحتوى LinkedIn",
+    nlDesc: "اشترك في نشرتنا — استراتيجيات واتجاهات وأفكار كل يوم اثنين.",
+    nlBtn: "اشتراك",
+    growthTitle: "تم تحقيق الهدف!",
+    growthDesc: "{n} منشور LinkedIn تم إنشاؤه بواسطة LinkedGenie",
+    growthShare: "شارك إنجازك",
+    growthDismiss: "ربما لاحقاً"
   }
 };
 
@@ -1781,6 +1898,11 @@ function applyLanguage(lang) {
 
   // Footer
   htm('footerText', 'footer');
+
+  // Newsletter
+  txt('nlTitle', 'nlTitle');
+  txt('nlDesc', 'nlDesc');
+  txt('nlBtn', 'nlBtn');
 
   // Modal
   txt('modalTitleText', 'modalTitle');
@@ -2191,6 +2313,42 @@ function copyItem(btn, index) {
 }
 
 function openUpgrade() { window.open('/api/checkout', '_blank'); }
+
+async function subscribeNewsletter() {
+  const input = document.getElementById('nlEmail');
+  const email = input.value.trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    input.style.borderColor = 'var(--red)';
+    return;
+  }
+  const btn = document.getElementById('nlBtn');
+  btn.disabled = true;
+  btn.textContent = '...';
+  try {
+    const res = await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    if (res.ok) {
+      document.getElementById('nlForm').innerHTML = '<span class="newsletter-success">✓ Subscribed!</span>';
+      localStorage.setItem('lg_subscribed', '1');
+    } else {
+      btn.textContent = 'Try again';
+      btn.disabled = false;
+    }
+  } catch {
+    btn.textContent = 'Try again';
+    btn.disabled = false;
+  }
+}
+// Hide newsletter if already subscribed
+if (localStorage.getItem('lg_subscribed')) {
+  document.addEventListener('DOMContentLoaded', () => {
+    const nl = document.getElementById('newsletterBox');
+    if (nl) nl.style.display = 'none';
+  });
+}
 function toggleSettings() { document.getElementById('settingsModal').classList.toggle('visible'); }
 
 function showLegal(type) {
@@ -2235,6 +2393,7 @@ function saveToHistory(text, type, mode) {
   if (history.length > 20) history.length = 20;
   localStorage.setItem(key, JSON.stringify(history));
   updateStreak();
+  checkGrowthMilestone();
 }
 
 function updateStreak() {
@@ -2273,6 +2432,52 @@ function initStreak() {
     localStorage.setItem('lg_streak', JSON.stringify(data));
   }
   if (data.count >= 2) showStreakBadge(data.count);
+}
+
+// ============ GROWTH BADGE ============
+const GROWTH_MILESTONES = [10, 25, 50, 100, 250, 500];
+const GROWTH_ICONS = { 10: '🏅', 25: '🥈', 50: '🥇', 100: '🏆', 250: '💎', 500: '👑' };
+
+function checkGrowthMilestone() {
+  const total = parseInt(localStorage.getItem('lg_total_gen') || '0', 10) + 1;
+  localStorage.setItem('lg_total_gen', total);
+  const shown = JSON.parse(localStorage.getItem('lg_growth_shown') || '[]');
+  for (const m of GROWTH_MILESTONES) {
+    if (total >= m && !shown.includes(m)) {
+      shown.push(m);
+      localStorage.setItem('lg_growth_shown', JSON.stringify(shown));
+      showGrowthBadge(m, total);
+      return;
+    }
+  }
+}
+
+function showGrowthBadge(milestone, total) {
+  const t = T[currentLang] || T.english;
+  const icon = GROWTH_ICONS[milestone] || '🏆';
+  document.getElementById('growthIcon').textContent = icon;
+  document.getElementById('growthTitle').textContent = t.growthTitle || 'Milestone Reached!';
+  document.getElementById('growthCount').textContent = milestone;
+  document.getElementById('growthDesc').textContent = (t.growthDesc || '{n} LinkedIn posts created with LinkedGenie').replace('{n}', milestone);
+  document.getElementById('growthShareBtn').textContent = t.growthShare || 'Share Your Achievement';
+  document.getElementById('growthDismissBtn').textContent = t.growthDismiss || 'Maybe later';
+  document.getElementById('growthModal').classList.add('visible');
+}
+
+function closeGrowth() {
+  document.getElementById('growthModal').classList.remove('visible');
+}
+
+function shareGrowth() {
+  const total = localStorage.getItem('lg_total_gen') || '0';
+  const text = `I just hit ${total} LinkedIn posts created with LinkedGenie! 🚀\n\nTry it free: linkedgenie.vercel.app`;
+  if (navigator.share) {
+    navigator.share({ title: 'LinkedGenie Achievement', text }).catch(() => {});
+  } else {
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+  }
+  closeGrowth();
 }
 
 function toggleHistory() {

@@ -1,37 +1,4 @@
-const KV_URL = process.env.UPSTASH_REDIS_REST_KV_REST_API_URL;
-const KV_TOKEN = process.env.UPSTASH_REDIS_REST_KV_REST_API_TOKEN;
-
-async function verifyGoogleToken(idToken) {
-  const res = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${idToken}`);
-  if (!res.ok) return null;
-  const data = await res.json();
-  if (data.aud !== process.env.GOOGLE_CLIENT_ID) return null;
-  return { email: data.email, name: data.name, picture: data.picture };
-}
-
-async function kvGet(key) {
-  const res = await fetch(`${KV_URL}/get/${key}`, {
-    headers: { Authorization: `Bearer ${KV_TOKEN}` }
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data.result ? JSON.parse(data.result) : null;
-}
-
-async function kvSet(key, value) {
-  await fetch(KV_URL, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${KV_TOKEN}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(["SET", key, JSON.stringify(value)])
-  });
-}
-
-function todayStr() {
-  return new Date().toISOString().slice(0, 10);
-}
+import { verifyGoogleToken, kvGet, kvSet, todayStr } from './_shared.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -42,7 +9,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    if (!KV_URL || !KV_TOKEN) {
+    if (!process.env.UPSTASH_REDIS_REST_KV_REST_API_URL || !process.env.UPSTASH_REDIS_REST_KV_REST_API_TOKEN) {
       return res.status(500).json({ error: 'Database not configured' });
     }
     if (!process.env.GOOGLE_CLIENT_ID) {

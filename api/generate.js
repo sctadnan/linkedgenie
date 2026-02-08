@@ -1,38 +1,5 @@
-const KV_URL = process.env.UPSTASH_REDIS_REST_KV_REST_API_URL;
-const KV_TOKEN = process.env.UPSTASH_REDIS_REST_KV_REST_API_TOKEN;
+import { verifyGoogleToken, kvGet, kvSet, todayStr, checkRateLimit, checkCircuitBreaker, recordCircuitFailure, resetCircuitBreaker } from './_shared.js';
 const FREE_LIMIT = 3;
-
-async function verifyGoogleToken(idToken) {
-  const res = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${idToken}`);
-  if (!res.ok) return null;
-  const data = await res.json();
-  if (data.aud !== process.env.GOOGLE_CLIENT_ID) return null;
-  return { email: data.email, name: data.name };
-}
-
-async function kvGet(key) {
-  const res = await fetch(`${KV_URL}/get/${key}`, {
-    headers: { Authorization: `Bearer ${KV_TOKEN}` }
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data.result ? JSON.parse(data.result) : null;
-}
-
-async function kvSet(key, value) {
-  await fetch(KV_URL, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${KV_TOKEN}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(["SET", key, JSON.stringify(value)])
-  });
-}
-
-function todayStr() {
-  return new Date().toISOString().slice(0, 10);
-}
 
 // ============ PROMPT BUILDERS ============
 
@@ -227,7 +194,15 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    if (!KV_URL || !KV_TOKEN) {
+    // Per-minute rate limiting (20 req/min per IP)
+    const clientIp = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown';
+    const rateCheck = await checkRateLimit(clientIp, 20);
+    if (!rateCheck.allowed) {
+      res.setHeader('Retry-After', '60');
+      return res.status(429).json({ error: 'Too many requests. Please wait a moment.' });
+    }
+
+    if (!process.env.UPSTASH_REDIS_REST_KV_REST_API_URL || !process.env.UPSTASH_REDIS_REST_KV_REST_API_TOKEN) {
       return res.status(500).json({ error: 'Database not configured' });
     }
     if (!process.env.GOOGLE_CLIENT_ID) {
@@ -322,6 +297,12 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
+    // Circuit breaker check
+    const circuit = await checkCircuitBreaker();
+    if (circuit.open) {
+      return res.status(503).json({ error: 'AI service is temporarily unavailable. Please try again in a few minutes.' });
+    }
+
     // Call OpenAI with retry
     const maxRetries = 2;
     let content;
@@ -346,12 +327,14 @@ export default async function handler(req, res) {
       if (response.ok) {
         const data = await response.json();
         content = data.choices[0].message.content;
+        await resetCircuitBreaker();
         break;
       }
 
       if (attempt === maxRetries) {
         const errText = await response.text();
         console.error('OpenAI error after retries:', errText);
+        await recordCircuitFailure();
         return res.status(502).json({ error: 'AI generation failed. Please try again.' });
       }
 

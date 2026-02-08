@@ -11,6 +11,9 @@
     },
     "api/webhook.js": {
       "maxDuration": 10
+    },
+    "api/subscribe.js": {
+      "maxDuration": 10
     }
   }
 }

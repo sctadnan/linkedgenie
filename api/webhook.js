@@ -1,31 +1,5 @@
 import crypto from 'crypto';
-
-const KV_URL = process.env.UPSTASH_REDIS_REST_KV_REST_API_URL;
-const KV_TOKEN = process.env.UPSTASH_REDIS_REST_KV_REST_API_TOKEN;
-
-async function kvGet(key) {
-  const res = await fetch(`${KV_URL}/get/${key}`, {
-    headers: { Authorization: `Bearer ${KV_TOKEN}` }
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data.result ? JSON.parse(data.result) : null;
-}
-
-async function kvSet(key, value) {
-  await fetch(KV_URL, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${KV_TOKEN}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(["SET", key, JSON.stringify(value)])
-  });
-}
-
-function todayStr() {
-  return new Date().toISOString().slice(0, 10);
-}
+import { kvGet, kvSet, todayStr } from './_shared.js';
 
 function verifySignature(rawBody, signature, secret) {
   const hmac = crypto.createHmac('sha256', secret);
