@@ -1368,7 +1368,8 @@ const T = {
     growthDesc: "{n} LinkedIn posts created with LinkedGenie",
     growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
     growthDismiss: "Maybe later",
-    shareText: "I just created {n} LinkedIn posts with LinkedGenie! 🚀"
+    shareText: "I just created {n} LinkedIn posts with LinkedGenie! 🚀",
+    clipboardCopied: "Text copied! Paste it in your LinkedIn post ✅"
   },
   spanish: {
     heroBadge: "Suite de Contenido LinkedIn con IA",
@@ -1452,7 +1453,8 @@ const T = {
     growthDesc: "{n} publicaciones de LinkedIn creadas con LinkedGenie",
     growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
     growthDismiss: "Quizás después",
-    shareText: "¡Acabo de crear {n} publicaciones de LinkedIn con LinkedGenie! 🚀"
+    shareText: "¡Acabo de crear {n} publicaciones de LinkedIn con LinkedGenie! 🚀",
+    clipboardCopied: "¡Texto copiado! Pégalo en tu publicación de LinkedIn ✅"
   },
   portuguese: {
     heroBadge: "Suite de Conteúdo LinkedIn com IA",
@@ -1536,7 +1538,8 @@ const T = {
     growthDesc: "{n} posts do LinkedIn criados com LinkedGenie",
     growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
     growthDismiss: "Talvez depois",
-    shareText: "Acabei de criar {n} posts do LinkedIn com LinkedGenie! 🚀"
+    shareText: "Acabei de criar {n} posts do LinkedIn com LinkedGenie! 🚀",
+    clipboardCopied: "Texto copiado! Cole na sua publicação do LinkedIn ✅"
   },
   french: {
     heroBadge: "Suite de Contenu LinkedIn propulsée par l'IA",
@@ -1620,7 +1623,8 @@ const T = {
     growthDesc: "{n} publications LinkedIn créées avec LinkedGenie",
     growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
     growthDismiss: "Peut-être plus tard",
-    shareText: "Je viens de créer {n} publications LinkedIn avec LinkedGenie ! 🚀"
+    shareText: "Je viens de créer {n} publications LinkedIn avec LinkedGenie ! 🚀",
+    clipboardCopied: "Texte copié ! Collez-le dans votre publication LinkedIn ✅"
   },
   german: {
     heroBadge: "KI-gestützte LinkedIn Content Suite",
@@ -1704,7 +1708,8 @@ const T = {
     growthDesc: "{n} LinkedIn-Beiträge mit LinkedGenie erstellt",
     growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
     growthDismiss: "Vielleicht später",
-    shareText: "Ich habe gerade {n} LinkedIn-Beiträge mit LinkedGenie erstellt! 🚀"
+    shareText: "Ich habe gerade {n} LinkedIn-Beiträge mit LinkedGenie erstellt! 🚀",
+    clipboardCopied: "Text kopiert! Füge ihn in deinen LinkedIn-Beitrag ein ✅"
   },
   arabic: {
     heroBadge: "مجموعة محتوى LinkedIn مدعومة بالذكاء الاصطناعي",
@@ -1788,7 +1793,8 @@ const T = {
     growthDesc: "{n} منشور LinkedIn تم إنشاؤه بواسطة LinkedGenie",
     growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
     growthDismiss: "ربما لاحقاً",
-    shareText: "أنشأت {n} منشور LinkedIn بواسطة LinkedGenie! 🚀"
+    shareText: "أنشأت {n} منشور LinkedIn بواسطة LinkedGenie! 🚀",
+    clipboardCopied: "تم نسخ النص! الصقه في منشورك على LinkedIn ✅"
   }
 };
 
@@ -2505,9 +2511,26 @@ function getShareText() {
 }
 
 function shareLinkedIn() {
+  const text = getShareText();
+  navigator.clipboard.writeText(text).then(() => {
+    showToast((T[currentLang] || T.english).clipboardCopied || 'Text copied! Paste it in your LinkedIn post ✅');
+  });
   const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent('https://linkedgenie.vercel.app')}`;
   window.open(url, '_blank');
   closeGrowth();
+}
+
+function showToast(msg) {
+  let t = document.getElementById('clipToast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'clipToast';
+    t.style.cssText = 'position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:#6366f1;color:#fff;padding:14px 28px;border-radius:12px;font-size:15px;font-weight:600;z-index:99999;box-shadow:0 8px 24px rgba(0,0,0,0.3);transition:opacity 0.3s;pointer-events:none;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  setTimeout(() => { t.style.opacity = '0'; }, 3000);
 }
 
 function shareTwitter() {
