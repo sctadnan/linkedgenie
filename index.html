@@ -213,27 +213,15 @@
   .global-lang:hover { border-color: var(--border-light); color: var(--text); }
   .global-lang:focus { border-color: var(--accent); outline: none; }
 
-  .plan-banner {
-    padding: 8px 16px;
-    border-radius: 10px;
-    font-size: 12px; font-weight: 500;
-    text-align: center;
-    margin-bottom: 12px;
-    display: none;
-  }
-  .plan-banner.visible { display: block; }
-  .plan-banner.pro {
-    background: linear-gradient(135deg, rgba(249,115,22,0.1), rgba(234,179,8,0.1));
-    border: 1px solid rgba(249,115,22,0.3);
+  .usage-pill.pro {
+    background: linear-gradient(135deg, rgba(249,115,22,0.15), rgba(234,179,8,0.15));
+    border-color: rgba(249,115,22,0.4);
     color: #f59e0b;
   }
-  .plan-banner.free {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--text-muted);
+  .usage-pill .upgrade-link {
+    color: var(--accent); text-decoration: none; font-weight: 600; cursor: pointer; margin-left: 4px;
   }
-  .plan-banner a { color: var(--accent); text-decoration: none; font-weight: 600; cursor: pointer; }
-  .plan-banner a:hover { text-decoration: underline; }
+  .usage-pill .upgrade-link:hover { text-decoration: underline; }
 
   .main-tab {
     flex: 1; padding: 10px 8px;
@@ -648,7 +636,7 @@
   }
   [dir="rtl"] .textarea-footer { flex-direction: row-reverse; }
   [dir="rtl"] .hero { text-align: center; }
-  [dir="rtl"] .plan-banner a { margin-right: 0; }
+  [dir="rtl"] .usage-pill .upgrade-link { margin-left: 0; margin-right: 4px; }
 
   /* === HISTORY === */
   .history-btn {
@@ -744,8 +732,6 @@
       </select>
     </div>
 
-    <!-- Plan Status Banner -->
-    <div class="plan-banner" id="planBanner"></div>
 
     <!-- ==================== TAB: POST ==================== -->
     <div class="gen-card">
@@ -1227,8 +1213,7 @@ const T = {
     modalUpgrade: "Upgrade to Pro", modalGotIt: "Got it!",
     hookOptionsTitle: "Hook Options", headlineOptionsTitle: "Headline Options", replyOptionsTitle: "Reply Options",
     writeAboutThis: "✍️ Write", signOut: "Sign out",
-    usagePro: "Pro", bannerPro: "⭐ You're on Pro — unlimited access",
-    bannerFree: "Free plan — {n}/{l} per day · <a onclick=\"openUpgrade()\">Upgrade</a>",
+    usagePro: "Pro", upgrade: "Upgrade",
     historyTitle: "History", historyEmpty: "No history yet", historyBtn: "📋"
   },
   spanish: {
@@ -1302,8 +1287,7 @@ const T = {
     modalUpgrade: "Actualizar a Pro", modalGotIt: "¡Entendido!",
     hookOptionsTitle: "Opciones de Gancho", headlineOptionsTitle: "Opciones de Titular", replyOptionsTitle: "Opciones de Respuesta",
     writeAboutThis: "✍️ Escribir", signOut: "Cerrar sesión",
-    usagePro: "Pro", bannerPro: "⭐ Estás en Pro — acceso ilimitado",
-    bannerFree: "Plan gratuito — {n}/{l} por día · <a onclick=\"openUpgrade()\">Mejorar</a>",
+    usagePro: "Pro", upgrade: "Mejorar",
     historyTitle: "Historial", historyEmpty: "Sin historial aún", historyBtn: "📋"
   },
   portuguese: {
@@ -1377,8 +1361,7 @@ const T = {
     modalUpgrade: "Atualizar para Pro", modalGotIt: "Entendi!",
     hookOptionsTitle: "Opções de Gancho", headlineOptionsTitle: "Opções de Título", replyOptionsTitle: "Opções de Resposta",
     writeAboutThis: "✍️ Escrever", signOut: "Sair",
-    usagePro: "Pro", bannerPro: "⭐ Você é Pro — acesso ilimitado",
-    bannerFree: "Plano gratuito — {n}/{l} por dia · <a onclick=\"openUpgrade()\">Atualizar</a>",
+    usagePro: "Pro", upgrade: "Atualizar",
     historyTitle: "Histórico", historyEmpty: "Nenhum histórico ainda", historyBtn: "📋"
   },
   french: {
@@ -1452,8 +1435,7 @@ const T = {
     modalUpgrade: "Passer à Pro", modalGotIt: "Compris !",
     hookOptionsTitle: "Options d'Accroche", headlineOptionsTitle: "Options de Titre", replyOptionsTitle: "Options de Réponse",
     writeAboutThis: "✍️ Écrire", signOut: "Se déconnecter",
-    usagePro: "Pro", bannerPro: "⭐ Vous êtes Pro — accès illimité",
-    bannerFree: "Plan gratuit — {n}/{l} par jour · <a onclick=\"openUpgrade()\">Améliorer</a>",
+    usagePro: "Pro", upgrade: "Améliorer",
     historyTitle: "Historique", historyEmpty: "Aucun historique", historyBtn: "📋"
   },
   german: {
@@ -1527,13 +1509,12 @@ const T = {
     modalUpgrade: "Auf Pro upgraden", modalGotIt: "Verstanden!",
     hookOptionsTitle: "Hook-Optionen", headlineOptionsTitle: "Überschrift-Optionen", replyOptionsTitle: "Antwort-Optionen",
     writeAboutThis: "✍️ Schreiben", signOut: "Abmelden",
-    usagePro: "Pro", bannerPro: "⭐ Sie sind Pro — unbegrenzter Zugang",
-    bannerFree: "Kostenlos — {n}/{l} pro Tag · <a onclick=\"openUpgrade()\">Upgraden</a>",
+    usagePro: "Pro", upgrade: "Upgraden",
     historyTitle: "Verlauf", historyEmpty: "Noch kein Verlauf", historyBtn: "📋"
   },
   arabic: {
     heroBadge: "مجموعة محتوى LinkedIn مدعومة بالذكاء الاصطناعي",
-    heroTitle: 'أدواتك المتكاملة لمحتوى LinkedIn',
+    heroTitle: 'أدواتك المتكاملة لمحتوى <em>LinkedIn</em>',
     heroDesc: "أنشئ منشورات، حسّن ملفك الشخصي، اكتب رسائل وردود — كل ذلك بالذكاء الاصطناعي.",
     loginPrompt: "سجّل الدخول بحساب Google لبدء إنشاء محتوى LinkedIn",
     tabPost: "✍️ منشور", tabProfile: "👤 الملف الشخصي", tabMessage: "📩 رسالة", tabReply: "💬 رد",
@@ -1602,8 +1583,7 @@ const T = {
     modalUpgrade: "ترقية إلى Pro", modalGotIt: "فهمت!",
     hookOptionsTitle: "خيارات العناوين الجاذبة", headlineOptionsTitle: "خيارات العنوان", replyOptionsTitle: "خيارات الرد",
     writeAboutThis: "✍️ اكتب عنه", signOut: "تسجيل الخروج",
-    usagePro: "Pro", bannerPro: "⭐ أنت على خطة Pro — وصول غير محدود",
-    bannerFree: "خطة مجانية — {n}/{l} يومياً · <a onclick=\"openUpgrade()\">ترقية</a>",
+    usagePro: "Pro", upgrade: "ترقية",
     historyTitle: "السجل", historyEmpty: "لا يوجد سجل بعد", historyBtn: "📋"
   }
 };
@@ -1921,28 +1901,26 @@ function signOut() {
   document.getElementById('outputCard').classList.remove('visible');
   document.getElementById('multiOutput').classList.remove('visible');
   document.getElementById('paywallCard').classList.remove('visible');
-  document.getElementById('usageLabel').textContent = '—';
+  document.getElementById('usageLabel').innerHTML = '—';
   document.getElementById('usageIndicator').className = 'usage-indicator';
+  document.querySelector('.usage-pill').classList.remove('pro');
   document.getElementById('historyNavBtn').style.display = 'none';
-  document.getElementById('planBanner').className = 'plan-banner';
 }
 
 function updateUsageUI(remaining, limit) {
   const t = T[currentLang] || T.english;
+  const pill = document.querySelector('.usage-pill');
   const label = document.getElementById('usageLabel');
   const dot = document.getElementById('usageIndicator');
-  const banner = document.getElementById('planBanner');
   dot.className = 'usage-indicator';
-  banner.className = 'plan-banner visible';
+  pill.classList.remove('pro');
   if (limit === 'unlimited') {
-    label.textContent = t.usagePro || 'Pro';
-    banner.classList.add('pro');
-    banner.innerHTML = t.bannerPro || '⭐ You\'re on Pro — unlimited access';
+    label.innerHTML = `⭐ ${t.usagePro || 'Pro'}`;
+    pill.classList.add('pro');
     return;
   }
-  label.textContent = `${remaining}/${limit}`;
-  banner.classList.add('free');
-  banner.innerHTML = (t.bannerFree || 'Free plan — {n}/{l} per day · <a onclick="openUpgrade()">Upgrade</a>').replace('{n}', remaining).replace('{l}', limit);
+  const upgradeText = t.upgrade || 'Upgrade';
+  label.innerHTML = `${remaining}/${limit} · <a class="upgrade-link" onclick="openUpgrade()">${upgradeText}</a>`;
   if (remaining === 0) dot.classList.add('out');
   else if (remaining === 1) dot.classList.add('warn');
 }
