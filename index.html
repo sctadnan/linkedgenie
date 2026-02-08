@@ -9,6 +9,14 @@
 <meta property="og:title" content="LinkedGenie — AI LinkedIn Content Suite">
 <meta property="og:description" content="Your complete AI toolkit for LinkedIn content creation.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://linkedgenie.vercel.app">
+<meta property="og:image" content="https://linkedgenie.vercel.app/api/og">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="LinkedGenie — AI LinkedIn Content Suite">
+<meta name="twitter:description" content="Your complete AI toolkit for LinkedIn content creation.">
+<meta name="twitter:image" content="https://linkedgenie.vercel.app/api/og">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <script src="https://accounts.google.com/gsi/client" async defer onload="initGoogleAuth()"></script>
@@ -1354,7 +1362,8 @@ const T = {
     growthTitle: "Milestone Reached!",
     growthDesc: "{n} LinkedIn posts created with LinkedGenie",
     growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
-    growthDismiss: "Maybe later"
+    growthDismiss: "Maybe later",
+    shareText: "I just created {n} LinkedIn posts with LinkedGenie! 🚀"
   },
   spanish: {
     heroBadge: "Suite de Contenido LinkedIn con IA",
@@ -1437,7 +1446,8 @@ const T = {
     growthTitle: "¡Meta alcanzada!",
     growthDesc: "{n} publicaciones de LinkedIn creadas con LinkedGenie",
     growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
-    growthDismiss: "Quizás después"
+    growthDismiss: "Quizás después",
+    shareText: "¡Acabo de crear {n} publicaciones de LinkedIn con LinkedGenie! 🚀"
   },
   portuguese: {
     heroBadge: "Suite de Conteúdo LinkedIn com IA",
@@ -1520,7 +1530,8 @@ const T = {
     growthTitle: "Meta alcançada!",
     growthDesc: "{n} posts do LinkedIn criados com LinkedGenie",
     growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
-    growthDismiss: "Talvez depois"
+    growthDismiss: "Talvez depois",
+    shareText: "Acabei de criar {n} posts do LinkedIn com LinkedGenie! 🚀"
   },
   french: {
     heroBadge: "Suite de Contenu LinkedIn propulsée par l'IA",
@@ -1603,7 +1614,8 @@ const T = {
     growthTitle: "Objectif atteint !",
     growthDesc: "{n} publications LinkedIn créées avec LinkedGenie",
     growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
-    growthDismiss: "Peut-être plus tard"
+    growthDismiss: "Peut-être plus tard",
+    shareText: "Je viens de créer {n} publications LinkedIn avec LinkedGenie ! 🚀"
   },
   german: {
     heroBadge: "KI-gestützte LinkedIn Content Suite",
@@ -1686,7 +1698,8 @@ const T = {
     growthTitle: "Meilenstein erreicht!",
     growthDesc: "{n} LinkedIn-Beiträge mit LinkedGenie erstellt",
     growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
-    growthDismiss: "Vielleicht später"
+    growthDismiss: "Vielleicht später",
+    shareText: "Ich habe gerade {n} LinkedIn-Beiträge mit LinkedGenie erstellt! 🚀"
   },
   arabic: {
     heroBadge: "مجموعة محتوى LinkedIn مدعومة بالذكاء الاصطناعي",
@@ -1769,7 +1782,8 @@ const T = {
     growthTitle: "تم تحقيق الهدف!",
     growthDesc: "{n} منشور LinkedIn تم إنشاؤه بواسطة LinkedGenie",
     growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
-    growthDismiss: "ربما لاحقاً"
+    growthDismiss: "ربما لاحقاً",
+    shareText: "أنشأت {n} منشور LinkedIn بواسطة LinkedGenie! 🚀"
   }
 };
 
@@ -2480,7 +2494,9 @@ function closeGrowth() {
 
 function getShareText() {
   const total = localStorage.getItem('lg_total_gen') || '0';
-  return `I just hit ${total} LinkedIn posts created with LinkedGenie! 🚀\n\nTry it free: linkedgenie.vercel.app`;
+  const t = T[currentLang] || T.english;
+  const text = (t.shareText || 'I just created {n} LinkedIn posts with LinkedGenie! 🚀').replace('{n}', total);
+  return text + '\n\nhttps://linkedgenie.vercel.app';
 }
 
 function shareLinkedIn() {
