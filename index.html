@@ -666,12 +666,18 @@
   .growth-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
   .growth-card p { font-size: 13px; color: var(--text-dim); margin-bottom: 16px; }
   .growth-card .badge-count { font-size: 28px; font-weight: 800; color: var(--accent2); }
+  .growth-share-btns {
+    display: flex; gap: 8px; justify-content: center; margin-top: 12px;
+  }
   .growth-share-btn {
-    display: inline-block; padding: 10px 20px; margin-top: 12px;
-    background: linear-gradient(135deg, var(--accent), #818cf8); color: #fff;
-    border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 16px;
+    color: #fff; border: none; border-radius: 10px;
+    font-size: 13px; font-weight: 600;
     cursor: pointer; transition: opacity .15s;
   }
+  .growth-share-btn.li { background: #0A66C2; }
+  .growth-share-btn.tw { background: #000; }
   .growth-share-btn:hover { opacity: .85; }
   .growth-dismiss {
     display: block; margin-top: 10px; background: none; border: none;
@@ -1186,7 +1192,10 @@
       <h3 id="growthTitle">Milestone Reached!</h3>
       <div class="badge-count" id="growthCount">10</div>
       <p id="growthDesc">LinkedIn posts created with LinkedGenie</p>
-      <button class="growth-share-btn" onclick="shareGrowth()" id="growthShareBtn">Share Your Achievement</button>
+      <div class="growth-share-btns">
+        <button class="growth-share-btn li" onclick="shareLinkedIn()" id="growthShareLI">LinkedIn</button>
+        <button class="growth-share-btn tw" onclick="shareTwitter()" id="growthShareTW">X / Twitter</button>
+      </div>
       <button class="growth-dismiss" onclick="closeGrowth()" id="growthDismissBtn">Maybe later</button>
     </div>
   </div>
@@ -1344,7 +1353,7 @@ const T = {
     nlBtn: "Subscribe",
     growthTitle: "Milestone Reached!",
     growthDesc: "{n} LinkedIn posts created with LinkedGenie",
-    growthShare: "Share Your Achievement",
+    growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
     growthDismiss: "Maybe later"
   },
   spanish: {
@@ -1427,7 +1436,7 @@ const T = {
     nlBtn: "Suscribirse",
     growthTitle: "¡Meta alcanzada!",
     growthDesc: "{n} publicaciones de LinkedIn creadas con LinkedGenie",
-    growthShare: "Comparte tu logro",
+    growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
     growthDismiss: "Quizás después"
   },
   portuguese: {
@@ -1510,7 +1519,7 @@ const T = {
     nlBtn: "Inscrever-se",
     growthTitle: "Meta alcançada!",
     growthDesc: "{n} posts do LinkedIn criados com LinkedGenie",
-    growthShare: "Compartilhe sua conquista",
+    growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
     growthDismiss: "Talvez depois"
   },
   french: {
@@ -1593,7 +1602,7 @@ const T = {
     nlBtn: "S'abonner",
     growthTitle: "Objectif atteint !",
     growthDesc: "{n} publications LinkedIn créées avec LinkedGenie",
-    growthShare: "Partagez votre réussite",
+    growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
     growthDismiss: "Peut-être plus tard"
   },
   german: {
@@ -1676,7 +1685,7 @@ const T = {
     nlBtn: "Abonnieren",
     growthTitle: "Meilenstein erreicht!",
     growthDesc: "{n} LinkedIn-Beiträge mit LinkedGenie erstellt",
-    growthShare: "Teile deine Leistung",
+    growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
     growthDismiss: "Vielleicht später"
   },
   arabic: {
@@ -1759,7 +1768,7 @@ const T = {
     nlBtn: "اشتراك",
     growthTitle: "تم تحقيق الهدف!",
     growthDesc: "{n} منشور LinkedIn تم إنشاؤه بواسطة LinkedGenie",
-    growthShare: "شارك إنجازك",
+    growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
     growthDismiss: "ربما لاحقاً"
   }
 };
@@ -2459,7 +2468,8 @@ function showGrowthBadge(milestone, total) {
   document.getElementById('growthTitle').textContent = t.growthTitle || 'Milestone Reached!';
   document.getElementById('growthCount').textContent = milestone;
   document.getElementById('growthDesc').textContent = (t.growthDesc || '{n} LinkedIn posts created with LinkedGenie').replace('{n}', milestone);
-  document.getElementById('growthShareBtn').textContent = t.growthShare || 'Share Your Achievement';
+  document.getElementById('growthShareLI').textContent = t.growthShareLI || 'LinkedIn';
+  document.getElementById('growthShareTW').textContent = t.growthShareTW || 'X / Twitter';
   document.getElementById('growthDismissBtn').textContent = t.growthDismiss || 'Maybe later';
   document.getElementById('growthModal').classList.add('visible');
 }
@@ -2468,15 +2478,20 @@ function closeGrowth() {
   document.getElementById('growthModal').classList.remove('visible');
 }
 
-function shareGrowth() {
+function getShareText() {
   const total = localStorage.getItem('lg_total_gen') || '0';
-  const text = `I just hit ${total} LinkedIn posts created with LinkedGenie! 🚀\n\nTry it free: linkedgenie.vercel.app`;
-  if (navigator.share) {
-    navigator.share({ title: 'LinkedGenie Achievement', text }).catch(() => {});
-  } else {
-    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank');
-  }
+  return `I just hit ${total} LinkedIn posts created with LinkedGenie! 🚀\n\nTry it free: linkedgenie.vercel.app`;
+}
+
+function shareLinkedIn() {
+  const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent('https://linkedgenie.vercel.app')}`;
+  window.open(url, '_blank');
+  closeGrowth();
+}
+
+function shareTwitter() {
+  const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(getShareText())}`;
+  window.open(url, '_blank');
   closeGrowth();
 }
 
