@@ -22,6 +22,17 @@
 <meta name="twitter:description" content="Generate LinkedIn posts, optimize your profile, craft connection messages, and write comment replies — all powered by AI.">
 <meta name="twitter:image" content="https://linkedgenie.vercel.app/api/og">
 <meta name="twitter:image:alt" content="LinkedGenie - AI LinkedIn Content Suite">
+<meta name="robots" content="index, follow">
+<meta name="author" content="LinkedGenie">
+<meta name="theme-color" content="#6366f1">
+<link rel="canonical" href="https://linkedgenie.vercel.app">
+<link rel="alternate" hreflang="en" href="https://linkedgenie.vercel.app">
+<link rel="alternate" hreflang="es" href="https://linkedgenie.vercel.app?lang=es">
+<link rel="alternate" hreflang="pt" href="https://linkedgenie.vercel.app?lang=pt">
+<link rel="alternate" hreflang="fr" href="https://linkedgenie.vercel.app?lang=fr">
+<link rel="alternate" hreflang="de" href="https://linkedgenie.vercel.app?lang=de">
+<link rel="alternate" hreflang="ar" href="https://linkedgenie.vercel.app?lang=ar">
+<link rel="alternate" hreflang="x-default" href="https://linkedgenie.vercel.app">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"SoftwareApplication","name":"LinkedGenie","description":"AI-Powered LinkedIn Content Suite — generate posts, optimize profiles, craft messages, and write replies.","url":"https://linkedgenie.vercel.app","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"5.00","priceCurrency":"USD"}}
@@ -790,11 +801,12 @@
       <div class="auth-area" id="authArea">
         <div id="googleBtnNav"></div>
       </div>
-      <button class="history-btn" id="historyNavBtn" onclick="toggleHistory()" title="History" style="display:none;">📋</button>
-      <button class="settings-btn" onclick="toggleSettings()" title="Info">ℹ️</button>
+      <button class="history-btn" id="historyNavBtn" onclick="toggleHistory()" title="History" aria-label="View history" style="display:none;">📋</button>
+      <button class="settings-btn" onclick="toggleSettings()" title="Info" aria-label="Settings and info">ℹ️</button>
     </div>
   </nav>
 
+  <main>
   <!-- Hero -->
   <section class="hero">
     <div class="hero-badge">
@@ -1142,8 +1154,8 @@
           <span id="outputTitle">Your LinkedIn Post</span>
         </div>
         <div class="output-actions">
-          <button class="act-btn" id="copyBtn" onclick="copyResult()"><span id="copyBtnText">📋 Copy</span></button>
-          <button class="act-btn" onclick="handleGenerate()"><span id="regenBtnText">🔄 Regenerate</span></button>
+          <button class="act-btn" id="copyBtn" onclick="copyResult()" aria-label="Copy to clipboard"><span id="copyBtnText">📋 Copy</span></button>
+          <button class="act-btn" onclick="handleGenerate()" aria-label="Regenerate content"><span id="regenBtnText">🔄 Regenerate</span></button>
         </div>
       </div>
       <div class="output-text" id="outputText"></div>
@@ -1205,6 +1217,7 @@
     </div>
   </div>
 
+  </main>
   <footer class="footer" id="footerText">
     LinkedGenie © 2026 · Built with ❤️ and AI
     <br><a href="#" onclick="showLegal('privacy')">Privacy Policy</a> · <a href="#" onclick="showLegal('terms')">Terms of Service</a>
@@ -1820,7 +1833,8 @@ function applyLanguage(lang) {
   const t = T[lang] || T.english;
   const isRTL = lang === 'arabic';
   document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
-  document.documentElement.setAttribute('lang', isRTL ? 'ar' : lang.slice(0,2));
+  const langCodeMap = {english:'en',spanish:'es',portuguese:'pt',french:'fr',german:'de',arabic:'ar'};
+  document.documentElement.setAttribute('lang', langCodeMap[lang] || 'en');
 
   // Helper
   const txt = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = t[key]; };
