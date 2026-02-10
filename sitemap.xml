@@ -2,16 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://linkedgenie.vercel.app</loc>
+    <loc>https://linkedgenie.co</loc>
     <lastmod>2026-02-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://linkedgenie.vercel.app"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://linkedgenie.vercel.app?lang=es"/>
-    <xhtml:link rel="alternate" hreflang="pt" href="https://linkedgenie.vercel.app?lang=pt"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://linkedgenie.vercel.app?lang=fr"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://linkedgenie.vercel.app?lang=de"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://linkedgenie.vercel.app?lang=ar"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://linkedgenie.vercel.app"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://linkedgenie.co"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://linkedgenie.co?lang=es"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://linkedgenie.co?lang=pt"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://linkedgenie.co?lang=fr"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://linkedgenie.co?lang=de"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://linkedgenie.co?lang=ar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://linkedgenie.co"/>
   </url>
 </urlset>

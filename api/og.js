@@ -98,7 +98,7 @@ export default function handler() {
           background: 'linear-gradient(to top, rgba(6,8,13,0.9), transparent)',
           fontSize: '18px', color: '#5a6a84', fontWeight: 500, letterSpacing: '1px'
         }
-      }, 'linkedgenie.vercel.app')
+      }, 'linkedgenie.co')
     ),
     { width: 1200, height: 630 }
   );

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 Disallow: /api/
-Sitemap: https://linkedgenie.vercel.app/sitemap.xml
+Sitemap: https://linkedgenie.co/sitemap.xml
