@@ -96,9 +96,15 @@ function buildProfileHeadline(body) {
 function buildProfileAbout(body) {
   const { inputs, tone, lang } = body;
   if (!inputs?.background) return null;
-  const { background, achievements, expertise, goal } = inputs;
-  const system = `You are a LinkedIn About section specialist. You write compelling, authentic About sections that tell a professional story, highlight key achievements, and drive action. The output must be under 2600 characters.`;
-  const userPrompt = `Write a complete LinkedIn About section:\n\nBACKGROUND: ${background}\nKEY ACHIEVEMENTS: ${achievements || 'not specified'}\nEXPERTISE AREAS: ${expertise || 'not specified'}\nGOAL (what I'm looking for): ${goal || 'not specified'}\nTONE: ${toneMap[tone] || toneMap.professional}\nLANGUAGE: ${langInstruction(lang)}\n\nOutput ONLY the About section text. Keep it under 2600 characters. Do NOT add any commentary.`;
+  const { background, achievements, expertise, goal, aboutLength } = inputs;
+  const lengthMap = {
+    short:  { chars: 500,  instruction: 'Keep it concise — 3-4 sentences maximum, under 500 characters.' },
+    medium: { chars: 1200, instruction: 'Write a focused About section, under 1200 characters.' },
+    long:   { chars: 2400, instruction: 'Write a comprehensive About section, under 2400 characters.' }
+  };
+  const len = lengthMap[aboutLength] || lengthMap.medium;
+  const system = `You are a LinkedIn About section specialist. You write compelling, authentic About sections that tell a professional story, highlight key achievements, and drive action. ${len.instruction}`;
+  const userPrompt = `Write a complete LinkedIn About section:\n\nBACKGROUND: ${background}\nKEY ACHIEVEMENTS: ${achievements || 'not specified'}\nEXPERTISE AREAS: ${expertise || 'not specified'}\nGOAL (what I'm looking for): ${goal || 'not specified'}\nTONE: ${toneMap[tone] || toneMap.professional}\nLANGUAGE: ${langInstruction(lang)}\n\n${len.instruction} Output ONLY the About section text. Do NOT add any commentary.`;
   return { system, user: userPrompt, outputTitle: 'Your About Section' };
 }
 
