@@ -22,6 +22,10 @@
 <meta name="twitter:description" content="Generate LinkedIn posts, optimize your profile, craft connection messages, and write comment replies — all powered by AI.">
 <meta name="twitter:image" content="https://linkedgenie.vercel.app/api/og">
 <meta name="twitter:image:alt" content="LinkedGenie - AI LinkedIn Content Suite">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"LinkedGenie","description":"AI-Powered LinkedIn Content Suite — generate posts, optimize profiles, craft messages, and write replies.","url":"https://linkedgenie.vercel.app","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"5.00","priceCurrency":"USD"}}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <script src="https://accounts.google.com/gsi/client" async defer onload="initGoogleAuth()"></script>
@@ -1160,7 +1164,7 @@
         Upgrade to <b>LinkedGenie Pro</b> for unlimited access to all tools,
         exclusive templates, and priority generation.
       </div>
-      <button class="upgrade-btn" onclick="openUpgrade()" id="paywallBtnText">🚀 Upgrade to Pro — $7/month</button>
+      <button class="upgrade-btn" onclick="openUpgrade()" id="paywallBtnText">🚀 Upgrade to Pro — $5/month</button>
       <div class="paywall-price" id="paywallCancelText">Cancel anytime</div>
     </div>
   </div>
@@ -1231,7 +1235,7 @@
       LinkedGenie is your complete AI toolkit for LinkedIn content creation.
       <br><br>
       <b>Free plan:</b> Sign in with Google — 3 generations per day.<br>
-      <b>Pro plan:</b> $7/month — unlimited access to all tools and templates.
+      <b>Pro plan:</b> $5/month — unlimited access to all tools and templates.
       <br><br>
       <b>Tools included:</b><br>
       ✍️ Post generator (8 styles + rewrite + hooks)<br>
@@ -1347,13 +1351,13 @@ const T = {
     words: "Words", characters: "Characters",
     paywallTitle: "You've used all free credits today",
     paywallDesc: 'Upgrade to <b>LinkedGenie Pro</b> for unlimited access to all tools, exclusive templates, and priority generation.',
-    paywallBtn: "🚀 Upgrade to Pro — $7/month", paywallCancel: "Cancel anytime",
+    paywallBtn: "🚀 Upgrade to Pro — $5/month", paywallCancel: "Cancel anytime",
     featPosts: "Smart Posts", featPostsDesc: "8 templates including Career Update & Job Posting",
     featProfile: "Profile Optimizer", featProfileDesc: "Headline, About section & Experience descriptions",
     featMessages: "Messages & Replies", featMessagesDesc: "Connection requests, follow-ups & comment replies",
     footer: 'LinkedGenie © 2026 · Built with ❤️ and AI<br><a href="#" onclick="showLegal(\'privacy\')">Privacy Policy</a> · <a href="#" onclick="showLegal(\'terms\')">Terms of Service</a>',
     modalTitle: "ℹ️ About LinkedGenie",
-    modalDesc: 'LinkedGenie is your complete AI toolkit for LinkedIn content creation.<br><br><b>Free plan:</b> Sign in with Google — 3 generations per day.<br><b>Pro plan:</b> $7/month — unlimited access to all tools and templates.<br><br><b>Tools included:</b><br>✍️ Post generator (8 styles + rewrite + hooks)<br>👤 Profile optimizer (headline, about, experience)<br>📩 Message crafter (connection, follow-up, thank you)<br>💬 Comment reply generator',
+    modalDesc: 'LinkedGenie is your complete AI toolkit for LinkedIn content creation.<br><br><b>Free plan:</b> Sign in with Google — 3 generations per day.<br><b>Pro plan:</b> $5/month — unlimited access to all tools and templates.<br><br><b>Tools included:</b><br>✍️ Post generator (8 styles + rewrite + hooks)<br>👤 Profile optimizer (headline, about, experience)<br>📩 Message crafter (connection, follow-up, thank you)<br>💬 Comment reply generator',
     modalUpgrade: "Upgrade to Pro", modalGotIt: "Got it!",
     hookOptionsTitle: "Hook Options", headlineOptionsTitle: "Headline Options", replyOptionsTitle: "Reply Options",
     writeAboutThis: "✍️ Write", signOut: "Sign out",
@@ -1432,13 +1436,13 @@ const T = {
     words: "Palabras", characters: "Caracteres",
     paywallTitle: "Has usado todos los créditos gratuitos hoy",
     paywallDesc: 'Actualiza a <b>LinkedGenie Pro</b> para acceso ilimitado a todas las herramientas, plantillas exclusivas y generación prioritaria.',
-    paywallBtn: "🚀 Actualizar a Pro — $7/mes", paywallCancel: "Cancela cuando quieras",
+    paywallBtn: "🚀 Actualizar a Pro — $5/mes", paywallCancel: "Cancela cuando quieras",
     featPosts: "Posts Inteligentes", featPostsDesc: "8 plantillas incluyendo Actualización de Carrera y Empleo",
     featProfile: "Optimizador de Perfil", featProfileDesc: "Titular, sección Acerca de y descripciones de Experiencia",
     featMessages: "Mensajes y Respuestas", featMessagesDesc: "Solicitudes de conexión, seguimientos y respuestas a comentarios",
     footer: 'LinkedGenie © 2026 · Hecho con ❤️ e IA<br><a href="#" onclick="showLegal(\'privacy\')">Privacidad</a> · <a href="#" onclick="showLegal(\'terms\')">Términos</a>',
     modalTitle: "ℹ️ Acerca de LinkedGenie",
-    modalDesc: 'LinkedGenie es tu kit completo de IA para crear contenido en LinkedIn.<br><br><b>Plan Gratis:</b> Inicia sesión con Google — 3 generaciones por día.<br><b>Plan Pro:</b> $7/mes — acceso ilimitado a todas las herramientas.<br><br><b>Herramientas:</b><br>✍️ Generador de posts (8 estilos + reescritura + ganchos)<br>👤 Optimizador de perfil (titular, acerca de, experiencia)<br>📩 Redactor de mensajes (conexión, seguimiento, agradecimiento)<br>💬 Generador de respuestas a comentarios',
+    modalDesc: 'LinkedGenie es tu kit completo de IA para crear contenido en LinkedIn.<br><br><b>Plan Gratis:</b> Inicia sesión con Google — 3 generaciones por día.<br><b>Plan Pro:</b> $5/mes — acceso ilimitado a todas las herramientas.<br><br><b>Herramientas:</b><br>✍️ Generador de posts (8 estilos + reescritura + ganchos)<br>👤 Optimizador de perfil (titular, acerca de, experiencia)<br>📩 Redactor de mensajes (conexión, seguimiento, agradecimiento)<br>💬 Generador de respuestas a comentarios',
     modalUpgrade: "Actualizar a Pro", modalGotIt: "¡Entendido!",
     hookOptionsTitle: "Opciones de Gancho", headlineOptionsTitle: "Opciones de Titular", replyOptionsTitle: "Opciones de Respuesta",
     writeAboutThis: "✍️ Escribir", signOut: "Cerrar sesión",
@@ -1517,13 +1521,13 @@ const T = {
     words: "Palavras", characters: "Caracteres",
     paywallTitle: "Você usou todos os créditos gratuitos hoje",
     paywallDesc: 'Atualize para <b>LinkedGenie Pro</b> para acesso ilimitado a todas as ferramentas, templates exclusivos e geração prioritária.',
-    paywallBtn: "🚀 Atualizar para Pro — $7/mês", paywallCancel: "Cancele quando quiser",
+    paywallBtn: "🚀 Atualizar para Pro — $5/mês", paywallCancel: "Cancele quando quiser",
     featPosts: "Posts Inteligentes", featPostsDesc: "8 templates incluindo Atualização de Carreira e Vaga",
     featProfile: "Otimizador de Perfil", featProfileDesc: "Título, seção Sobre e descrições de Experiência",
     featMessages: "Mensagens e Respostas", featMessagesDesc: "Pedidos de conexão, follow-ups e respostas a comentários",
     footer: 'LinkedGenie © 2026 · Feito com ❤️ e IA<br><a href="#" onclick="showLegal(\'privacy\')">Privacidade</a> · <a href="#" onclick="showLegal(\'terms\')">Termos</a>',
     modalTitle: "ℹ️ Sobre o LinkedGenie",
-    modalDesc: 'LinkedGenie é seu kit completo de IA para criar conteúdo no LinkedIn.<br><br><b>Plano Grátis:</b> Login com Google — 3 gerações por dia.<br><b>Plano Pro:</b> $7/mês — acesso ilimitado a todas as ferramentas.<br><br><b>Ferramentas:</b><br>✍️ Gerador de posts (8 estilos + reescrita + ganchos)<br>👤 Otimizador de perfil (título, sobre, experiência)<br>📩 Criador de mensagens (conexão, follow-up, agradecimento)<br>💬 Gerador de respostas a comentários',
+    modalDesc: 'LinkedGenie é seu kit completo de IA para criar conteúdo no LinkedIn.<br><br><b>Plano Grátis:</b> Login com Google — 3 gerações por dia.<br><b>Plano Pro:</b> $5/mês — acesso ilimitado a todas as ferramentas.<br><br><b>Ferramentas:</b><br>✍️ Gerador de posts (8 estilos + reescrita + ganchos)<br>👤 Otimizador de perfil (título, sobre, experiência)<br>📩 Criador de mensagens (conexão, follow-up, agradecimento)<br>💬 Gerador de respostas a comentários',
     modalUpgrade: "Atualizar para Pro", modalGotIt: "Entendi!",
     hookOptionsTitle: "Opções de Gancho", headlineOptionsTitle: "Opções de Título", replyOptionsTitle: "Opções de Resposta",
     writeAboutThis: "✍️ Escrever", signOut: "Sair",
@@ -1602,13 +1606,13 @@ const T = {
     words: "Mots", characters: "Caractères",
     paywallTitle: "Vous avez utilisé tous vos crédits gratuits aujourd'hui",
     paywallDesc: "Passez à <b>LinkedGenie Pro</b> pour un accès illimité à tous les outils, modèles exclusifs et génération prioritaire.",
-    paywallBtn: "🚀 Passer à Pro — 7$/mois", paywallCancel: "Annulez à tout moment",
+    paywallBtn: "🚀 Passer à Pro — 5$/mois", paywallCancel: "Annulez à tout moment",
     featPosts: "Posts Intelligents", featPostsDesc: "8 modèles dont Évolution Pro et Offre d'Emploi",
     featProfile: "Optimiseur de Profil", featProfileDesc: "Titre, section À propos et descriptions d'Expérience",
     featMessages: "Messages et Réponses", featMessagesDesc: "Demandes de connexion, suivis et réponses aux commentaires",
     footer: 'LinkedGenie © 2026 · Fait avec ❤️ et IA<br><a href="#" onclick="showLegal(\'privacy\')">Confidentialité</a> · <a href="#" onclick="showLegal(\'terms\')">Conditions</a>',
     modalTitle: "ℹ️ À propos de LinkedGenie",
-    modalDesc: "LinkedGenie est votre boîte à outils IA complète pour créer du contenu LinkedIn.<br><br><b>Plan Gratuit :</b> Connectez-vous avec Google — 3 générations par jour.<br><b>Plan Pro :</b> 7$/mois — accès illimité à tous les outils.<br><br><b>Outils inclus :</b><br>✍️ Générateur de posts (8 styles + réécriture + accroches)<br>👤 Optimiseur de profil (titre, à propos, expérience)<br>📩 Rédacteur de messages (connexion, suivi, remerciement)<br>💬 Générateur de réponses aux commentaires",
+    modalDesc: "LinkedGenie est votre boîte à outils IA complète pour créer du contenu LinkedIn.<br><br><b>Plan Gratuit :</b> Connectez-vous avec Google — 3 générations par jour.<br><b>Plan Pro :</b> 5$/mois — accès illimité à tous les outils.<br><br><b>Outils inclus :</b><br>✍️ Générateur de posts (8 styles + réécriture + accroches)<br>👤 Optimiseur de profil (titre, à propos, expérience)<br>📩 Rédacteur de messages (connexion, suivi, remerciement)<br>💬 Générateur de réponses aux commentaires",
     modalUpgrade: "Passer à Pro", modalGotIt: "Compris !",
     hookOptionsTitle: "Options d'Accroche", headlineOptionsTitle: "Options de Titre", replyOptionsTitle: "Options de Réponse",
     writeAboutThis: "✍️ Écrire", signOut: "Se déconnecter",
@@ -1687,13 +1691,13 @@ const T = {
     words: "Wörter", characters: "Zeichen",
     paywallTitle: "Sie haben heute alle kostenlosen Credits verbraucht",
     paywallDesc: 'Upgraden Sie auf <b>LinkedGenie Pro</b> für unbegrenzten Zugang zu allen Tools, exklusiven Vorlagen und priorisierter Generierung.',
-    paywallBtn: "🚀 Auf Pro upgraden — 7$/Monat", paywallCancel: "Jederzeit kündbar",
+    paywallBtn: "🚀 Auf Pro upgraden — 5$/Monat", paywallCancel: "Jederzeit kündbar",
     featPosts: "Smarte Beiträge", featPostsDesc: "8 Vorlagen inkl. Karriere-Update & Stellenanzeige",
     featProfile: "Profil-Optimierer", featProfileDesc: "Überschrift, Über-mich-Bereich & Erfahrungsbeschreibungen",
     featMessages: "Nachrichten & Antworten", featMessagesDesc: "Vernetzungsanfragen, Follow-ups & Kommentarantworten",
     footer: 'LinkedGenie © 2026 · Mit ❤️ und KI erstellt<br><a href="#" onclick="showLegal(\'privacy\')">Datenschutz</a> · <a href="#" onclick="showLegal(\'terms\')">AGB</a>',
     modalTitle: "ℹ️ Über LinkedGenie",
-    modalDesc: 'LinkedGenie ist Ihr komplettes KI-Toolkit für LinkedIn Content.<br><br><b>Kostenlos:</b> Mit Google anmelden — 3 Generierungen pro Tag.<br><b>Pro:</b> 7$/Monat — unbegrenzter Zugang zu allen Tools.<br><br><b>Tools:</b><br>✍️ Beitragsgenerator (8 Stile + Umschreiben + Hooks)<br>👤 Profil-Optimierer (Überschrift, Über mich, Erfahrung)<br>📩 Nachrichtenverfasser (Vernetzung, Follow-up, Dank)<br>💬 Kommentarantwort-Generator',
+    modalDesc: 'LinkedGenie ist Ihr komplettes KI-Toolkit für LinkedIn Content.<br><br><b>Kostenlos:</b> Mit Google anmelden — 3 Generierungen pro Tag.<br><b>Pro:</b> 5$/Monat — unbegrenzter Zugang zu allen Tools.<br><br><b>Tools:</b><br>✍️ Beitragsgenerator (8 Stile + Umschreiben + Hooks)<br>👤 Profil-Optimierer (Überschrift, Über mich, Erfahrung)<br>📩 Nachrichtenverfasser (Vernetzung, Follow-up, Dank)<br>💬 Kommentarantwort-Generator',
     modalUpgrade: "Auf Pro upgraden", modalGotIt: "Verstanden!",
     hookOptionsTitle: "Hook-Optionen", headlineOptionsTitle: "Überschrift-Optionen", replyOptionsTitle: "Antwort-Optionen",
     writeAboutThis: "✍️ Schreiben", signOut: "Abmelden",
@@ -1772,13 +1776,13 @@ const T = {
     words: "كلمات", characters: "أحرف",
     paywallTitle: "لقد استخدمت جميع الرصيد المجاني اليوم",
     paywallDesc: 'قم بالترقية إلى <b>LinkedGenie Pro</b> للوصول غير المحدود لجميع الأدوات والقوالب الحصرية.',
-    paywallBtn: "🚀 ترقية إلى Pro — 7$/شهرياً", paywallCancel: "إلغاء في أي وقت",
+    paywallBtn: "🚀 ترقية إلى Pro — 5$/شهرياً", paywallCancel: "إلغاء في أي وقت",
     featPosts: "منشورات ذكية", featPostsDesc: "8 قوالب تشمل تحديث مهني وإعلان وظيفة",
     featProfile: "محسّن الملف الشخصي", featProfileDesc: "العنوان، نبذة عني، ووصف الخبرة",
     featMessages: "رسائل وردود", featMessagesDesc: "طلبات تواصل، متابعات، وردود على التعليقات",
     footer: 'LinkedGenie © 2026 · صُنع بـ ❤️ والذكاء الاصطناعي<br><a href="#" onclick="showLegal(\'privacy\')">سياسة الخصوصية</a> · <a href="#" onclick="showLegal(\'terms\')">شروط الاستخدام</a>',
     modalTitle: "ℹ️ عن LinkedGenie",
-    modalDesc: 'LinkedGenie هو مجموعة أدوات الذكاء الاصطناعي المتكاملة لإنشاء محتوى LinkedIn.<br><br><b>الخطة المجانية:</b> سجّل بحساب Google — 3 عمليات إنشاء يومياً.<br><b>خطة Pro:</b> 7$/شهرياً — وصول غير محدود لجميع الأدوات.<br><br><b>الأدوات:</b><br>✍️ منشئ المنشورات (8 أساليب + إعادة كتابة + عناوين جذب)<br>👤 محسّن الملف الشخصي (العنوان، نبذة عني، الخبرة)<br>📩 كاتب الرسائل (تواصل، متابعة، شكر)<br>💬 منشئ ردود التعليقات',
+    modalDesc: 'LinkedGenie هو مجموعة أدوات الذكاء الاصطناعي المتكاملة لإنشاء محتوى LinkedIn.<br><br><b>الخطة المجانية:</b> سجّل بحساب Google — 3 عمليات إنشاء يومياً.<br><b>خطة Pro:</b> 5$/شهرياً — وصول غير محدود لجميع الأدوات.<br><br><b>الأدوات:</b><br>✍️ منشئ المنشورات (8 أساليب + إعادة كتابة + عناوين جذب)<br>👤 محسّن الملف الشخصي (العنوان، نبذة عني، الخبرة)<br>📩 كاتب الرسائل (تواصل، متابعة، شكر)<br>💬 منشئ ردود التعليقات',
     modalUpgrade: "ترقية إلى Pro", modalGotIt: "فهمت!",
     hookOptionsTitle: "خيارات العناوين الجاذبة", headlineOptionsTitle: "خيارات العنوان", replyOptionsTitle: "خيارات الرد",
     writeAboutThis: "✍️ اكتب عنه", signOut: "تسجيل الخروج",
@@ -2403,7 +2407,7 @@ function showLegal(type) {
     title.textContent = 'Terms of Service';
     body.innerHTML = `<p><b>Last updated:</b> February 2026</p>
 <p><b>Service:</b> LinkedGenie is an AI-powered content generation tool for LinkedIn. It helps you create posts, optimize profiles, craft messages, and write replies.</p>
-<p><b>Usage:</b> Free users get 3 AI generations per day. Pro subscribers ($7/month) get unlimited access. You may cancel anytime.</p>
+<p><b>Usage:</b> Free users get 3 AI generations per day. Pro subscribers ($5/month) get unlimited access. You may cancel anytime.</p>
 <p><b>Content ownership:</b> You own all content generated through LinkedGenie. We claim no rights over your generated text.</p>
 <p><b>Acceptable use:</b> Do not use LinkedGenie to generate spam, misleading content, hate speech, or content that violates LinkedIn's Terms of Service.</p>
 <p><b>AI disclaimer:</b> Content is generated by AI and may not always be accurate. You are responsible for reviewing and editing content before publishing.</p>
@@ -2639,5 +2643,6 @@ window.onload = function() {
 };
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>
