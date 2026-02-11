@@ -1,14 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI LinkedIn Comment Reply Generator — LinkedGenie</title>
-<meta name="description" content="Generate smart, engaging replies to LinkedIn comments with AI. Choose supportive, insightful, questioning, or respectful disagree styles. 6 languages supported.">
+<meta name="description" id="metaDesc" content="Generate smart, engaging replies to LinkedIn comments with AI. Choose supportive, insightful, questioning, or respectful disagree styles. 6 languages supported.">
 <meta name="robots" content="index, follow">
 <meta name="author" content="LinkedGenie">
 <meta name="theme-color" content="#6366f1">
 <link rel="canonical" href="https://linkedgenie.co/linkedin-reply-generator">
+<link rel="alternate" hreflang="en" href="https://linkedgenie.co/linkedin-reply-generator">
+<link rel="alternate" hreflang="es" href="https://linkedgenie.co/linkedin-reply-generator?lang=es">
+<link rel="alternate" hreflang="pt" href="https://linkedgenie.co/linkedin-reply-generator?lang=pt">
+<link rel="alternate" hreflang="fr" href="https://linkedgenie.co/linkedin-reply-generator?lang=fr">
+<link rel="alternate" hreflang="de" href="https://linkedgenie.co/linkedin-reply-generator?lang=de">
+<link rel="alternate" hreflang="ar" href="https://linkedgenie.co/linkedin-reply-generator?lang=ar">
+<link rel="alternate" hreflang="x-default" href="https://linkedgenie.co/linkedin-reply-generator">
 <meta property="og:title" content="AI LinkedIn Comment Reply Generator — LinkedGenie">
 <meta property="og:description" content="Generate smart, engaging replies to LinkedIn comments with AI. Multiple reply styles in 6 languages.">
 <meta property="og:type" content="website">
@@ -36,11 +43,7 @@
   "url": "https://linkedgenie.co/linkedin-reply-generator",
   "applicationCategory": "BusinessApplication",
   "operatingSystem": "Web",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  },
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
   "screenshot": "https://linkedgenie.co/api/og",
   "inLanguage": ["en","es","pt","fr","de","ar"]
 },{
@@ -49,63 +52,41 @@
   "mainEntity": [{
     "@type": "Question",
     "name": "How does the LinkedIn Reply Generator work?",
-    "acceptedAnswer": {
-      "@type": "Answer",
-      "text": "Paste the LinkedIn comment you want to reply to, choose a reply style (supportive, insightful, questioning, or respectful disagree), and the AI generates a thoughtful, engaging reply in seconds."
-    }
+    "acceptedAnswer": {"@type": "Answer", "text": "Paste the comment, choose a reply style, and get a thoughtful response in seconds."}
   },{
     "@type": "Question",
     "name": "What reply styles are available?",
-    "acceptedAnswer": {
-      "@type": "Answer",
-      "text": "LinkedGenie offers 4 reply styles: Supportive (agree and encourage), Insightful (add value with additional perspective), Questioning (ask a thoughtful follow-up question), and Respectful Disagree (present an alternative viewpoint professionally)."
-    }
+    "acceptedAnswer": {"@type": "Answer", "text": "4 styles: Supportive, Insightful, Questioning, and Respectful Disagree."}
   },{
     "@type": "Question",
     "name": "Why should I reply to LinkedIn comments?",
-    "acceptedAnswer": {
-      "@type": "Answer",
-      "text": "Replying to comments boosts your post's visibility in the LinkedIn algorithm, builds stronger professional relationships, and positions you as an engaged thought leader. Consistent engagement can significantly grow your network and reach."
-    }
+    "acceptedAnswer": {"@type": "Answer", "text": "Replying boosts your post's visibility in the LinkedIn algorithm and builds stronger professional relationships."}
   }]
 }]
 </script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 body{background:#06080d;color:#e8ecf4;font-family:'DM Sans',system-ui,sans-serif;line-height:1.6}
-a{color:#818cf8;text-decoration:none}
-a:hover{text-decoration:underline}
+a{color:#818cf8;text-decoration:none}a:hover{text-decoration:underline}
 .nav{max-width:1100px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
-.nav-logo{font-size:20px;font-weight:700;color:#e8ecf4;display:flex;align-items:center;gap:8px}
-.nav-logo svg{width:28px;height:28px}
-.nav-links{display:flex;gap:20px;flex-wrap:wrap;font-size:14px}
-.nav-links a{color:#8694ad;transition:color .2s}
-.nav-links a:hover{color:#818cf8;text-decoration:none}
+.nav-logo{font-size:20px;font-weight:700;color:#e8ecf4;display:flex;align-items:center;gap:8px}.nav-logo svg{width:28px;height:28px}
+.nav-links{display:flex;gap:20px;flex-wrap:wrap;font-size:14px;align-items:center}.nav-links a{color:#8694ad;transition:color .2s}.nav-links a:hover{color:#818cf8;text-decoration:none}
+.lang-select{background:#0f1420;color:#e8ecf4;border:1px solid #1e2a3f;border-radius:8px;padding:4px 8px;font-size:13px;cursor:pointer;font-family:inherit}
 .hero{max-width:800px;margin:60px auto 0;padding:0 24px;text-align:center}
 .badge{display:inline-block;background:rgba(99,102,241,.12);color:#818cf8;font-size:13px;font-weight:600;padding:6px 16px;border-radius:20px;margin-bottom:20px}
-h1{font-size:clamp(28px,5vw,44px);font-weight:700;line-height:1.2;margin-bottom:16px}
-h1 span{background:linear-gradient(135deg,#6366f1,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+h1{font-size:clamp(28px,5vw,44px);font-weight:700;line-height:1.2;margin-bottom:16px}h1 span{background:linear-gradient(135deg,#6366f1,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .hero p{font-size:18px;color:#8694ad;max-width:600px;margin:0 auto 32px}
-.cta{display:inline-block;background:linear-gradient(135deg,#6366f1,#7c3aed);color:#fff;font-size:16px;font-weight:600;padding:14px 36px;border-radius:12px;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 24px rgba(99,102,241,.25)}
-.cta:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(99,102,241,.35);text-decoration:none}
-.features{max-width:900px;margin:80px auto;padding:0 24px}
-.features h2{font-size:24px;text-align:center;margin-bottom:40px;color:#e8ecf4}
+.cta{display:inline-block;background:linear-gradient(135deg,#6366f1,#7c3aed);color:#fff;font-size:16px;font-weight:600;padding:14px 36px;border-radius:12px;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 24px rgba(99,102,241,.25)}.cta:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(99,102,241,.35);text-decoration:none}
+.features{max-width:900px;margin:80px auto;padding:0 24px}.features h2{font-size:24px;text-align:center;margin-bottom:40px;color:#e8ecf4}
 .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px}
-.feature-card{background:#0f1420;border:1px solid #1e2a3f;border-radius:16px;padding:28px;transition:border-color .2s}
-.feature-card:hover{border-color:#6366f1}
-.feature-icon{font-size:28px;margin-bottom:12px}
-.feature-card h3{font-size:16px;font-weight:600;margin-bottom:8px}
-.feature-card p{font-size:14px;color:#8694ad;line-height:1.5}
-.faq{max-width:700px;margin:80px auto;padding:0 24px}
-.faq h2{font-size:24px;text-align:center;margin-bottom:32px}
-.faq-item{background:#0f1420;border:1px solid #1e2a3f;border-radius:12px;padding:24px;margin-bottom:16px}
-.faq-item h3{font-size:15px;font-weight:600;margin-bottom:8px;color:#e8ecf4}
-.faq-item p{font-size:14px;color:#8694ad;line-height:1.6}
-.cta-section{text-align:center;margin:80px auto;padding:0 24px}
-.cta-section h2{font-size:24px;margin-bottom:16px}
-.cta-section p{color:#8694ad;margin-bottom:24px}
-footer{border-top:1px solid #1e2a3f;max-width:1100px;margin:0 auto;padding:24px;text-align:center;color:#5a6a84;font-size:13px}
-footer a{color:#8694ad}
+.feature-card{background:#0f1420;border:1px solid #1e2a3f;border-radius:16px;padding:28px;transition:border-color .2s}.feature-card:hover{border-color:#6366f1}
+.feature-icon{font-size:28px;margin-bottom:12px}.feature-card h3{font-size:16px;font-weight:600;margin-bottom:8px}.feature-card p{font-size:14px;color:#8694ad;line-height:1.5}
+.faq{max-width:700px;margin:80px auto;padding:0 24px}.faq h2{font-size:24px;text-align:center;margin-bottom:32px}
+.faq-item{background:#0f1420;border:1px solid #1e2a3f;border-radius:12px;padding:24px;margin-bottom:16px}.faq-item h3{font-size:15px;font-weight:600;margin-bottom:8px;color:#e8ecf4}.faq-item p{font-size:14px;color:#8694ad;line-height:1.6}
+.cta-section{text-align:center;margin:80px auto;padding:0 24px}.cta-section h2{font-size:24px;margin-bottom:16px}.cta-section p{color:#8694ad;margin-bottom:24px}
+footer{border-top:1px solid #1e2a3f;max-width:1100px;margin:0 auto;padding:24px;text-align:center;color:#5a6a84;font-size:13px}footer a{color:#8694ad}
+[dir="rtl"] body{text-align:right}[dir="rtl"] .hero,[dir="rtl"] .features h2,[dir="rtl"] .faq h2,[dir="rtl"] .cta-section{text-align:center}
+[dir="rtl"] .nav{flex-direction:row-reverse}[dir="rtl"] .nav-links{flex-direction:row-reverse}[dir="rtl"] footer{text-align:center}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -117,84 +98,66 @@ footer a{color:#8694ad}
     LinkedGenie
   </a>
   <div class="nav-links">
-    <a href="/linkedin-post-generator">Post Generator</a>
-    <a href="/linkedin-profile-optimizer">Profile Optimizer</a>
-    <a href="/linkedin-message-generator">Message Generator</a>
-    <a href="/">Launch App</a>
+    <a href="/linkedin-post-generator" data-i18n="navPost">Post Generator</a>
+    <a href="/linkedin-profile-optimizer" data-i18n="navProfile">Profile Optimizer</a>
+    <a href="/linkedin-message-generator" data-i18n="navMessage">Message Generator</a>
+    <a href="/" data-i18n="navApp">Launch App</a>
+    <select class="lang-select" onchange="applyLang(this.value)"><option value="en">EN</option><option value="es">ES</option><option value="pt">PT</option><option value="fr">FR</option><option value="de">DE</option><option value="ar">AR</option></select>
   </div>
 </nav>
-
 <main>
   <section class="hero">
-    <div class="badge">AI-Powered LinkedIn Content Suite</div>
-    <h1>Generate Smart <span>LinkedIn Replies</span> with AI</h1>
-    <p>Never struggle with comment replies again. Choose your style, paste the comment, and get a thoughtful response in seconds.</p>
-    <a href="/?tab=reply" class="cta">Generate Replies — Free</a>
+    <div class="badge" data-i18n="badge">AI-Powered LinkedIn Content Suite</div>
+    <h1 data-i18n="h1" data-i18n-html="1">Generate Smart <span>LinkedIn Replies</span> with AI</h1>
+    <p data-i18n="heroDesc">Never struggle with comment replies again. Choose your style, paste the comment, and get a thoughtful response in seconds.</p>
+    <a href="/?tab=reply" class="cta" id="heroCta" data-i18n="heroCta">Generate Replies — Free</a>
   </section>
-
   <section class="features">
-    <h2>4 Reply Styles for Every Situation</h2>
+    <h2 data-i18n="featTitle">4 Reply Styles for Every Situation</h2>
     <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">💪</div>
-        <h3>Supportive</h3>
-        <p>Agree and encourage the commenter. Perfect for building rapport, showing appreciation, and strengthening professional bonds.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">💡</div>
-        <h3>Insightful</h3>
-        <p>Add value with additional perspective or data. Position yourself as a knowledgeable contributor to the conversation.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">❓</div>
-        <h3>Questioning</h3>
-        <p>Ask a thoughtful follow-up question that deepens the discussion. Great for sparking engagement and showing genuine curiosity.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🤔</div>
-        <h3>Respectful Disagree</h3>
-        <p>Present an alternative viewpoint professionally. Stand out by adding nuance to discussions without burning bridges.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🌍</div>
-        <h3>6 Languages Supported</h3>
-        <p>Reply to comments in English, Spanish, Portuguese, French, German, and Arabic. Engage with your global audience natively.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">📈</div>
-        <h3>Boost Algorithm Reach</h3>
-        <p>Consistent, quality replies boost your post's visibility in the LinkedIn algorithm. More engagement means more reach and followers.</p>
-      </div>
+      <div class="feature-card"><div class="feature-icon">💪</div><h3 data-i18n="f1t">Supportive</h3><p data-i18n="f1d">Agree and encourage the commenter. Perfect for building rapport, showing appreciation, and strengthening professional bonds.</p></div>
+      <div class="feature-card"><div class="feature-icon">💡</div><h3 data-i18n="f2t">Insightful</h3><p data-i18n="f2d">Add value with additional perspective or data. Position yourself as a knowledgeable contributor to the conversation.</p></div>
+      <div class="feature-card"><div class="feature-icon">❓</div><h3 data-i18n="f3t">Questioning</h3><p data-i18n="f3d">Ask a thoughtful follow-up question that deepens the discussion. Great for sparking engagement and showing curiosity.</p></div>
+      <div class="feature-card"><div class="feature-icon">🤔</div><h3 data-i18n="f4t">Respectful Disagree</h3><p data-i18n="f4d">Present an alternative viewpoint professionally. Stand out by adding nuance to discussions without burning bridges.</p></div>
+      <div class="feature-card"><div class="feature-icon">🌍</div><h3 data-i18n="f5t">6 Languages Supported</h3><p data-i18n="f5d">Reply to comments in English, Spanish, Portuguese, French, German, and Arabic. Engage with your global audience natively.</p></div>
+      <div class="feature-card"><div class="feature-icon">📈</div><h3 data-i18n="f6t">Boost Algorithm Reach</h3><p data-i18n="f6d">Consistent, quality replies boost your post's visibility in the LinkedIn algorithm. More engagement means more reach.</p></div>
     </div>
   </section>
-
   <section class="faq">
-    <h2>Frequently Asked Questions</h2>
-    <div class="faq-item">
-      <h3>How does the LinkedIn Reply Generator work?</h3>
-      <p>Paste the LinkedIn comment you want to reply to, choose a reply style (supportive, insightful, questioning, or respectful disagree), and the AI generates a thoughtful, engaging reply in seconds.</p>
-    </div>
-    <div class="faq-item">
-      <h3>What reply styles are available?</h3>
-      <p>LinkedGenie offers 4 reply styles: Supportive (agree and encourage), Insightful (add value with additional perspective), Questioning (ask a thoughtful follow-up question), and Respectful Disagree (present an alternative viewpoint professionally).</p>
-    </div>
-    <div class="faq-item">
-      <h3>Why should I reply to LinkedIn comments?</h3>
-      <p>Replying to comments boosts your post's visibility in the LinkedIn algorithm, builds stronger professional relationships, and positions you as an engaged thought leader. Consistent engagement can significantly grow your network and reach.</p>
-    </div>
+    <h2 data-i18n="faqTitle">Frequently Asked Questions</h2>
+    <div class="faq-item"><h3 data-i18n="faq1q">How does the LinkedIn Reply Generator work?</h3><p data-i18n="faq1a">Paste the LinkedIn comment you want to reply to, choose a reply style (supportive, insightful, questioning, or respectful disagree), and the AI generates a thoughtful reply in seconds.</p></div>
+    <div class="faq-item"><h3 data-i18n="faq2q">What reply styles are available?</h3><p data-i18n="faq2a">4 styles: Supportive (agree and encourage), Insightful (add value), Questioning (ask a thoughtful follow-up), and Respectful Disagree (present an alternative viewpoint professionally).</p></div>
+    <div class="faq-item"><h3 data-i18n="faq3q">Why should I reply to LinkedIn comments?</h3><p data-i18n="faq3a">Replying boosts your post's visibility in the LinkedIn algorithm, builds stronger professional relationships, and positions you as an engaged thought leader.</p></div>
   </section>
-
   <section class="cta-section">
-    <h2>Ready to Master LinkedIn Engagement?</h2>
-    <p>Turn every comment into an opportunity to grow your influence.</p>
-    <a href="/?tab=reply" class="cta">Try Reply Generator — Free</a>
+    <h2 data-i18n="ctaTitle">Ready to Master LinkedIn Engagement?</h2>
+    <p data-i18n="ctaDesc">Turn every comment into an opportunity to grow your influence.</p>
+    <a href="/?tab=reply" class="cta" id="bottomCta" data-i18n="ctaBtn">Try Reply Generator — Free</a>
   </section>
 </main>
-
-<footer>
-  <p>&copy; 2026 LinkedGenie. All rights reserved. | <a href="/">Home</a> | <a href="/linkedin-post-generator">Post Generator</a> | <a href="/linkedin-profile-optimizer">Profile Optimizer</a> | <a href="/linkedin-message-generator">Message Generator</a></p>
-</footer>
-
+<footer><p data-i18n="footer" data-i18n-html="1">&copy; 2026 LinkedGenie. All rights reserved. | <a href="/">Home</a> | <a href="/linkedin-post-generator">Post Generator</a> | <a href="/linkedin-profile-optimizer">Profile Optimizer</a> | <a href="/linkedin-message-generator">Message Generator</a></p></footer>
+<script>
+var T={
+en:{title:"AI LinkedIn Comment Reply Generator — LinkedGenie",metaDesc:"Generate smart, engaging replies to LinkedIn comments with AI. Choose supportive, insightful, questioning, or respectful disagree styles. 6 languages.",badge:"AI-Powered LinkedIn Content Suite",h1:'Generate Smart <span>LinkedIn Replies</span> with AI',heroDesc:"Never struggle with comment replies again. Choose your style, paste the comment, and get a thoughtful response in seconds.",heroCta:"Generate Replies — Free",featTitle:"4 Reply Styles for Every Situation",f1t:"Supportive",f1d:"Agree and encourage the commenter. Perfect for building rapport, showing appreciation, and strengthening professional bonds.",f2t:"Insightful",f2d:"Add value with additional perspective or data. Position yourself as a knowledgeable contributor to the conversation.",f3t:"Questioning",f3d:"Ask a thoughtful follow-up question that deepens the discussion. Great for sparking engagement and showing curiosity.",f4t:"Respectful Disagree",f4d:"Present an alternative viewpoint professionally. Stand out by adding nuance to discussions without burning bridges.",f5t:"6 Languages Supported",f5d:"Reply to comments in English, Spanish, Portuguese, French, German, and Arabic. Engage with your global audience natively.",f6t:"Boost Algorithm Reach",f6d:"Consistent, quality replies boost your post's visibility in the LinkedIn algorithm. More engagement means more reach.",faqTitle:"Frequently Asked Questions",faq1q:"How does the LinkedIn Reply Generator work?",faq1a:"Paste the LinkedIn comment you want to reply to, choose a reply style (supportive, insightful, questioning, or respectful disagree), and the AI generates a thoughtful reply in seconds.",faq2q:"What reply styles are available?",faq2a:"4 styles: Supportive (agree and encourage), Insightful (add value), Questioning (ask a thoughtful follow-up), and Respectful Disagree (present an alternative viewpoint professionally).",faq3q:"Why should I reply to LinkedIn comments?",faq3a:"Replying boosts your post's visibility in the LinkedIn algorithm, builds stronger professional relationships, and positions you as an engaged thought leader.",ctaTitle:"Ready to Master LinkedIn Engagement?",ctaDesc:"Turn every comment into an opportunity to grow your influence.",ctaBtn:"Try Reply Generator — Free",navPost:"Post Generator",navProfile:"Profile Optimizer",navMessage:"Message Generator",navApp:"Launch App",footer:'&copy; 2026 LinkedGenie. All rights reserved. | <a href="/">Home</a> | <a href="/linkedin-post-generator">Post Generator</a> | <a href="/linkedin-profile-optimizer">Profile Optimizer</a> | <a href="/linkedin-message-generator">Message Generator</a>'},
+es:{title:"Generador de Respuestas LinkedIn con IA — LinkedGenie",metaDesc:"Genera respuestas inteligentes a comentarios de LinkedIn con IA. Elige entre estilos de apoyo, perspicaz, cuestionamiento o desacuerdo respetuoso. 6 idiomas.",badge:"Suite de Contenido LinkedIn con IA",h1:'Genera Respuestas <span>LinkedIn</span> Inteligentes con IA',heroDesc:"No luches más con las respuestas a comentarios. Elige tu estilo, pega el comentario y obtén una respuesta reflexiva en segundos.",heroCta:"Genera Respuestas — Gratis",featTitle:"4 Estilos de Respuesta para Cada Situación",f1t:"De Apoyo",f1d:"Acuerda y anima al comentarista. Perfecto para construir rapport y fortalecer vínculos profesionales.",f2t:"Perspicaz",f2d:"Agrega valor con perspectiva adicional o datos. Posiciónate como un contribuyente conocedor de la conversación.",f3t:"Cuestionamiento",f3d:"Haz una pregunta de seguimiento reflexiva que profundice la discusión. Ideal para generar engagement.",f4t:"Desacuerdo Respetuoso",f4d:"Presenta un punto de vista alternativo profesionalmente. Destaca añadiendo matiz a las discusiones sin quemar puentes.",f5t:"6 Idiomas Soportados",f5d:"Responde a comentarios en inglés, español, portugués, francés, alemán y árabe.",f6t:"Impulsa el Alcance del Algoritmo",f6d:"Respuestas consistentes y de calidad impulsan la visibilidad de tu publicación en el algoritmo de LinkedIn.",faqTitle:"Preguntas Frecuentes",faq1q:"¿Cómo funciona el Generador de Respuestas de LinkedIn?",faq1a:"Pega el comentario, elige un estilo de respuesta y la IA genera una respuesta reflexiva en segundos.",faq2q:"¿Qué estilos de respuesta están disponibles?",faq2a:"4 estilos: De Apoyo, Perspicaz, Cuestionamiento y Desacuerdo Respetuoso.",faq3q:"¿Por qué debería responder a los comentarios de LinkedIn?",faq3a:"Responder impulsa la visibilidad de tu publicación en el algoritmo de LinkedIn y construye relaciones profesionales más fuertes.",ctaTitle:"¿Listo para Dominar el Engagement en LinkedIn?",ctaDesc:"Convierte cada comentario en una oportunidad para crecer tu influencia.",ctaBtn:"Prueba el Generador — Gratis",navPost:"Generador de Posts",navProfile:"Optimizador de Perfil",navMessage:"Generador de Mensajes",navApp:"Abrir App",footer:'&copy; 2026 LinkedGenie. Todos los derechos reservados. | <a href="/">Inicio</a> | <a href="/linkedin-post-generator">Posts</a> | <a href="/linkedin-profile-optimizer">Perfil</a> | <a href="/linkedin-message-generator">Mensajes</a>'},
+pt:{title:"Gerador de Respostas LinkedIn com IA — LinkedGenie",metaDesc:"Gere respostas inteligentes a comentários do LinkedIn com IA. Escolha entre estilos de apoio, perspicaz, questionamento ou discordância respeitosa. 6 idiomas.",badge:"Suite de Conteúdo LinkedIn com IA",h1:'Gere Respostas <span>LinkedIn</span> Inteligentes com IA',heroDesc:"Nunca mais tenha dificuldade com respostas a comentários. Escolha seu estilo, cole o comentário e obtenha uma resposta reflexiva em segundos.",heroCta:"Gere Respostas — Grátis",featTitle:"4 Estilos de Resposta para Cada Situação",f1t:"Apoio",f1d:"Concorde e encoraje o comentarista. Perfeito para construir rapport e fortalecer vínculos profissionais.",f2t:"Perspicaz",f2d:"Adicione valor com perspectiva adicional ou dados. Posicione-se como um contribuidor conhecedor da conversa.",f3t:"Questionamento",f3d:"Faça uma pergunta de acompanhamento reflexiva que aprofunde a discussão. Ótimo para gerar engajamento.",f4t:"Discordância Respeitosa",f4d:"Apresente um ponto de vista alternativo profissionalmente. Destaque-se adicionando nuance às discussões.",f5t:"6 Idiomas Suportados",f5d:"Responda a comentários em inglês, espanhol, português, francês, alemão e árabe.",f6t:"Impulsione o Alcance do Algoritmo",f6d:"Respostas consistentes e de qualidade impulsionam a visibilidade da sua publicação no algoritmo do LinkedIn.",faqTitle:"Perguntas Frequentes",faq1q:"Como funciona o Gerador de Respostas do LinkedIn?",faq1a:"Cole o comentário, escolha um estilo de resposta e a IA gera uma resposta reflexiva em segundos.",faq2q:"Quais estilos de resposta estão disponíveis?",faq2a:"4 estilos: Apoio, Perspicaz, Questionamento e Discordância Respeitosa.",faq3q:"Por que devo responder aos comentários do LinkedIn?",faq3a:"Responder impulsiona a visibilidade da sua publicação no algoritmo do LinkedIn e constrói relacionamentos profissionais mais fortes.",ctaTitle:"Pronto para Dominar o Engajamento no LinkedIn?",ctaDesc:"Transforme cada comentário em uma oportunidade para crescer sua influência.",ctaBtn:"Teste o Gerador — Grátis",navPost:"Gerador de Posts",navProfile:"Otimizador de Perfil",navMessage:"Gerador de Mensagens",navApp:"Abrir App",footer:'&copy; 2026 LinkedGenie. Todos os direitos reservados. | <a href="/">Início</a> | <a href="/linkedin-post-generator">Posts</a> | <a href="/linkedin-profile-optimizer">Perfil</a> | <a href="/linkedin-message-generator">Mensagens</a>'},
+fr:{title:"Générateur de Réponses LinkedIn IA — LinkedGenie",metaDesc:"Générez des réponses intelligentes aux commentaires LinkedIn avec l'IA. Choisissez entre soutien, perspicace, questionnement ou désaccord respectueux. 6 langues.",badge:"Suite de Contenu LinkedIn propulsée par l'IA",h1:'Générez des Réponses <span>LinkedIn</span> Intelligentes avec l\'IA',heroDesc:"Ne luttez plus avec les réponses aux commentaires. Choisissez votre style, collez le commentaire et obtenez une réponse réfléchie en secondes.",heroCta:"Générez des Réponses — Gratuit",featTitle:"4 Styles de Réponse pour Chaque Situation",f1t:"Soutien",f1d:"Approuvez et encouragez le commentateur. Parfait pour créer du rapport et renforcer les liens professionnels.",f2t:"Perspicace",f2d:"Ajoutez de la valeur avec une perspective supplémentaire. Positionnez-vous comme un contributeur compétent.",f3t:"Questionnement",f3d:"Posez une question de suivi réfléchie qui approfondit la discussion. Idéal pour susciter l'engagement.",f4t:"Désaccord Respectueux",f4d:"Présentez un point de vue alternatif professionnellement. Ajoutez de la nuance aux discussions sans brûler les ponts.",f5t:"6 Langues Supportées",f5d:"Répondez aux commentaires en anglais, espagnol, portugais, français, allemand et arabe.",f6t:"Boostez la Portée Algorithmique",f6d:"Des réponses consistantes et de qualité boostent la visibilité de votre publication dans l'algorithme LinkedIn.",faqTitle:"Questions Fréquentes",faq1q:"Comment fonctionne le Générateur de Réponses LinkedIn ?",faq1a:"Collez le commentaire, choisissez un style de réponse et l'IA génère une réponse réfléchie en secondes.",faq2q:"Quels styles de réponse sont disponibles ?",faq2a:"4 styles : Soutien, Perspicace, Questionnement et Désaccord Respectueux.",faq3q:"Pourquoi devrais-je répondre aux commentaires LinkedIn ?",faq3a:"Répondre booste la visibilité de votre publication dans l'algorithme LinkedIn et construit des relations professionnelles plus fortes.",ctaTitle:"Prêt à Maîtriser l'Engagement LinkedIn ?",ctaDesc:"Transformez chaque commentaire en opportunité de croissance.",ctaBtn:"Essayez le Générateur — Gratuit",navPost:"Générateur de Posts",navProfile:"Optimiseur de Profil",navMessage:"Générateur de Messages",navApp:"Ouvrir l'App",footer:'&copy; 2026 LinkedGenie. Tous droits réservés. | <a href="/">Accueil</a> | <a href="/linkedin-post-generator">Posts</a> | <a href="/linkedin-profile-optimizer">Profil</a> | <a href="/linkedin-message-generator">Messages</a>'},
+de:{title:"KI LinkedIn Antwort-Generator — LinkedGenie",metaDesc:"Generieren Sie intelligente Antworten auf LinkedIn-Kommentare mit KI. Wählen Sie zwischen unterstützend, aufschlussreich, fragend oder respektvollem Widerspruch. 6 Sprachen.",badge:"KI-gestützte LinkedIn Content Suite",h1:'Generieren Sie intelligente <span>LinkedIn-Antworten</span> mit KI',heroDesc:"Kämpfen Sie nie wieder mit Kommentar-Antworten. Wählen Sie Ihren Stil, fügen Sie den Kommentar ein und erhalten Sie eine durchdachte Antwort in Sekunden.",heroCta:"Antworten generieren — Kostenlos",featTitle:"4 Antwort-Stile für Jede Situation",f1t:"Unterstützend",f1d:"Stimmen Sie zu und ermutigen Sie den Kommentator. Perfekt für den Aufbau von Rapport und die Stärkung professioneller Bindungen.",f2t:"Aufschlussreich",f2d:"Fügen Sie Wert mit zusätzlicher Perspektive hinzu. Positionieren Sie sich als kompetenter Beiträger.",f3t:"Fragend",f3d:"Stellen Sie eine durchdachte Folgefrage, die die Diskussion vertieft. Ideal für Engagement und Neugier.",f4t:"Respektvoller Widerspruch",f4d:"Präsentieren Sie einen alternativen Standpunkt professionell. Fügen Sie Nuance zu Diskussionen hinzu.",f5t:"6 Sprachen Unterstützt",f5d:"Antworten Sie auf Kommentare auf Englisch, Spanisch, Portugiesisch, Französisch, Deutsch und Arabisch.",f6t:"Algorithmus-Reichweite Steigern",f6d:"Konsistente, qualitative Antworten steigern die Sichtbarkeit Ihres Beitrags im LinkedIn-Algorithmus.",faqTitle:"Häufig Gestellte Fragen",faq1q:"Wie funktioniert der LinkedIn Antwort-Generator?",faq1a:"Fügen Sie den Kommentar ein, wählen Sie einen Antwort-Stil und die KI generiert eine durchdachte Antwort in Sekunden.",faq2q:"Welche Antwort-Stile sind verfügbar?",faq2a:"4 Stile: Unterstützend, Aufschlussreich, Fragend und Respektvoller Widerspruch.",faq3q:"Warum sollte ich auf LinkedIn-Kommentare antworten?",faq3a:"Antworten steigern die Sichtbarkeit Ihres Beitrags im LinkedIn-Algorithmus und bauen stärkere professionelle Beziehungen auf.",ctaTitle:"Bereit, LinkedIn-Engagement zu Meistern?",ctaDesc:"Verwandeln Sie jeden Kommentar in eine Wachstumschance.",ctaBtn:"Generator Testen — Kostenlos",navPost:"Post-Generator",navProfile:"Profil-Optimierer",navMessage:"Nachrichten-Generator",navApp:"App Öffnen",footer:'&copy; 2026 LinkedGenie. Alle Rechte vorbehalten. | <a href="/">Start</a> | <a href="/linkedin-post-generator">Posts</a> | <a href="/linkedin-profile-optimizer">Profil</a> | <a href="/linkedin-message-generator">Nachrichten</a>'},
+ar:{title:"مولد ردود تعليقات لينكدإن بالذكاء الاصطناعي — LinkedGenie",metaDesc:"أنشئ ردوداً ذكية وجذابة على تعليقات لينكدإن بالذكاء الاصطناعي. اختر بين أساليب الدعم والتبصر والتساؤل والاختلاف المحترم. ٦ لغات.",badge:"مجموعة محتوى لينكدإن بالذكاء الاصطناعي",h1:'أنشئ ردود <span>لينكدإن</span> ذكية بالذكاء الاصطناعي',heroDesc:"لا تعانِ مع الردود على التعليقات بعد الآن. اختر أسلوبك، الصق التعليق، واحصل على رد مدروس في ثوانٍ.",heroCta:"أنشئ الردود — مجاناً",featTitle:"٤ أساليب رد لكل موقف",f1t:"داعم",f1d:"وافق وشجّع المعلّق. مثالي لبناء العلاقات وإظهار التقدير وتقوية الروابط المهنية.",f2t:"تبصّري",f2d:"أضف قيمة بمنظور إضافي أو بيانات. ضع نفسك كمساهم خبير في المحادثة.",f3t:"تساؤلي",f3d:"اطرح سؤال متابعة مدروس يعمّق النقاش. رائع لتحفيز التفاعل وإظهار الفضول.",f4t:"اختلاف محترم",f4d:"قدّم وجهة نظر بديلة باحترافية. تميّز بإضافة فروق دقيقة للنقاشات دون حرق الجسور.",f5t:"٦ لغات مدعومة",f5d:"رد على التعليقات بالإنجليزية والإسبانية والبرتغالية والفرنسية والألمانية والعربية. تفاعل مع جمهورك العالمي.",f6t:"عزّز وصول الخوارزمية",f6d:"الردود المتسقة والجيدة تعزز ظهور منشورك في خوارزمية لينكدإن. تفاعل أكثر يعني وصول أكبر.",faqTitle:"الأسئلة الشائعة",faq1q:"كيف يعمل مولد ردود لينكدإن؟",faq1a:"الصق التعليق الذي تريد الرد عليه، اختر أسلوب الرد (داعم، تبصّري، تساؤلي، أو اختلاف محترم)، والذكاء الاصطناعي ينشئ رداً مدروساً في ثوانٍ.",faq2q:"ما أساليب الرد المتوفرة؟",faq2a:"٤ أساليب: داعم (وافق وشجّع)، تبصّري (أضف قيمة)، تساؤلي (اطرح سؤال متابعة مدروس)، واختلاف محترم (قدّم وجهة نظر بديلة باحترافية).",faq3q:"لماذا يجب أن أرد على تعليقات لينكدإن؟",faq3a:"الرد يعزز ظهور منشورك في خوارزمية لينكدإن، ويبني علاقات مهنية أقوى، ويضعك كقائد فكر متفاعل.",ctaTitle:"مستعد لإتقان التفاعل على لينكدإن؟",ctaDesc:"حوّل كل تعليق إلى فرصة لتنمية تأثيرك.",ctaBtn:"جرّب المولد — مجاناً",navPost:"مولد المنشورات",navProfile:"محسّن الملف الشخصي",navMessage:"مولد الرسائل",navApp:"فتح التطبيق",footer:'&copy; 2026 LinkedGenie. جميع الحقوق محفوظة. | <a href="/">الرئيسية</a> | <a href="/linkedin-post-generator">المنشورات</a> | <a href="/linkedin-profile-optimizer">الملف الشخصي</a> | <a href="/linkedin-message-generator">الرسائل</a>'}
+};
+function applyLang(lang){
+  if(!T[lang]) lang='en';var t=T[lang];
+  document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+  document.title=t.title;var md=document.getElementById('metaDesc');if(md)md.setAttribute('content',t.metaDesc);
+  document.querySelectorAll('[data-i18n]').forEach(function(el){var key=el.getAttribute('data-i18n');if(t[key]){if(el.getAttribute('data-i18n-html'))el.innerHTML=t[key];else el.textContent=t[key];}});
+  var lp=lang==='en'?'':'&lang='+lang;
+  var h=document.getElementById('heroCta');if(h)h.href='/?tab=reply'+(lp?lp.replace('&','&'):'');
+  var b=document.getElementById('bottomCta');if(b)b.href='/?tab=reply'+(lp?lp.replace('&','&'):'');
+  document.querySelector('.lang-select').value=lang;
+  document.querySelectorAll('.nav-links a').forEach(function(a){var href=a.getAttribute('href');if(href&&href.startsWith('/')){a.href=href.split('?')[0]+(lang!=='en'?'?lang='+lang:'');}});
+}
+(function(){var p=new URLSearchParams(window.location.search);var l=p.get('lang');if(!l){var bl=(navigator.language||'').slice(0,2).toLowerCase();if(T[bl])l=bl;}applyLang(l||'en');})();
+</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FXHT5RB3L9"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-FXHT5RB3L9');</script>
 </body>
