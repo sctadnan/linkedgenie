@@ -16,6 +16,12 @@
       "maxDuration": 10
     }
   },
+  "rewrites": [
+    { "source": "/linkedin-post-generator", "destination": "/post-generator.html" },
+    { "source": "/linkedin-profile-optimizer", "destination": "/profile-optimizer.html" },
+    { "source": "/linkedin-message-generator", "destination": "/message-generator.html" },
+    { "source": "/linkedin-reply-generator", "destination": "/reply-generator.html" }
+  ],
   "headers": [
     {
       "source": "/api/og",
