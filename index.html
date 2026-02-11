@@ -817,6 +817,14 @@
       <span class="nav-name">LinkedGenie</span>
     </a>
     <div class="nav-right">
+      <select class="global-lang" id="globalLang" onchange="pickLang(this.value)">
+        <option value="english">🌐 EN</option>
+        <option value="spanish">🌐 ES</option>
+        <option value="portuguese">🌐 PT</option>
+        <option value="french">🌐 FR</option>
+        <option value="german">🌐 DE</option>
+        <option value="arabic">🌐 AR</option>
+      </select>
       <span class="streak-badge" id="streakBadge" style="display:none;"></span>
       <div class="usage-pill">
         <div class="usage-indicator" id="usageIndicator"></div>
@@ -858,14 +866,6 @@
         <button class="main-tab" data-tab="message" onclick="switchTab('message')">📩 Message</button>
         <button class="main-tab" data-tab="reply" onclick="switchTab('reply')">💬 Reply</button>
       </div>
-      <select class="global-lang" id="globalLang" onchange="pickLang(this.value)">
-        <option value="english">🌐 EN</option>
-        <option value="spanish">🌐 ES</option>
-        <option value="portuguese">🌐 PT</option>
-        <option value="french">🌐 FR</option>
-        <option value="german">🌐 DE</option>
-        <option value="arabic">🌐 AR</option>
-      </select>
     </div>
 
 
@@ -1408,7 +1408,7 @@ const T = {
     modalUpgrade: "Upgrade to Pro", modalGotIt: "Got it!",
     hookOptionsTitle: "Hook Options", headlineOptionsTitle: "Headline Options", replyOptionsTitle: "Reply Options",
     writeAboutThis: "✍️ Write", signOut: "Sign out",
-    usagePro: "Pro", upgrade: "Upgrade",
+    usagePro: "Pro", usageFree: "Free", upgrade: "Upgrade",
     historyTitle: "History", historyEmpty: "No history yet", historyBtn: "📋", historyDelete: "Delete", historyClearAll: "Clear All", historyClearConfirm: "Delete all history?",
     streakTooltip: "{n} day streak!",
     onboardTip: "Start here — type your idea and we'll turn it into a professional LinkedIn post",
@@ -1494,7 +1494,7 @@ const T = {
     modalUpgrade: "Actualizar a Pro", modalGotIt: "¡Entendido!",
     hookOptionsTitle: "Opciones de Gancho", headlineOptionsTitle: "Opciones de Titular", replyOptionsTitle: "Opciones de Respuesta",
     writeAboutThis: "✍️ Escribir", signOut: "Cerrar sesión",
-    usagePro: "Pro", upgrade: "Mejorar",
+    usagePro: "Pro", usageFree: "Gratis", upgrade: "Mejorar",
     historyTitle: "Historial", historyEmpty: "Sin historial aún", historyBtn: "📋", historyDelete: "Eliminar", historyClearAll: "Borrar todo", historyClearConfirm: "¿Eliminar todo el historial?",
     streakTooltip: "¡{n} días seguidos!",
     onboardTip: "Empieza aquí — escribe tu idea y la convertiremos en un post profesional de LinkedIn",
@@ -1580,7 +1580,7 @@ const T = {
     modalUpgrade: "Atualizar para Pro", modalGotIt: "Entendi!",
     hookOptionsTitle: "Opções de Gancho", headlineOptionsTitle: "Opções de Título", replyOptionsTitle: "Opções de Resposta",
     writeAboutThis: "✍️ Escrever", signOut: "Sair",
-    usagePro: "Pro", upgrade: "Atualizar",
+    usagePro: "Pro", usageFree: "Grátis", upgrade: "Atualizar",
     historyTitle: "Histórico", historyEmpty: "Nenhum histórico ainda", historyBtn: "📋", historyDelete: "Excluir", historyClearAll: "Limpar tudo", historyClearConfirm: "Excluir todo o histórico?",
     streakTooltip: "{n} dias seguidos!",
     onboardTip: "Comece aqui — digite sua ideia e a transformaremos em um post profissional do LinkedIn",
@@ -1666,7 +1666,7 @@ const T = {
     modalUpgrade: "Passer à Pro", modalGotIt: "Compris !",
     hookOptionsTitle: "Options d'Accroche", headlineOptionsTitle: "Options de Titre", replyOptionsTitle: "Options de Réponse",
     writeAboutThis: "✍️ Écrire", signOut: "Se déconnecter",
-    usagePro: "Pro", upgrade: "Améliorer",
+    usagePro: "Pro", usageFree: "Gratuit", upgrade: "Améliorer",
     historyTitle: "Historique", historyEmpty: "Aucun historique", historyBtn: "📋", historyDelete: "Supprimer", historyClearAll: "Tout effacer", historyClearConfirm: "Effacer tout l'historique ?",
     streakTooltip: "{n} jours consécutifs !",
     onboardTip: "Commencez ici — tapez votre idée et nous la transformerons en un post LinkedIn professionnel",
@@ -1752,7 +1752,7 @@ const T = {
     modalUpgrade: "Auf Pro upgraden", modalGotIt: "Verstanden!",
     hookOptionsTitle: "Hook-Optionen", headlineOptionsTitle: "Überschrift-Optionen", replyOptionsTitle: "Antwort-Optionen",
     writeAboutThis: "✍️ Schreiben", signOut: "Abmelden",
-    usagePro: "Pro", upgrade: "Upgraden",
+    usagePro: "Pro", usageFree: "Kostenlos", upgrade: "Upgraden",
     historyTitle: "Verlauf", historyEmpty: "Noch kein Verlauf", historyBtn: "📋", historyDelete: "Löschen", historyClearAll: "Alles löschen", historyClearConfirm: "Gesamten Verlauf löschen?",
     streakTooltip: "{n} Tage in Folge!",
     onboardTip: "Starten Sie hier — geben Sie Ihre Idee ein und wir erstellen einen professionellen LinkedIn-Post",
@@ -1838,7 +1838,7 @@ const T = {
     modalUpgrade: "ترقية إلى Pro", modalGotIt: "فهمت!",
     hookOptionsTitle: "خيارات العناوين الجاذبة", headlineOptionsTitle: "خيارات العنوان", replyOptionsTitle: "خيارات الرد",
     writeAboutThis: "✍️ اكتب عنه", signOut: "تسجيل الخروج",
-    usagePro: "Pro", upgrade: "ترقية",
+    usagePro: "Pro", usageFree: "مجاني", upgrade: "ترقية",
     historyTitle: "السجل", historyEmpty: "لا يوجد سجل بعد", historyBtn: "📋", historyDelete: "حذف", historyClearAll: "حذف الكل", historyClearConfirm: "حذف كل السجل؟",
     streakTooltip: "{n} أيام متتالية!",
     onboardTip: "ابدأ هنا — اكتب فكرتك وسنحولها إلى منشور LinkedIn احترافي",
@@ -2190,12 +2190,13 @@ function updateUsageUI(remaining, limit) {
   dot.className = 'usage-indicator';
   pill.classList.remove('pro');
   if (limit === 'unlimited') {
-    label.innerHTML = `⭐ ${t.usagePro || 'Pro'}`;
+    label.innerHTML = `PRO`;
     pill.classList.add('pro');
     return;
   }
+  const freeText = t.usageFree || 'Free';
   const upgradeText = t.upgrade || 'Upgrade';
-  label.innerHTML = `${remaining}/${limit} · <a class="upgrade-link" onclick="openUpgrade()">${upgradeText}</a>`;
+  label.innerHTML = `${freeText} ${remaining}/${limit} · <a class="upgrade-link" onclick="openUpgrade()">${upgradeText}</a>`;
   if (remaining === 0) dot.classList.add('out');
   else if (remaining === 1) dot.classList.add('warn');
 }
