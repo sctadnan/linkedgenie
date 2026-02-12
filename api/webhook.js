@@ -64,10 +64,31 @@ export default async function handler(req, res) {
       };
     }
 
+    const attrs = event.data?.attributes || {};
+
     if (eventName === 'order_created' || eventName === 'subscription_created') {
       userData.isPro = true;
+      userData.subscription = {
+        startDate: attrs.created_at || new Date().toISOString(),
+        renewalDate: attrs.renews_at || null,
+        expiryDate: attrs.ends_at || null,
+        planType: (attrs.variant_name || '').toLowerCase().includes('year') ? 'yearly' : 'monthly',
+        status: 'active'
+      };
+    } else if (eventName === 'subscription_updated') {
+      if (userData.subscription) {
+        userData.subscription.renewalDate = attrs.renews_at || userData.subscription.renewalDate;
+        userData.subscription.expiryDate = attrs.ends_at || userData.subscription.expiryDate;
+        userData.subscription.status = attrs.status || userData.subscription.status;
+        if (attrs.variant_name) {
+          userData.subscription.planType = attrs.variant_name.toLowerCase().includes('year') ? 'yearly' : 'monthly';
+        }
+      }
     } else if (eventName === 'subscription_expired' || eventName === 'subscription_cancelled') {
       userData.isPro = false;
+      if (userData.subscription) {
+        userData.subscription.status = eventName === 'subscription_expired' ? 'expired' : 'cancelled';
+      }
     }
 
     await kvSet(key, userData);

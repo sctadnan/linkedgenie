@@ -54,12 +54,20 @@ export default async function handler(req, res) {
     const FREE_LIMIT = 3;
     const remaining = userData.isPro ? 999 : Math.max(0, FREE_LIMIT - userData.usage.count);
 
+    let subscription = null;
+    if (userData.isPro && userData.subscription) {
+      const expiry = userData.subscription.renewalDate || userData.subscription.expiryDate;
+      const daysRemaining = expiry ? Math.max(0, Math.ceil((new Date(expiry) - new Date()) / 86400000)) : null;
+      subscription = { ...userData.subscription, daysRemaining };
+    }
+
     return res.status(200).json({
       email: googleUser.email,
       name: googleUser.name,
       isPro: userData.isPro,
       remaining,
-      limit: userData.isPro ? 'unlimited' : FREE_LIMIT
+      limit: userData.isPro ? 'unlimited' : FREE_LIMIT,
+      subscription
     });
 
   } catch (error) {

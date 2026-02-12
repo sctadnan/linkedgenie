@@ -216,6 +216,117 @@
     font-size: 10px; font-weight: 700;
     color: #1a1a1a;
   }
+  .free-badge {
+    padding: 2px 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 10px; font-weight: 700;
+    color: var(--text-dim);
+  }
+
+  /* === ACCOUNT DROPDOWN === */
+  .account-dropdown-wrapper { position: relative; }
+  .account-avatar-btn {
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 2px solid var(--border); cursor: pointer;
+    transition: border-color 0.2s; object-fit: cover;
+  }
+  .account-avatar-btn:hover { border-color: var(--accent); }
+  .account-dropdown {
+    position: absolute; top: calc(100% + 8px); right: 0;
+    width: 280px; background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    z-index: 50; padding: 0;
+    opacity: 0; visibility: hidden;
+    transform: translateY(-8px);
+    transition: all 0.2s ease;
+  }
+  .account-dropdown.open {
+    opacity: 1; visibility: visible;
+    transform: translateY(0);
+  }
+  .dropdown-header {
+    padding: 16px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .dropdown-avatar {
+    width: 40px; height: 40px; border-radius: 50%; object-fit: cover;
+  }
+  .dropdown-user-info { flex: 1; min-width: 0; }
+  .dropdown-name {
+    font-size: 14px; font-weight: 600; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .dropdown-email {
+    font-size: 11px; color: var(--text-muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .dropdown-plan-box {
+    margin: 12px 16px; padding: 12px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .dropdown-plan-box.pro {
+    background: linear-gradient(135deg, rgba(249,115,22,0.1), rgba(234,179,8,0.1));
+    border-color: rgba(249,115,22,0.3);
+  }
+  .dropdown-plan-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .dropdown-plan-row:last-child { margin-bottom: 0; }
+  .dropdown-plan-label {
+    font-size: 12px; font-weight: 600; color: var(--text);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .dropdown-plan-value {
+    font-size: 11px; color: var(--text-dim);
+  }
+  .dropdown-plan-days {
+    font-size: 11px; color: var(--accent2); font-weight: 500;
+  }
+  .dropdown-usage-bar {
+    height: 4px; background: var(--surface); border-radius: 4px;
+    margin-top: 8px; overflow: hidden;
+  }
+  .dropdown-usage-fill {
+    height: 100%; border-radius: 4px;
+    background: var(--green); transition: width 0.3s;
+  }
+  .dropdown-usage-fill.warn { background: var(--orange); }
+  .dropdown-usage-fill.out { background: var(--red); }
+  .dropdown-upgrade-btn {
+    display: block; width: 100%; margin-top: 8px;
+    padding: 8px; border: none; border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent), #a855f7);
+    color: #fff; font-family: 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+    transition: opacity 0.2s; text-align: center;
+  }
+  .dropdown-upgrade-btn:hover { opacity: 0.9; }
+  .dropdown-menu { padding: 6px 0; }
+  .dropdown-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 16px; cursor: pointer;
+    font-size: 13px; color: var(--text2);
+    transition: background 0.15s;
+  }
+  .dropdown-item:hover { background: var(--surface2); }
+  .dropdown-item-icon { font-size: 15px; width: 20px; text-align: center; }
+  .dropdown-divider {
+    height: 1px; background: var(--border); margin: 4px 0;
+  }
+  .dropdown-signout {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 16px; cursor: pointer; width: 100%;
+    font-size: 13px; color: var(--text-muted); border: none;
+    background: none; font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+  .dropdown-signout:hover { background: var(--surface2); color: var(--red); }
 
   /* === HERO === */
   .hero { text-align: center; padding: 40px 0 24px; }
@@ -302,6 +413,10 @@
     border: 1px solid rgba(99,102,241,0.2);
   }
   @media (max-width: 520px) { .main-tab { font-size: 12px; padding: 8px 4px; } }
+  @media (max-width: 520px) {
+    .account-dropdown { width: calc(100vw - 32px); right: -8px; }
+    .nav-name { display: none; }
+  }
 
   /* === GENERATOR CARD === */
   .gen-card {
@@ -762,6 +877,11 @@
   [dir="rtl"] .textarea-footer { flex-direction: row-reverse; }
   [dir="rtl"] .hero { text-align: center; }
   [dir="rtl"] .usage-pill .upgrade-link { margin-left: 0; margin-right: 4px; }
+  [dir="rtl"] .account-dropdown { right: auto; left: 0; }
+  [dir="rtl"] .dropdown-header { flex-direction: row-reverse; text-align: right; }
+  [dir="rtl"] .dropdown-plan-row { flex-direction: row-reverse; }
+  [dir="rtl"] .dropdown-item { flex-direction: row-reverse; text-align: right; }
+  [dir="rtl"] .dropdown-signout { flex-direction: row-reverse; text-align: right; }
 
   /* === HISTORY === */
   .history-btn {
@@ -825,16 +945,9 @@
         <option value="german">🌐 DE</option>
         <option value="arabic">🌐 AR</option>
       </select>
-      <span class="streak-badge" id="streakBadge" style="display:none;"></span>
-      <div class="usage-pill">
-        <div class="usage-indicator" id="usageIndicator"></div>
-        <span id="usageLabel">—</span>
-      </div>
       <div class="auth-area" id="authArea">
         <div id="googleBtnNav"></div>
       </div>
-      <button class="history-btn" id="historyNavBtn" onclick="toggleHistory()" title="History" aria-label="View history" style="display:none;">📋</button>
-      <button class="settings-btn" onclick="toggleSettings()" title="Info" aria-label="Settings and info">ℹ️</button>
     </div>
   </nav>
 
@@ -1409,6 +1522,9 @@ const T = {
     hookOptionsTitle: "Hook Options", headlineOptionsTitle: "Headline Options", replyOptionsTitle: "Reply Options",
     writeAboutThis: "✍️ Write", signOut: "Sign out",
     usagePro: "Pro", usageFree: "Free", upgrade: "Upgrade",
+    planPro: "Pro Plan", planFree: "Free Plan", monthlyPlan: "Monthly", yearlyPlan: "Yearly",
+    renewsOn: "Renews", expiresOn: "Expires", daysLeft: "days left",
+    todayUsage: "Today", history: "History", settings: "Settings",
     historyTitle: "History", historyEmpty: "No history yet", historyBtn: "📋", historyDelete: "Delete", historyClearAll: "Clear All", historyClearConfirm: "Delete all history?",
     streakTooltip: "{n} day streak!",
     onboardTip: "Start here — type your idea and we'll turn it into a professional LinkedIn post",
@@ -1495,6 +1611,9 @@ const T = {
     hookOptionsTitle: "Opciones de Gancho", headlineOptionsTitle: "Opciones de Titular", replyOptionsTitle: "Opciones de Respuesta",
     writeAboutThis: "✍️ Escribir", signOut: "Cerrar sesión",
     usagePro: "Pro", usageFree: "Gratis", upgrade: "Mejorar",
+    planPro: "Plan Pro", planFree: "Plan Gratis", monthlyPlan: "Mensual", yearlyPlan: "Anual",
+    renewsOn: "Renueva", expiresOn: "Expira", daysLeft: "días restantes",
+    todayUsage: "Hoy", history: "Historial", settings: "Ajustes",
     historyTitle: "Historial", historyEmpty: "Sin historial aún", historyBtn: "📋", historyDelete: "Eliminar", historyClearAll: "Borrar todo", historyClearConfirm: "¿Eliminar todo el historial?",
     streakTooltip: "¡{n} días seguidos!",
     onboardTip: "Empieza aquí — escribe tu idea y la convertiremos en un post profesional de LinkedIn",
@@ -1581,6 +1700,9 @@ const T = {
     hookOptionsTitle: "Opções de Gancho", headlineOptionsTitle: "Opções de Título", replyOptionsTitle: "Opções de Resposta",
     writeAboutThis: "✍️ Escrever", signOut: "Sair",
     usagePro: "Pro", usageFree: "Grátis", upgrade: "Atualizar",
+    planPro: "Plano Pro", planFree: "Plano Grátis", monthlyPlan: "Mensal", yearlyPlan: "Anual",
+    renewsOn: "Renova", expiresOn: "Expira", daysLeft: "dias restantes",
+    todayUsage: "Hoje", history: "Histórico", settings: "Configurações",
     historyTitle: "Histórico", historyEmpty: "Nenhum histórico ainda", historyBtn: "📋", historyDelete: "Excluir", historyClearAll: "Limpar tudo", historyClearConfirm: "Excluir todo o histórico?",
     streakTooltip: "{n} dias seguidos!",
     onboardTip: "Comece aqui — digite sua ideia e a transformaremos em um post profissional do LinkedIn",
@@ -1667,6 +1789,9 @@ const T = {
     hookOptionsTitle: "Options d'Accroche", headlineOptionsTitle: "Options de Titre", replyOptionsTitle: "Options de Réponse",
     writeAboutThis: "✍️ Écrire", signOut: "Se déconnecter",
     usagePro: "Pro", usageFree: "Gratuit", upgrade: "Améliorer",
+    planPro: "Plan Pro", planFree: "Plan Gratuit", monthlyPlan: "Mensuel", yearlyPlan: "Annuel",
+    renewsOn: "Renouvelle", expiresOn: "Expire", daysLeft: "jours restants",
+    todayUsage: "Aujourd'hui", history: "Historique", settings: "Paramètres",
     historyTitle: "Historique", historyEmpty: "Aucun historique", historyBtn: "📋", historyDelete: "Supprimer", historyClearAll: "Tout effacer", historyClearConfirm: "Effacer tout l'historique ?",
     streakTooltip: "{n} jours consécutifs !",
     onboardTip: "Commencez ici — tapez votre idée et nous la transformerons en un post LinkedIn professionnel",
@@ -1753,6 +1878,9 @@ const T = {
     hookOptionsTitle: "Hook-Optionen", headlineOptionsTitle: "Überschrift-Optionen", replyOptionsTitle: "Antwort-Optionen",
     writeAboutThis: "✍️ Schreiben", signOut: "Abmelden",
     usagePro: "Pro", usageFree: "Kostenlos", upgrade: "Upgraden",
+    planPro: "Pro-Plan", planFree: "Kostenloser Plan", monthlyPlan: "Monatlich", yearlyPlan: "Jährlich",
+    renewsOn: "Erneuert", expiresOn: "Läuft ab", daysLeft: "Tage übrig",
+    todayUsage: "Heute", history: "Verlauf", settings: "Einstellungen",
     historyTitle: "Verlauf", historyEmpty: "Noch kein Verlauf", historyBtn: "📋", historyDelete: "Löschen", historyClearAll: "Alles löschen", historyClearConfirm: "Gesamten Verlauf löschen?",
     streakTooltip: "{n} Tage in Folge!",
     onboardTip: "Starten Sie hier — geben Sie Ihre Idee ein und wir erstellen einen professionellen LinkedIn-Post",
@@ -1839,6 +1967,9 @@ const T = {
     hookOptionsTitle: "خيارات العناوين الجاذبة", headlineOptionsTitle: "خيارات العنوان", replyOptionsTitle: "خيارات الرد",
     writeAboutThis: "✍️ اكتب عنه", signOut: "تسجيل الخروج",
     usagePro: "Pro", usageFree: "مجاني", upgrade: "ترقية",
+    planPro: "خطة Pro", planFree: "خطة مجانية", monthlyPlan: "شهري", yearlyPlan: "سنوي",
+    renewsOn: "يتجدد", expiresOn: "ينتهي", daysLeft: "يوم متبقي",
+    todayUsage: "اليوم", history: "السجل", settings: "الإعدادات",
     historyTitle: "السجل", historyEmpty: "لا يوجد سجل بعد", historyBtn: "📋", historyDelete: "حذف", historyClearAll: "حذف الكل", historyClearConfirm: "حذف كل السجل؟",
     streakTooltip: "{n} أيام متتالية!",
     onboardTip: "ابدأ هنا — اكتب فكرتك وسنحولها إلى منشور LinkedIn احترافي",
@@ -2004,6 +2135,9 @@ function applyLanguage(lang) {
   htm('modalDescText', 'modalDesc');
   txt('modalUpgradeBtn', 'modalUpgrade');
   txt('modalGotItBtn', 'modalGotIt');
+
+  // Refresh account dropdown with new language
+  if (currentUser) renderAccountDropdown();
 }
 
 // ============ TAB SWITCHING ============
@@ -2133,18 +2267,14 @@ function restoreSession() {
 }
 
 function onSignIn() {
-  const t = T[currentLang] || T.english;
   const authArea = document.getElementById('authArea');
   authArea.innerHTML = `
-    <div class="user-info">
-      <img class="user-avatar" src="${currentUser.picture}" alt="" referrerpolicy="no-referrer">
-      <span class="user-name">${currentUser.name.split(' ')[0]}</span>
-      ${currentUser.isPro ? '<span class="pro-badge">PRO</span>' : ''}
+    <div class="account-dropdown-wrapper">
+      <img class="account-avatar-btn" id="accountAvatarBtn" src="${currentUser.picture}" alt="" referrerpolicy="no-referrer" onclick="toggleAccountDropdown(event)">
+      <div class="account-dropdown" id="accountDropdown"></div>
     </div>
-    <button class="signout-btn" onclick="signOut()">${t.signOut}</button>
   `;
   document.getElementById('loginPromptCard').style.display = 'none';
-  document.getElementById('historyNavBtn').style.display = '';
   fetchUserStatus();
 }
 
@@ -2154,14 +2284,13 @@ async function fetchUserStatus() {
     if (!res.ok) return;
     let data; try { data = await res.json(); } catch { return; }
     currentUser.isPro = data.isPro;
-    updateUsageUI(data.remaining, data.isPro ? 'unlimited' : FREE_LIMIT);
+    currentUser.remaining = data.remaining;
+    currentUser.limit = data.isPro ? 'unlimited' : FREE_LIMIT;
+    currentUser.subscription = data.subscription || null;
     if (data.isPro) {
       document.querySelectorAll('.style-card.pro-only').forEach(c => c.classList.remove('pro-only'));
-      const info = document.querySelector('.user-info');
-      if (info && !info.querySelector('.pro-badge')) {
-        const badge = document.createElement('span'); badge.className = 'pro-badge'; badge.textContent = 'PRO'; info.appendChild(badge);
-      }
     }
+    renderAccountDropdown();
   } catch (e) { console.error('Failed to fetch user status:', e); }
 }
 
@@ -2176,30 +2305,120 @@ function signOut() {
   document.getElementById('outputCard').classList.remove('visible');
   document.getElementById('multiOutput').classList.remove('visible');
   document.getElementById('paywallCard').classList.remove('visible');
-  document.getElementById('usageLabel').innerHTML = '—';
-  document.getElementById('usageIndicator').className = 'usage-indicator';
-  document.querySelector('.usage-pill').classList.remove('pro');
-  document.getElementById('historyNavBtn').style.display = 'none';
 }
 
 function updateUsageUI(remaining, limit) {
-  const t = T[currentLang] || T.english;
-  const pill = document.querySelector('.usage-pill');
-  const label = document.getElementById('usageLabel');
-  const dot = document.getElementById('usageIndicator');
-  dot.className = 'usage-indicator';
-  pill.classList.remove('pro');
-  if (limit === 'unlimited') {
-    label.innerHTML = `PRO`;
-    pill.classList.add('pro');
-    return;
+  if (currentUser) {
+    currentUser.remaining = remaining;
+    currentUser.limit = limit;
+    renderAccountDropdown();
   }
-  const freeText = t.usageFree || 'Free';
-  const upgradeText = t.upgrade || 'Upgrade';
-  label.innerHTML = `${freeText} ${remaining}/${limit} · <a class="upgrade-link" onclick="openUpgrade()">${upgradeText}</a>`;
-  if (remaining === 0) dot.classList.add('out');
-  else if (remaining === 1) dot.classList.add('warn');
 }
+
+function toggleAccountDropdown(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('accountDropdown');
+  if (dd) dd.classList.toggle('open');
+}
+
+function renderAccountDropdown() {
+  const dd = document.getElementById('accountDropdown');
+  if (!dd || !currentUser) return;
+  const t = T[currentLang] || T.english;
+  const isPro = currentUser.isPro;
+  const sub = currentUser.subscription;
+  const remaining = currentUser.remaining ?? '—';
+  const limit = currentUser.limit;
+  const streak = window._streakCount || 0;
+
+  // Plan section
+  let planHTML = '';
+  if (isPro) {
+    const planType = sub?.planType === 'yearly' ? (t.yearlyPlan || 'Yearly') : (t.monthlyPlan || 'Monthly');
+    planHTML = `<div class="dropdown-plan-box pro">
+      <div class="dropdown-plan-row">
+        <span class="dropdown-plan-label"><span class="pro-badge">PRO</span> ${planType}</span>
+      </div>`;
+    if (sub?.renewalDate || sub?.expiryDate) {
+      const dateStr = sub.expiryDate && sub.status === 'cancelled'
+        ? sub.expiryDate : sub.renewalDate;
+      const label = sub.status === 'cancelled' ? (t.expiresOn || 'Expires') : (t.renewsOn || 'Renews');
+      if (dateStr) {
+        const d = new Date(dateStr);
+        const formatted = d.toLocaleDateString(currentLang === 'arabic' ? 'ar' : currentLang === 'spanish' ? 'es' : currentLang === 'portuguese' ? 'pt' : currentLang === 'french' ? 'fr' : currentLang === 'german' ? 'de' : 'en', { month: 'short', day: 'numeric', year: 'numeric' });
+        planHTML += `<div class="dropdown-plan-row">
+          <span class="dropdown-plan-value">${label}: ${formatted}</span>
+        </div>`;
+      }
+      if (sub.daysRemaining != null) {
+        planHTML += `<div class="dropdown-plan-row">
+          <span class="dropdown-plan-days">${sub.daysRemaining} ${t.daysLeft || 'days left'}</span>
+        </div>`;
+      }
+    }
+    planHTML += `</div>`;
+  } else {
+    const freeLabel = t.planFree || 'Free Plan';
+    const usageLabel = t.todayUsage || 'Today';
+    const usedCount = limit && limit !== 'unlimited' ? limit - remaining : 0;
+    const barPct = limit && limit !== 'unlimited' ? Math.round((remaining / limit) * 100) : 100;
+    const barClass = remaining === 0 ? 'out' : remaining === 1 ? 'warn' : '';
+    planHTML = `<div class="dropdown-plan-box">
+      <div class="dropdown-plan-row">
+        <span class="dropdown-plan-label"><span class="free-badge">FREE</span> ${freeLabel}</span>
+      </div>
+      <div class="dropdown-plan-row">
+        <span class="dropdown-plan-value">${usageLabel}: ${remaining}/${limit}</span>
+      </div>
+      <div class="dropdown-usage-bar"><div class="dropdown-usage-fill ${barClass}" style="width:${barPct}%"></div></div>
+      <button class="dropdown-upgrade-btn" onclick="openUpgrade(); toggleAccountDropdown(event);">${t.upgrade || 'Upgrade'} →</button>
+    </div>`;
+  }
+
+  // Streak
+  let streakHTML = '';
+  if (streak >= 2) {
+    const tip = (t.streakTooltip || '{n} day streak!').replace('{n}', streak);
+    streakHTML = `<div class="dropdown-item" style="cursor:default;">
+      <span class="dropdown-item-icon">🔥</span><span>${tip}</span>
+    </div>`;
+  }
+
+  dd.innerHTML = `
+    <div class="dropdown-header">
+      <img class="dropdown-avatar" src="${currentUser.picture}" alt="" referrerpolicy="no-referrer">
+      <div class="dropdown-user-info">
+        <div class="dropdown-name">${currentUser.name}</div>
+        <div class="dropdown-email">${currentUser.email}</div>
+      </div>
+    </div>
+    ${planHTML}
+    <div class="dropdown-menu">
+      ${streakHTML}
+      <div class="dropdown-item" onclick="toggleHistory(); toggleAccountDropdown(event);">
+        <span class="dropdown-item-icon">📋</span><span>${t.history || 'History'}</span>
+      </div>
+      <div class="dropdown-item" onclick="toggleSettings(); toggleAccountDropdown(event);">
+        <span class="dropdown-item-icon">⚙️</span><span>${t.settings || 'Settings'}</span>
+      </div>
+    </div>
+    <div class="dropdown-divider"></div>
+    <button class="dropdown-signout" onclick="signOut()">
+      <span class="dropdown-item-icon">🚪</span><span>${t.signOut || 'Sign out'}</span>
+    </button>
+  `;
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+  const dd = document.getElementById('accountDropdown');
+  if (dd && dd.classList.contains('open')) {
+    const wrapper = dd.closest('.account-dropdown-wrapper');
+    if (wrapper && !wrapper.contains(e.target)) {
+      dd.classList.remove('open');
+    }
+  }
+});
 
 // ============ BUILD REQUEST ============
 function buildRequest() {
@@ -2508,15 +2727,8 @@ function updateStreak() {
 }
 
 function showStreakBadge(count) {
-  const badge = document.getElementById('streakBadge');
-  if (!badge) return;
-  if (count >= 2) {
-    badge.textContent = `🔥 ${count}`;
-    badge.title = (T[currentLang] || T.english).streakTooltip?.replace('{n}', count) || `${count} day streak!`;
-    badge.style.display = '';
-  } else {
-    badge.style.display = 'none';
-  }
+  window._streakCount = count;
+  if (currentUser) renderAccountDropdown();
 }
 
 function initStreak() {
