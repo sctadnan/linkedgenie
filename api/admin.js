@@ -1,4 +1,4 @@
-import { kvGet, kvSet, todayStr } from './_shared.js';
+import { kvGet, kvSet, todayStr, checkRateLimit } from './_shared.js';
 
 const KV_URL = process.env.UPSTASH_REDIS_REST_KV_REST_API_URL;
 const KV_TOKEN = process.env.UPSTASH_REDIS_REST_KV_REST_API_TOKEN;
@@ -8,6 +8,10 @@ function verifyAdmin(req) {
   if (!secret) return false;
   const auth = req.headers.authorization;
   return auth === `Bearer ${secret}`;
+}
+
+function getClientIP(req) {
+  return req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown';
 }
 
 async function kvKeys(pattern) {
@@ -27,6 +31,13 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  // Rate limit: 5 attempts per minute per IP
+  const ip = getClientIP(req);
+  const rl = await checkRateLimit(`admin:${ip}`, 5);
+  if (!rl.allowed) {
+    return res.status(429).json({ error: 'Too many attempts. Try again later.' });
+  }
 
   if (!verifyAdmin(req)) {
     return res.status(401).json({ error: 'Unauthorized' });

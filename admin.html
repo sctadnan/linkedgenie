@@ -257,7 +257,9 @@ function doLogin() {
   // Test by calling list
   apiCall('list').then(data => {
     if (data.error) {
-      document.getElementById('loginError').style.display = 'block';
+      const errEl = document.getElementById('loginError');
+      errEl.textContent = data.error === 'Too many attempts. Try again later.' ? data.error : 'Invalid secret. Try again.';
+      errEl.style.display = 'block';
       adminSecret = '';
       return;
     }
