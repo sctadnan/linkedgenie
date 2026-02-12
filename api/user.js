@@ -46,6 +46,15 @@ export default async function handler(req, res) {
       await kvSet(key, userData);
     }
 
+    // Auto-expire subscriptions
+    if (userData.isPro && userData.subscription?.expiryDate) {
+      if (new Date(userData.subscription.expiryDate) < new Date()) {
+        userData.isPro = false;
+        userData.subscription.status = 'expired';
+        await kvSet(key, userData);
+      }
+    }
+
     // Dev account always PRO
     if (process.env.DEV_EMAIL && googleUser.email === process.env.DEV_EMAIL) {
       userData.isPro = true;

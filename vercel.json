@@ -14,9 +14,13 @@
     },
     "api/subscribe.js": {
       "maxDuration": 10
+    },
+    "api/admin.js": {
+      "maxDuration": 15
     }
   },
   "rewrites": [
+    { "source": "/admin", "destination": "/admin.html" },
     { "source": "/linkedin-post-generator", "destination": "/post-generator.html" },
     { "source": "/linkedin-profile-optimizer", "destination": "/profile-optimizer.html" },
     { "source": "/linkedin-message-generator", "destination": "/message-generator.html" },
