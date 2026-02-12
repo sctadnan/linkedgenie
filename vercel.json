@@ -17,8 +17,17 @@
     },
     "api/admin.js": {
       "maxDuration": 15
+    },
+    "api/cron-reengagement.js": {
+      "maxDuration": 30
     }
   },
+  "crons": [
+    {
+      "path": "/api/cron-reengagement",
+      "schedule": "0 9 * * *"
+    }
+  ],
   "rewrites": [
     { "source": "/admin", "destination": "/admin.html" },
     { "source": "/linkedin-post-generator", "destination": "/post-generator.html" },

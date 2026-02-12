@@ -40,11 +40,18 @@ export default async function handler(req, res) {
       await kvSet(key, userData);
     }
 
-    // Reset daily count if new day
-    if (userData.usage.date !== todayStr()) {
-      userData.usage = { date: todayStr(), count: 0 };
-      await kvSet(key, userData);
+    // Track last seen + reset daily count
+    const today = todayStr();
+    let needSave = false;
+    if (userData.lastSeen !== today) {
+      userData.lastSeen = today;
+      needSave = true;
     }
+    if (userData.usage.date !== today) {
+      userData.usage = { date: today, count: 0 };
+      needSave = true;
+    }
+    if (needSave) await kvSet(key, userData);
 
     // Auto-expire subscriptions
     if (userData.isPro && userData.subscription?.expiryDate) {
