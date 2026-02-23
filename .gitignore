@@ -3,3 +3,13 @@ node_modules/
 .vercel/
 .claude/
 nul
+
+# Project Management & Study Docs
+GEMINI.md
+docs/
+*.cmd
+*.bat
+
+# Dev Tools
+api/debug.js
+admin.html

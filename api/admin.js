@@ -128,7 +128,6 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Unknown action. Use: list, get, grant, revoke' });
 
   } catch (error) {
-    console.error('Admin API error:', error);
     return res.status(500).json({ error: error.message || 'Internal server error' });
   }
 }
