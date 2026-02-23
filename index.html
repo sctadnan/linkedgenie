@@ -4,9 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google-site-verification" content="61J9yNQcB_uUjvnMenXwYGuUtMkHEDFrsilpOi8HDks">
-<meta name="google-site-verification" content="j0gXnlDZMT6SGm-Ars3-ys8UkzEQwH8Vqq8Z6IcJkpo">
 <meta name="yandex-verification" content="c84d45e82a3feb50">
-<meta name="yandex-verification" content="74e6c3c2f30404ad">
 <title>LinkedGenie — AI LinkedIn Content Suite</title>
 <meta name="description" content="Generate LinkedIn posts, optimize your profile, craft connection messages, and reply to comments — all with AI.">
 <meta name="keywords" content="LinkedIn post generator, AI content writer, LinkedIn profile optimizer, LinkedIn messages, social media tool">
@@ -2270,7 +2268,7 @@ function onSignIn() {
   const authArea = document.getElementById('authArea');
   authArea.innerHTML = `
     <div class="account-dropdown-wrapper">
-      <img class="account-avatar-btn" id="accountAvatarBtn" src="${currentUser.picture}" alt="" referrerpolicy="no-referrer" onclick="toggleAccountDropdown(event)">
+      <img class="account-avatar-btn" id="accountAvatarBtn" src="${currentUser.picture}" alt="User Profile" referrerpolicy="no-referrer" onclick="toggleAccountDropdown(event)">
       <div class="account-dropdown" id="accountDropdown"></div>
     </div>
   `;
@@ -2387,7 +2385,7 @@ function renderAccountDropdown() {
 
   dd.innerHTML = `
     <div class="dropdown-header">
-      <img class="dropdown-avatar" src="${currentUser.picture}" alt="" referrerpolicy="no-referrer">
+      <img class="dropdown-avatar" src="${currentUser.picture}" alt="User Profile" referrerpolicy="no-referrer">
       <div class="dropdown-user-info">
         <div class="dropdown-name">${currentUser.name}</div>
         <div class="dropdown-email">${currentUser.email}</div>
