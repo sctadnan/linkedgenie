@@ -41,9 +41,6 @@ export default function RootLayout({
             </nav>
             <div className="flex items-center gap-3">
               <UserBadge />
-              <a href="/auth" className="text-sm font-medium text-zinc-300 hover:text-white transition-colors hidden sm:block">
-                Sign In
-              </a>
               {process.env.CHECKOUT_URL && (
                 <a href={process.env.CHECKOUT_URL} target="_blank" rel="noopener noreferrer" className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity drop-shadow-sm shadow-orange-500/20">
                   Upgrade Pro

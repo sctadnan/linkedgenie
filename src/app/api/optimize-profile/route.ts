@@ -6,17 +6,23 @@ export async function POST(req: Request) {
     const ip = req.headers.get("x-forwarded-for") ?? "127.0.0.1";
 
     // Apply rate limiting if Upstash Redis variables are present
-    if (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_REST_KV_REST_API_URL) {
-        const { success } = await ratelimit.limit(ip);
-        if (!success) {
-            return new Response(
-                JSON.stringify({ error: "Rate limit exceeded. Please try again tomorrow or upgrade." }),
-                { status: 429, headers: { 'Content-Type': 'application/json' } }
-            );
-        }
-    }
+    // if (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_REST_KV_REST_API_URL) {
+    //     const { success } = await ratelimit.limit(ip);
+    //     if (!success) {
+    //         return new Response(
+    //             JSON.stringify({ error: "Rate limit exceeded. Please try again tomorrow or upgrade." }),
+    //             { status: 429, headers: { 'Content-Type': 'application/json' } }
+    //         );
+    //     }
+    // }
 
-    const { prompt } = await req.json();
+    let prompt;
+    try {
+        const body = await req.json();
+        prompt = body.prompt;
+    } catch (e) {
+        return new Response(JSON.stringify({ error: "Invalid request body" }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+    }
 
     if (!process.env.OPENAI_API_KEY) {
         return new Response(JSON.stringify({ error: "No OpenAI API key found. Please add OPENAI_API_KEY to your .env file." }), { status: 500, headers: { 'Content-Type': 'application/json' } });
@@ -41,6 +47,7 @@ Your Goal:
 
         return result.toTextStreamResponse();
     } catch (err: any) {
-        return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+        console.error("OpenAI API Error:", err);
+        return new Response(JSON.stringify({ error: err.message || "Failed to optimize profile" }), { status: 500, headers: { 'Content-Type': 'application/json' } });
     }
 }

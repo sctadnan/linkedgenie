@@ -42,9 +42,18 @@ export default function PostGenerator() {
 
     const { completion, input, handleInputChange, handleSubmit, isLoading, error } = useCompletion({
         api: "/api/generate",
+        headers: {
+            "Content-Type": "application/json"
+        },
         body: {
             tone,
             format,
+        },
+        onError: (err) => {
+            console.error("useCompletion failed:", err);
+        },
+        onFinish: (prompt, completion) => {
+            console.log("Generation finished successfully.");
         }
     });
 
@@ -112,8 +121,9 @@ export default function PostGenerator() {
 
                     {error && (
                         <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl text-sm">
-                            <p>Error: {error.message}</p>
-                            <p className="text-xs mt-1 text-red-400/70">Did you add an OPENAI_API_KEY in your .env layer?</p>
+                            <p className="font-bold">Error Generation Failed:</p>
+                            <p>{error.message}</p>
+                            <p className="text-xs mt-1 text-red-400/70">Console log has more details. The backend might have rejected the format.</p>
                         </div>
                     )}
 
