@@ -42,6 +42,7 @@ export default function PostGenerator() {
 
     const { completion, input, handleInputChange, handleSubmit, isLoading, error } = useCompletion({
         api: "/api/generate",
+        streamProtocol: "text",
         headers: {
             "Content-Type": "application/json"
         },

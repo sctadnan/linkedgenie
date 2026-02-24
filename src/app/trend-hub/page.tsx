@@ -10,6 +10,7 @@ export default function TrendHub() {
 
     const { completion, complete, isLoading, error } = useCompletion({
         api: "/api/trend-analysis",
+        streamProtocol: "text",
     });
 
     const handleSubmit = (e: React.FormEvent) => {

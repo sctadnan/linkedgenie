@@ -33,22 +33,19 @@ export default function RootLayout({
               <span className="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-xs">LG</span>
               LinkedGenie <span className="text-zinc-500 text-sm font-normal">v2</span>
             </a>
-            <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-zinc-300">
-              <a href="/post-generator" className="hover:text-white transition-colors">Post Generator</a>
-              <a href="/profile-optimizer" className="hover:text-white transition-colors">Profile Grader</a>
-              <a href="/hook-generator" className="hover:text-white transition-colors">Hook Generator</a>
-              <a href="/trend-hub" className="hover:text-white transition-colors">Trend Hub</a>
+            <nav className="hidden md:flex items-center gap-5 text-[13px] font-medium text-zinc-400">
+              <a href="/post-generator" className="hover:text-white transition-colors">Post AI</a>
+              <a href="/profile-optimizer" className="hover:text-white transition-colors">Profile AI</a>
+              <a href="/hook-generator" className="hover:text-white transition-colors">Hook AI</a>
+              <a href="/trend-hub" className="hover:text-white transition-colors">Trends</a>
             </nav>
             <div className="flex items-center gap-3">
-              <UserBadge />
               {process.env.CHECKOUT_URL && (
-                <a href={process.env.CHECKOUT_URL} target="_blank" rel="noopener noreferrer" className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity drop-shadow-sm shadow-orange-500/20">
+                <a href={process.env.CHECKOUT_URL} target="_blank" rel="noopener noreferrer" className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:opacity-90 transition-opacity drop-shadow-sm shadow-orange-500/20 hidden md:block">
                   Upgrade Pro
                 </a>
               )}
-              <a href="/post-generator" className="bg-white text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-zinc-200 transition-colors drop-shadow-sm">
-                Get Started
-              </a>
+              <UserBadge />
             </div>
           </div>
         </header>

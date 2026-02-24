@@ -14,6 +14,7 @@ export default function ProfileOptimizer() {
 
     const { completion, complete, isLoading, error } = useCompletion({
         api: "/api/optimize-profile",
+        streamProtocol: "text",
     });
 
     const handleSubmit = (e: React.FormEvent) => {

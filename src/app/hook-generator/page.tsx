@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function HookGenerator() {
     const { completion, input, handleInputChange, handleSubmit, isLoading, error } = useCompletion({
         api: "/api/generate-hook",
+        streamProtocol: "text",
     });
 
     const generatedHooks = completion.split('\n').filter(h => h.trim().length > 0);
