@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import UserBadge from "@/components/UserBadge";
+import { niches } from "@/data/niches";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -60,6 +62,41 @@ export default function RootLayout({
             </div>
           )}
           {children}
+
+          {/* Programmatic SEO Footer */}
+          <footer className="w-full border-t border-white/10 bg-black/50 backdrop-blur-md mt-20">
+            <div className="max-w-6xl mx-auto px-6 py-12">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div>
+                  <h4 className="text-white font-semibold mb-2 flex items-center gap-2">
+                    <span className="w-5 h-5 rounded bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-[10px] text-white">LG</span>
+                    LinkedGenie
+                  </h4>
+                  <p className="text-sm text-zinc-500 max-w-xs">
+                    The elite AI platform for LinkedIn creators. Generate content, analyze trends, and grow your personal brand.
+                  </p>
+                </div>
+
+                <div className="w-full md:w-auto">
+                  <h4 className="text-sm font-semibold text-zinc-300 mb-4 uppercase tracking-wider">Popular Industries</h4>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-8 gap-y-3">
+                    {niches.map((niche) => (
+                      <Link
+                        key={niche.slug}
+                        href={`/generator/${niche.slug}`}
+                        className="text-sm text-zinc-500 hover:text-purple-400 transition-colors"
+                      >
+                        {niche.title}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="mt-12 pt-8 border-t border-white/5 text-center text-xs text-zinc-600">
+                &copy; {new Date().getFullYear()} LinkedGenie. All rights reserved.
+              </div>
+            </div>
+          </footer>
         </main>
       </body>
     </html>
