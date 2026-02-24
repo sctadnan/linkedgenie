@@ -84,8 +84,9 @@ export default function RootLayout({
                 </div>
 
                 <div>
-                  <h4 className="text-white font-semibold mb-4">Product</h4>
+                  <h4 className="text-white font-semibold mb-4">Company & Product</h4>
                   <ul className="space-y-3 text-sm">
+                    <li><a href="/about" className="hover:text-white transition-colors">About Us</a></li>
                     <li><a href="/dashboard" className="hover:text-white transition-colors">Dashboard</a></li>
                     <li><a href="/#features" className="hover:text-white transition-colors">Features</a></li>
                     <li><a href="/#pricing" className="hover:text-white transition-colors">Pricing</a></li>
@@ -105,7 +106,7 @@ export default function RootLayout({
                 <div>
                   <h4 className="text-white font-semibold mb-4">Legal</h4>
                   <ul className="space-y-3 text-sm">
-                    <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
+                    <li><a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a></li>
                     <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
                     <li><a href="mailto:support@linkedgenie.com" className="hover:text-white transition-colors">Contact Support</a></li>
                   </ul>
