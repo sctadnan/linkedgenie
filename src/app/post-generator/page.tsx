@@ -2,15 +2,28 @@
 
 import { useState, useEffect } from "react";
 import { useCompletion } from "@ai-sdk/react";
-import { Loader2, Sparkles, Send, Copy, ThumbsUp, MessageSquare, Repeat2, BookmarkPlus } from "lucide-react";
+import { Loader2, Sparkles, Send, Copy, ThumbsUp, MessageSquare, Repeat2, BookmarkPlus, Fingerprint, Activity } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
+import { DigitalFootprintModal } from "@/components/DigitalFootprintModal";
 
 export default function PostGenerator() {
     const [tone, setTone] = useState("Professional");
     const [format, setFormat] = useState("Listicle");
+    const [digitalFootprint, setDigitalFootprint] = useState("");
+    const [isFootprintModalOpen, setIsFootprintModalOpen] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [savedMessage, setSavedMessage] = useState("");
+
+    // Predictive Score Calculation
+    const calculateScore = (text: string) => {
+        if (!text) return 0;
+        let score = 50; // Base score
+        if (text.length > 200 && text.length < 1300) score += 20; // Optimal length
+        if (text.split('\n\n').length > 3) score += 15; // Good whitespace
+        if (text.includes('?')) score += 15; // CTA or question included
+        return Math.min(100, score);
+    };
 
     const handleSave = async () => {
         if (!completion) return;
@@ -49,6 +62,7 @@ export default function PostGenerator() {
         body: {
             tone,
             format,
+            digitalFootprint,
         },
         onError: (err) => {
             console.error("useCompletion failed:", err);
@@ -138,7 +152,25 @@ export default function PostGenerator() {
                         </div>
                     )}
 
-                    <div className="mt-auto pt-6 pb-20 md:pb-0">
+                    <div className="flex items-center gap-4 bg-purple-500/10 border border-purple-500/20 rounded-xl p-4">
+                        <div className="flex-1">
+                            <h3 className="text-sm font-semibold text-purple-400 flex items-center gap-2">
+                                <Fingerprint className="w-4 h-4" /> Digital Footprint
+                            </h3>
+                            <p className="text-xs text-zinc-400 mt-1">
+                                {digitalFootprint ? "Footprint loaded! Post will mimic your style." : "Teach AI to write exactly like you."}
+                            </p>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => setIsFootprintModalOpen(true)}
+                            className="text-xs font-semibold bg-purple-600/20 text-purple-300 hover:bg-purple-600/30 px-3 py-2 rounded-lg transition-colors"
+                        >
+                            {digitalFootprint ? "Edit Style" : "Clone Style"}
+                        </button>
+                    </div>
+
+                    <div className="mt-auto pt-4 pb-20 md:pb-0">
                         <button
                             type="submit"
                             disabled={isGenerating || !input}
@@ -238,6 +270,37 @@ export default function PostGenerator() {
                     </div>
                 </motion.div>
 
+                {/* Predictive Scoring and Floating Actions */}
+                <AnimatePresence>
+                    {hasResult && !isGenerating && (
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            className="mt-6 w-full max-w-lg mb-4 bg-zinc-900 border border-white/10 rounded-xl p-4 flex items-center justify-between"
+                        >
+                            <div className="flex items-center gap-3">
+                                <Activity className="w-5 h-5 text-blue-400" />
+                                <div>
+                                    <p className="text-sm font-semibold text-zinc-200">Viral Potential Score</p>
+                                    <div className="flex items-center gap-2 mt-1">
+                                        <div className="h-1.5 w-32 bg-zinc-800 rounded-full overflow-hidden">
+                                            <div
+                                                className="h-full bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full transition-all duration-1000"
+                                                style={{ width: `${calculateScore(completion)}%` }}
+                                            />
+                                        </div>
+                                        <span className="text-xs font-bold text-emerald-400">{calculateScore(completion)}/100</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="text-xs text-zinc-500 text-right">
+                                {completion.length > 1300 ? <span className="text-red-400 flex items-center justify-end">Too long</span> : <span className="text-emerald-400 flex items-center justify-end">Optimal length</span>}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
                 {/* Floating Actions */}
                 <AnimatePresence>
                     {hasResult && !isGenerating && (
@@ -273,6 +336,12 @@ export default function PostGenerator() {
                 </AnimatePresence>
             </div>
 
+            <DigitalFootprintModal
+                isOpen={isFootprintModalOpen}
+                onClose={() => setIsFootprintModalOpen(false)}
+                onFootprintExtracted={setDigitalFootprint}
+                currentFootprint={digitalFootprint}
+            />
         </div>
     );
 }

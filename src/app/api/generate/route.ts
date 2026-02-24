@@ -17,12 +17,13 @@ export async function POST(req: Request) {
         }
     }
 
-    let prompt, tone, format;
+    let prompt, tone, format, digitalFootprint;
     try {
         const body = await req.json();
         prompt = body.prompt; // AI SDK always sends the text here
         tone = body.tone;
         format = body.format;
+        digitalFootprint = body.digitalFootprint; // New parameter for extracted style
     } catch (e) {
         return new Response(JSON.stringify({ error: "Invalid request body" }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
@@ -31,16 +32,25 @@ export async function POST(req: Request) {
         return new Response(JSON.stringify({ error: "No OpenAI API key found. Please add OPENAI_API_KEY to your .env file." }), { status: 500, headers: { 'Content-Type': 'application/json' } });
     }
 
-    const systemPrompt = `You are a world-class LinkedIn ghostwriter who helps professionals grow their personal brand. 
-Your goal is to write a highly engaging, viral LinkedIn post based on the user's input.
-Rules:
-1. Start with a scroll-stopping hook (short, punchy).
-2. Use short paragraphs and lots of white space.
-3. Keep the tone ${tone || 'professional but engaging'}.
-4. Structure the post using the ${format || 'PAS (Problem, Agitation, Solution)'} framework if possible.
-5. End with a clear call-to-action or a question for the comments.
-6. Under NO circumstances should you use hashtags.
-7. Return raw text only, no markdown formatting like bolding or asterisks unless necessary.`;
+    const basePrompt = `You are an Elite Brand Strategist and world-class LinkedIn ghostwriter.
+Your objective is to craft a highly engaging, viral LinkedIn post based on the user's input.
+Use "Chain-of-Thought" reasoning before writing: first analyze the topic, then draft the hook, body, and CTA. 
+HOWEVER, ONLY output the final LinkedIn post. Do NOT output your thought process.
+
+CRITICAL STRUCTURAL RULES (Do not violate these):
+1. HOOK: The first 1-2 lines must be a scroll-stopping hook (under 12 words). It must arouse curiosity, emotion, or surprise.
+2. PACING: Use extremely short paragraphs. No paragraph should exceed 3 lines. Use generous white space (empty lines) between thoughts.
+3. LENGTH: The entire post MUST be strictly under 1300 characters to optimize for the LinkedIn algorithm.
+4. HASHTAGS: NEVER use hashtags. They are strictly forbidden.
+5. FORMATTING: Return plain raw text. No bolding (**), no italics, no emojis unless they add immense value.
+6. CLOSING: End with a single, clear, conversation-starting question (Call-to-Action) to drive comments.
+7. TONE: The general tone should be ${tone || 'professional but engaging'}. Structure the narrative using the ${format || 'PAS (Problem, Agitation, Solution)'} framework if possible.`;
+
+    const footprintInstruction = digitalFootprint
+        ? `\n\nUSER'S DIGITAL FOOTPRINT (Mimic this exact style):\n${digitalFootprint}\nAnalyze this footprint deeply. Adopt the exact vocabulary, sentence rhythm, and "signature moves" described above. The post must sound like the user wrote it, NOT a generic AI.`
+        : '';
+
+    const systemPrompt = basePrompt + footprintInstruction;
 
     try {
         const result = streamText({
