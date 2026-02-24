@@ -1,252 +1,119 @@
 'use client';
 
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useRef, useMemo, useEffect, useState } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { useRef, useMemo } from 'react';
 import * as THREE from 'three';
 
-const NODE_COUNT = 35; // Fewer nodes because they are larger profile pictures
-const CONNECTION_DISTANCE = 2.5;
-const MOUSE_ATTRACTION_RADIUS = 3.0;
-
-// Reliable avatar URLs for the demo
-const AVATAR_URLS = [
-    'https://randomuser.me/api/portraits/men/32.jpg',
-    'https://randomuser.me/api/portraits/women/44.jpg',
-    'https://randomuser.me/api/portraits/men/46.jpg',
-    'https://randomuser.me/api/portraits/women/12.jpg',
-    'https://randomuser.me/api/portraits/men/90.jpg',
-    'https://randomuser.me/api/portraits/women/33.jpg',
-    'https://randomuser.me/api/portraits/men/22.jpg',
-];
-
-function NetworkNodes() {
+function GyroscopeRings() {
     const groupRef = useRef<THREE.Group>(null);
-    const linesRef = useRef<THREE.LineSegments>(null);
-    const { pointer, viewport, invalidate } = useThree();
+    const ring1 = useRef<THREE.Mesh>(null);
+    const ring2 = useRef<THREE.Mesh>(null);
+    const ring3 = useRef<THREE.Mesh>(null);
+    const core = useRef<THREE.Mesh>(null);
 
-    // Bulletproof Texture Loading State
-    const [textures, setTextures] = useState<THREE.Texture[]>([]);
-
-    useEffect(() => {
-        const loader = new THREE.TextureLoader();
-        loader.setCrossOrigin('anonymous');
-        const loaded: THREE.Texture[] = [];
-        let loadedCount = 0;
-
-        const handleComplete = () => {
-            if (loadedCount === AVATAR_URLS.length) {
-                setTextures([...loaded]);
-                invalidate(); // Force render once loaded
-            }
+    // Materials created once to save memory
+    const materials = useMemo(() => {
+        return {
+            ring: new THREE.MeshStandardMaterial({
+                color: '#8b5cf6', // Violet
+                roughness: 0.1,
+                metalness: 0.9,
+                transparent: true,
+                opacity: 0.8,
+            }),
+            core: new THREE.MeshBasicMaterial({
+                color: '#d946ef', // Fuchsia glow
+                wireframe: true,
+            }),
+            coreSolid: new THREE.MeshStandardMaterial({
+                color: '#c084fc',
+                roughness: 0.2,
+                metalness: 0.8,
+            })
         };
-
-        AVATAR_URLS.forEach((url) => {
-            loader.load(
-                url,
-                (tex) => {
-                    tex.colorSpace = THREE.SRGBColorSpace;
-                    tex.generateMipmaps = true;
-                    tex.minFilter = THREE.LinearMipmapLinearFilter;
-                    loaded.push(tex);
-                    loadedCount++;
-                    handleComplete();
-                },
-                undefined,
-                (err) => {
-                    console.warn("Avatar failed to load, using fallback.", url);
-                    // Minimal fallback texture
-                    const canvas = document.createElement('canvas');
-                    canvas.width = 128; canvas.height = 128;
-                    const ctx = canvas.getContext('2d');
-                    if (ctx) {
-                        ctx.fillStyle = '#6366f1';
-                        ctx.beginPath();
-                        ctx.arc(64, 64, 64, 0, Math.PI * 2);
-                        ctx.fill();
-                    }
-                    const fbTex = new THREE.CanvasTexture(canvas);
-                    fbTex.colorSpace = THREE.SRGBColorSpace;
-                    loaded.push(fbTex);
-                    loadedCount++;
-                    handleComplete();
-                }
-            );
-        });
-    }, [invalidate]);
-
-    // Generate initial completely random positions and metadata for each node
-    const nodes = useMemo(() => {
-        const temp = [];
-        for (let i = 0; i < NODE_COUNT; i++) {
-            // Random point in a sphere
-            const u = Math.random();
-            const v = Math.random();
-            const theta = u * 2.0 * Math.PI;
-            const phi = Math.acos(2.0 * v - 1.0);
-            const r = Math.cbrt(Math.random()) * 5; // spread radius
-
-            const x = r * Math.sin(phi) * Math.cos(theta);
-            const y = r * Math.sin(phi) * Math.sin(theta);
-            const z = r * Math.cos(phi);
-
-            temp.push({
-                id: i,
-                pos: new THREE.Vector3(x, y, z),
-                origPos: new THREE.Vector3(x, y, z),
-                textureIndex: Math.floor(Math.random() * AVATAR_URLS.length),
-                // Slight offset size for variety
-                size: 0.2 + (Math.random() * 0.1)
-            });
-        }
-        return temp;
     }, []);
 
-    useFrame(() => {
-        if (!groupRef.current || !linesRef.current || textures.length === 0) return;
+    useFrame((state) => {
+        const time = state.clock.getElapsedTime();
 
-        // Convert mouse pointer (-1 to 1) to world coordinates (roughly)
-        const mouseX = (pointer.x * viewport.width) / 2;
-        const mouseY = (pointer.y * viewport.height) / 2;
-        const mouseVector = new THREE.Vector3(mouseX, mouseY, 0);
-
-        // Arrays to hold dynamic line data
-        const linePositions = [];
-        const lineColors = [];
-
-        // Update Node Positions
-        nodes.forEach((node, i) => {
-            const distToMouse = node.pos.distanceTo(mouseVector);
-
-            // Mouse Interaction: Pull towards mouse if close, else drift back to original pos
-            if (distToMouse < MOUSE_ATTRACTION_RADIUS) {
-                node.pos.lerp(mouseVector, 0.03); // gentle pull
-            } else {
-                node.pos.lerp(node.origPos, 0.015); // gentle return
-            }
-
-            // Sync the actual mesh position
-            const mesh = groupRef.current!.children[i] as THREE.Mesh;
-            mesh.position.copy(node.pos);
-
-            // Make the circle face the camera always (Billboard effect)
-            mesh.quaternion.copy(groupRef.current!.parent!.quaternion).invert();
-        });
-
-        // Calculate Connections
-        for (let i = 0; i < NODE_COUNT; i++) {
-            const nodeA = nodes[i];
-            for (let j = i + 1; j < NODE_COUNT; j++) {
-                const nodeB = nodes[j];
-                const dist = nodeA.pos.distanceTo(nodeB.pos);
-
-                if (dist < CONNECTION_DISTANCE) {
-                    linePositions.push(
-                        nodeA.pos.x, nodeA.pos.y, nodeA.pos.z,
-                        nodeB.pos.x, nodeB.pos.y, nodeB.pos.z
-                    );
-
-                    // Line opacity and color logic based on proximity to mouse
-                    const distToMouseMid = (nodeA.pos.distanceTo(mouseVector) + nodeB.pos.distanceTo(mouseVector)) / 2;
-                    let opacity = 1 - (dist / CONNECTION_DISTANCE);
-
-                    let r, g, b;
-                    if (distToMouseMid < MOUSE_ATTRACTION_RADIUS * 1.5) {
-                        // Active professional connection (Blue/Purple)
-                        r = 99 / 255; g = 102 / 255; b = 241 / 255; // #6366f1 (Indigo)
-                        opacity = Math.min(opacity * 2.0, 0.8);
-                    } else {
-                        // Inactive/Distanced connection
-                        r = 82 / 255; g = 82 / 255; b = 91 / 255; // #52525b (Zinc)
-                        opacity *= 0.2;
-                    }
-
-                    lineColors.push(r, g, b, opacity, r, g, b, opacity);
-                }
-            }
+        // Continuous rotation for each ring (Gyroscope effect)
+        if (ring1.current) ring1.current.rotation.x = time * 0.3;
+        if (ring2.current) {
+            ring2.current.rotation.y = time * 0.4;
+            ring2.current.rotation.z = time * 0.1;
+        }
+        if (ring3.current) {
+            ring3.current.rotation.x = time * 0.5;
+            ring3.current.rotation.y = time * 0.5;
         }
 
-        // Update Lines BufferGeometry
-        const lineGeo = linesRef.current.geometry as THREE.BufferGeometry;
-        lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
-        lineGeo.setAttribute('color', new THREE.Float32BufferAttribute(lineColors, 4));
-        if (linesRef.current.material) {
-            (linesRef.current.material as THREE.LineBasicMaterial).transparent = true;
-            (linesRef.current.material as THREE.LineBasicMaterial).vertexColors = true;
-            (linesRef.current.material as THREE.LineBasicMaterial).depthWrite = false;
+        // Pulse the core slightly
+        if (core.current) {
+            const scale = 1 + Math.sin(time * 3) * 0.08;
+            core.current.scale.set(scale, scale, scale);
+            core.current.rotation.y = time * 0.5;
+            core.current.rotation.x = time * 0.2;
+        }
+
+        // Mouse Parallax Effect on the whole group
+        if (groupRef.current) {
+            // Target rotations based on mouse pointer (-1 to 1)
+            // Limit the tilt angle for elegance
+            const targetX = (state.pointer.y * Math.PI) / 6;
+            const targetY = (state.pointer.x * Math.PI) / 6;
+
+            // Smoothly interpolate to target rotation using Lerp
+            groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetX, 0.05);
+            groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetY, 0.05);
         }
     });
 
     return (
-        <group>
-            {/* The Nodes (Profile Pictures) */}
-            <group ref={groupRef}>
-                {textures.length === AVATAR_URLS.length && nodes.map((node) => (
-                    <mesh key={node.id} position={node.pos}>
-                        <circleGeometry args={[node.size, 32]} />
-                        <meshBasicMaterial
-                            map={textures[node.textureIndex % textures.length]}
-                            transparent
-                            side={THREE.DoubleSide}
-                        />
-                        {/* Optional subtle ring around the profile pic */}
-                        <mesh position={[0, 0, -0.01]}>
-                            <circleGeometry args={[node.size + 0.02, 32]} />
-                            <meshBasicMaterial color="#3f3f46" />
-                        </mesh>
-                    </mesh>
-                ))}
+        <group ref={groupRef}>
+            {/* The AI Core (Geodesic Sphere) */}
+            <group ref={core}>
+                {/* Inner solid core */}
+                <mesh material={materials.coreSolid}>
+                    <icosahedronGeometry args={[0.5, 1]} />
+                </mesh>
+                {/* Outer wireframe glow */}
+                <mesh material={materials.core} scale={1.2}>
+                    <icosahedronGeometry args={[0.5, 1]} />
+                </mesh>
             </group>
 
-            {/* The Network Connections (Lines) */}
-            <lineSegments ref={linesRef}>
-                <bufferGeometry />
-                <lineBasicMaterial vertexColors transparent depthWrite={false} linewidth={1} />
-            </lineSegments>
+            {/* Inner Ring */}
+            <mesh ref={ring3} material={materials.ring}>
+                <torusGeometry args={[1.2, 0.02, 16, 100]} />
+            </mesh>
+
+            {/* Middle Ring */}
+            <mesh ref={ring2} material={materials.ring} rotation={[Math.PI / 3, 0, 0]}>
+                <torusGeometry args={[1.8, 0.03, 16, 100]} />
+            </mesh>
+
+            {/* Outer Ring */}
+            <mesh ref={ring1} material={materials.ring} rotation={[0, Math.PI / 4, 0]}>
+                <torusGeometry args={[2.5, 0.04, 16, 100]} />
+            </mesh>
         </group>
     );
 }
 
-// Wrapper component to handle the frameloop demand and mouse tracking
-function InteractiveCanvas() {
-    return (
-        <Canvas
-            camera={{ position: [0, 0, 8], fov: 50 }}
-            frameloop="demand"
-            className="w-full h-full"
-            onPointerMove={(e) => {
-                if (typeof window !== 'undefined' && (window as any).__R3F_INVALIDATE) {
-                    (window as any).__R3F_INVALIDATE();
-                }
-            }}
-            onMouseLeave={() => {
-                if (typeof window !== 'undefined' && (window as any).__R3F_INVALIDATE) {
-                    (window as any).__R3F_INVALIDATE();
-                }
-            }}
-        >
-            <ambientLight intensity={1} />
-            <NetworkTopologySetter />
-            <NetworkNodes />
-        </Canvas>
-    );
-}
-
-// Helper to expose invalidate to the window object for easy access from Canvas events
-function NetworkTopologySetter() {
-    const { invalidate } = useThree();
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            (window as any).__R3F_INVALIDATE = invalidate;
-        }
-    }, [invalidate]);
-    return null;
-}
-
 export default function GenieMascot() {
     return (
-        <div className="w-full h-[400px] md:h-[500px] relative pointer-events-auto">
-            {/* Removed the background gradient to perfectly match the site's dark aesthetic */}
-            <InteractiveCanvas />
+        <div className="w-full h-[400px] md:h-[500px] relative pointer-events-auto overflow-visible">
+            {/* Canvas for 3D AI Core Gyroscope */}
+            <Canvas camera={{ position: [0, 0, 7], fov: 45 }} className="w-full h-full">
+                <ambientLight intensity={0.4} />
+
+                {/* Strategic dramatic lighting to highlight the metallic rings */}
+                <directionalLight position={[5, 5, 5]} intensity={2} color="#a855f7" /> {/* Purple top light */}
+                <directionalLight position={[-5, -5, -2]} intensity={1} color="#3b82f6" /> {/* Blue rim light */}
+                <pointLight position={[0, 0, 0]} intensity={2} color="#f0abfc" distance={5} /> {/* Core inner light */}
+
+                <GyroscopeRings />
+            </Canvas>
         </div>
     );
 }
