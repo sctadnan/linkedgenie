@@ -1,8 +1,7 @@
 'use client';
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useRef, useMemo, useEffect, Suspense } from 'react';
-import { useTexture } from '@react-three/drei';
+import { useRef, useMemo, useEffect, useState } from 'react';
 import * as THREE from 'three';
 
 const NODE_COUNT = 35; // Fewer nodes because they are larger profile pictures
@@ -23,19 +22,57 @@ const AVATAR_URLS = [
 function NetworkNodes() {
     const groupRef = useRef<THREE.Group>(null);
     const linesRef = useRef<THREE.LineSegments>(null);
-    const { pointer, viewport } = useThree();
+    const { pointer, viewport, invalidate } = useThree();
 
-    // Load textures
-    const textures = useTexture(AVATAR_URLS);
+    // Bulletproof Texture Loading State
+    const [textures, setTextures] = useState<THREE.Texture[]>([]);
 
-    // Ensure textures are rendered beautifully (sRGB, smooth filtering)
     useEffect(() => {
-        textures.forEach(t => {
-            t.colorSpace = THREE.SRGBColorSpace;
-            t.generateMipmaps = true;
-            t.minFilter = THREE.LinearMipmapLinearFilter;
+        const loader = new THREE.TextureLoader();
+        loader.setCrossOrigin('anonymous');
+        const loaded: THREE.Texture[] = [];
+        let loadedCount = 0;
+
+        const handleComplete = () => {
+            if (loadedCount === AVATAR_URLS.length) {
+                setTextures([...loaded]);
+                invalidate(); // Force render once loaded
+            }
+        };
+
+        AVATAR_URLS.forEach((url) => {
+            loader.load(
+                url,
+                (tex) => {
+                    tex.colorSpace = THREE.SRGBColorSpace;
+                    tex.generateMipmaps = true;
+                    tex.minFilter = THREE.LinearMipmapLinearFilter;
+                    loaded.push(tex);
+                    loadedCount++;
+                    handleComplete();
+                },
+                undefined,
+                (err) => {
+                    console.warn("Avatar failed to load, using fallback.", url);
+                    // Minimal fallback texture
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 128; canvas.height = 128;
+                    const ctx = canvas.getContext('2d');
+                    if (ctx) {
+                        ctx.fillStyle = '#6366f1';
+                        ctx.beginPath();
+                        ctx.arc(64, 64, 64, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    const fbTex = new THREE.CanvasTexture(canvas);
+                    fbTex.colorSpace = THREE.SRGBColorSpace;
+                    loaded.push(fbTex);
+                    loadedCount++;
+                    handleComplete();
+                }
+            );
         });
-    }, [textures]);
+    }, [invalidate]);
 
     // Generate initial completely random positions and metadata for each node
     const nodes = useMemo(() => {
@@ -65,7 +102,7 @@ function NetworkNodes() {
     }, []);
 
     useFrame(() => {
-        if (!groupRef.current || !linesRef.current) return;
+        if (!groupRef.current || !linesRef.current || textures.length === 0) return;
 
         // Convert mouse pointer (-1 to 1) to world coordinates (roughly)
         const mouseX = (pointer.x * viewport.width) / 2;
@@ -143,11 +180,11 @@ function NetworkNodes() {
         <group>
             {/* The Nodes (Profile Pictures) */}
             <group ref={groupRef}>
-                {nodes.map((node) => (
+                {textures.length === AVATAR_URLS.length && nodes.map((node) => (
                     <mesh key={node.id} position={node.pos}>
                         <circleGeometry args={[node.size, 32]} />
                         <meshBasicMaterial
-                            map={textures[node.textureIndex]}
+                            map={textures[node.textureIndex % textures.length]}
                             transparent
                             side={THREE.DoubleSide}
                         />
@@ -189,9 +226,7 @@ function InteractiveCanvas() {
         >
             <ambientLight intensity={1} />
             <NetworkTopologySetter />
-            <Suspense fallback={null}>
-                <NetworkNodes />
-            </Suspense>
+            <NetworkNodes />
         </Canvas>
     );
 }
