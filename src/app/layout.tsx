@@ -36,21 +36,22 @@ export default function RootLayout({
               <span className="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-xs">LG</span>
               LinkedGenie <span className="text-zinc-500 text-sm font-normal">v2</span>
             </a>
-            <nav className="hidden md:flex items-center gap-5 text-[13px] font-medium text-zinc-400">
-              <a href="/post-generator" className="hover:text-white transition-colors">Post AI</a>
-              <a href="/profile-optimizer" className="hover:text-white transition-colors">Profile AI</a>
-              <a href="/hook-generator" className="hover:text-white transition-colors">Hook AI</a>
-              <a href="/trend-hub" className="hover:text-white transition-colors">Trends</a>
-              <a href="/dashboard" className="text-purple-400 hover:text-purple-300 font-semibold transition-colors">Dashboard</a>
-            </nav>
-            <div className="flex items-center gap-3">
-              {process.env.CHECKOUT_URL && (
-                <a href={process.env.CHECKOUT_URL} target="_blank" rel="noopener noreferrer" className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:opacity-90 transition-opacity drop-shadow-sm shadow-orange-500/20 hidden md:block">
-                  Upgrade Pro
-                </a>
-              )}
-              <GenieCredits />
-              <UserBadge />
+            {/* Main Navigation - Minimalist (SaaS Style) */}
+            <div className="flex items-center gap-6">
+              <nav className="hidden md:flex items-center gap-6 text-[14px] font-medium text-zinc-400">
+                <a href="/dashboard" className="hover:text-white transition-colors">Dashboard</a>
+                <a href="/#features" className="hover:text-white transition-colors">Features</a>
+                <a href="/#pricing" className="hover:text-white transition-colors">Pricing</a>
+              </nav>
+              <div className="flex items-center gap-3">
+                {process.env.CHECKOUT_URL && (
+                  <a href={process.env.CHECKOUT_URL} target="_blank" rel="noopener noreferrer" className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:opacity-90 transition-opacity drop-shadow-sm shadow-orange-500/20 hidden md:block">
+                    Upgrade Pro
+                  </a>
+                )}
+                <GenieCredits />
+                <UserBadge />
+              </div>
             </div>
           </div>
         </header>
@@ -66,36 +67,68 @@ export default function RootLayout({
           )}
           {children}
 
-          {/* Programmatic SEO Footer */}
-          <footer className="w-full border-t border-white/10 bg-black/50 backdrop-blur-md mt-20">
-            <div className="max-w-6xl mx-auto px-6 py-12">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                <div>
-                  <h4 className="text-white font-semibold mb-2 flex items-center gap-2">
-                    <span className="w-5 h-5 rounded bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-[10px] text-white">LG</span>
-                    LinkedGenie
-                  </h4>
+          <footer className="border-t border-white/10 bg-black py-16 text-zinc-400">
+            <div className="max-w-6xl mx-auto px-6">
+
+              {/* Main Footer Content */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 text-white font-bold text-xl">
+                    <span className="text-3xl">🧞‍♂️</span> LinkedGenie
+                  </div>
                   <p className="text-sm text-zinc-500 max-w-xs">
-                    The elite AI platform for LinkedIn creators. Generate content, analyze trends, and grow your personal brand.
+                    The ultimate AI-powered platform to grow your LinkedIn presence, generate viral content, and build your digital footprint.
                   </p>
                 </div>
 
-                <div className="w-full md:w-auto">
-                  <h4 className="text-sm font-semibold text-zinc-300 mb-4 uppercase tracking-wider">Popular Industries</h4>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-8 gap-y-3">
-                    {niches.map((niche) => (
-                      <Link
-                        key={niche.slug}
-                        href={`/generator/${niche.slug}`}
-                        className="text-sm text-zinc-500 hover:text-purple-400 transition-colors"
-                      >
-                        {niche.title}
-                      </Link>
-                    ))}
-                  </div>
+                <div>
+                  <h4 className="text-white font-semibold mb-4">Product</h4>
+                  <ul className="space-y-3 text-sm">
+                    <li><a href="/dashboard" className="hover:text-white transition-colors">Dashboard</a></li>
+                    <li><a href="/#features" className="hover:text-white transition-colors">Features</a></li>
+                    <li><a href="/#pricing" className="hover:text-white transition-colors">Pricing</a></li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="text-white font-semibold mb-4">AI Tools</h4>
+                  <ul className="space-y-3 text-sm">
+                    <li><a href="/post-generator" className="hover:text-white transition-colors">Post Generator</a></li>
+                    <li><a href="/profile-optimizer" className="hover:text-white transition-colors">Profile Optimizer</a></li>
+                    <li><a href="/hook-generator" className="hover:text-white transition-colors">Hook Writer</a></li>
+                    <li><a href="/trend-hub" className="hover:text-white transition-colors">Trend Hub</a></li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="text-white font-semibold mb-4">Legal</h4>
+                  <ul className="space-y-3 text-sm">
+                    <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
+                    <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
+                    <li><a href="mailto:support@linkedgenie.com" className="hover:text-white transition-colors">Contact Support</a></li>
+                  </ul>
                 </div>
               </div>
-              <div className="mt-12 pt-8 border-t border-white/5 text-center text-xs text-zinc-600">
+
+              <div className="border-t border-white/10 pt-8" />
+
+              {/* SEO / Popular Niches */}
+              <div className="mb-8">
+                <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-4">Popular Growth Industries</h4>
+                <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs">
+                  {niches.map((niche) => (
+                    <a
+                      key={niche.slug}
+                      href={`/generator/${niche.slug}`}
+                      className="hover:text-purple-400 transition-colors"
+                    >
+                      LinkedIn Posts for {niche.title}
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              <div className="text-xs text-center text-zinc-600">
                 &copy; {new Date().getFullYear()} LinkedGenie. All rights reserved.
               </div>
             </div>

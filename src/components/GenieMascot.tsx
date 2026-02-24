@@ -1,15 +1,15 @@
 'use client';
 
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, MeshDistortMaterial, Environment } from '@react-three/drei';
+import { Float, MeshTransmissionMaterial, Environment, Icosahedron } from '@react-three/drei';
 import { useRef, useState } from 'react';
 import * as THREE from 'three';
 
-function MagicOrb() {
+function MagicCrystal() {
     const meshRef = useRef<THREE.Mesh>(null);
     const [hovered, setHover] = useState(false);
 
-    // Rotate the orb slowly
+    // Rotate the crystal slowly
     useFrame((state, delta) => {
         if (meshRef.current) {
             meshRef.current.rotation.x += delta * 0.2;
@@ -19,46 +19,54 @@ function MagicOrb() {
 
     return (
         <Float
-            speed={2} // Animation speed, defaults to 1
-            rotationIntensity={0.5} // XYZ rotation intensity, defaults to 1
-            floatIntensity={1} // Up/down float intensity, works like a multiplier with floatingRange,defaults to 1
-            floatingRange={[-0.1, 0.1]} // Range of y-axis values the object will float within, defaults to [-0.1,0.1]
+            speed={2}
+            rotationIntensity={0.5}
+            floatIntensity={1.5}
+            floatingRange={[-0.2, 0.2]}
         >
-            <mesh
+            {/* The Outer Glass Crystal */}
+            <Icosahedron
                 ref={meshRef}
+                args={[1.5, 0]} // radius 1.5, detail 0 for low-poly crystal aesthetic
                 onPointerOver={() => setHover(true)}
                 onPointerOut={() => setHover(false)}
                 scale={hovered ? 1.1 : 1}
                 position={[0, 0, 0]}
             >
-                <sphereGeometry args={[1.5, 64, 64]} />
-                <MeshDistortMaterial
-                    color={hovered ? "#ec4899" : "#8b5cf6"} // Pink on hover, Purple default
+                <MeshTransmissionMaterial
                     attach="material"
-                    distort={0.4} // Amount of distortion
-                    speed={2} // Speed of distortion movement
-                    roughness={0.2}
-                    metalness={0.8}
+                    color={hovered ? "#f472b6" : "#c084fc"} // Pinkish/Purple tint
+                    transmission={0.95} // High transmission for glass look
+                    thickness={1.5}     // Refraction thickness
+                    roughness={0.1}     // Slight frosting
+                    ior={1.5}           // Index of refraction equivalent to glass
+                    chromaticAberration={0.05} // Subtle rainbow edges
                 />
+            </Icosahedron>
+
+            {/* Inner Glowing Core */}
+            <mesh scale={hovered ? 0.6 : 0.4} position={[0, 0, 0]}>
+                <sphereGeometry args={[1, 32, 32]} />
+                <meshBasicMaterial color={hovered ? "#ec4899" : "#6366f1"} />
             </mesh>
 
-            {/* Core glowing light inside the orb */}
-            <pointLight position={[0, 0, 0]} intensity={hovered ? 2 : 1.5} color={hovered ? "#f472b6" : "#a78bfa"} distance={4} />
+            {/* Intense Light emitted from the core */}
+            <pointLight position={[0, 0, 0]} intensity={hovered ? 3 : 2} color={hovered ? "#fbcfe8" : "#818cf8"} distance={5} />
         </Float>
     );
 }
 
 export default function GenieMascot() {
     return (
-        <div className="w-full h-[400px] md:h-[500px] relative">
+        <div className="w-full h-[400px] md:h-[500px] relative pointer-events-auto">
             <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
                 <ambientLight intensity={0.5} />
-                <directionalLight position={[10, 10, 10]} intensity={1} />
+                <directionalLight position={[10, 10, 10]} intensity={1.5} />
                 <directionalLight position={[-10, -10, -10]} intensity={0.5} color="#3b82f6" />
 
-                <MagicOrb />
+                <MagicCrystal />
 
-                {/* Pre-baked environment lighting for realistic reflections without heavy computation */}
+                {/* Pre-baked environment lighting is essential for MeshTransmissionMaterial to refract something */}
                 <Environment preset="city" />
             </Canvas>
         </div>
