@@ -46,12 +46,7 @@ export default function RootLayout({
                 <a href="/dashboard" className="text-purple-400 hover:text-purple-300 font-semibold transition-colors">Dashboard</a>
               </nav>
               <div className="flex items-center gap-3">
-                {process.env.CHECKOUT_URL && (
-                  <a href={process.env.CHECKOUT_URL} target="_blank" rel="noopener noreferrer" className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:opacity-90 transition-opacity drop-shadow-sm shadow-orange-500/20 hidden md:block">
-                    Upgrade Pro
-                  </a>
-                )}
-                {/* The compact UserBadge now contains Avatar, Level, and Credits */}
+                {/* The Command Center UserBadge Dropdown */}
                 <UserBadge />
               </div>
             </div>
