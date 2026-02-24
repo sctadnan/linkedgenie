@@ -1,186 +1,211 @@
 'use client';
 
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, MeshTransmissionMaterial, RoundedBox, Environment, Sparkles } from '@react-three/drei';
-import { useRef, Suspense } from 'react';
+import { Float, MeshTransmissionMaterial, RoundedBox, Environment, Sparkles, Text } from '@react-three/drei';
+import { useRef, Suspense, useState, useMemo } from 'react';
 import * as THREE from 'three';
 
-// An animated line that grows from left to right simulating AI typing text
-function AnimatedTypingLine({
-    position,
-    width,
-    color,
-    delay = 0,
-    speed = 1
-}: {
-    position: [number, number, number],
-    width: number,
-    color: string,
-    delay?: number,
-    speed?: number
-}) {
-    const meshRef = useRef<THREE.Mesh>(null);
-    const materialRef = useRef<THREE.MeshBasicMaterial>(null);
+// Real examples of LinkedIn posts to cycle through
+const POSTS = [
+    `🚀 How I scaled my SaaS to $10K MRR in 30 days.
+
+Most founders overcomplicate growth.
+They build features nobody asked for.
+They ignore product-market fit.
+
+Here is my 3-step proven framework:
+
+1. Find a bleeding neck problem.
+2. Build a scrappy MVP in 48 hours.
+3. Cold outreach to 100 ideal targets.
+
+Don't overthink it. Just execute. 💡`,
+
+    `I've reviewed 500+ LinkedIn profiles.
+99% of them make this ONE fatal mistake:
+
+Treating their profile like a resume.
+
+Your profile is a landing page.
+Your headline is the value prop.
+Your about section is the sales copy.
+
+Stop listing daily tasks.
+Start selling real outcomes. 📈`,
+
+    `The algorithm doesn't hate you.
+Your hooks are just weak.
+
+A great post with a bad hook is invisible.
+
+Try this framework tomorrow:
+[Achievement] without [Common Pain]
+
+Example:
+"How I hit 10k followers without 
+posting 5x a day."
+
+Steal this. Watch your metrics explode. 💥`
+];
+
+function TypingText({ position }: { position: [number, number, number] }) {
+    const textRef = useRef<any>(null);
+    const [textIndex, setTextIndex] = useState(0);
+
+    // Using a ref for the index to avoid re-renders in useFrame
+    const currentPost = POSTS[textIndex];
 
     useFrame((state) => {
-        if (!meshRef.current || !materialRef.current) return;
-
         const time = state.clock.getElapsedTime();
-        // A complete cycle of typing (e.g., 5 seconds)
-        const cycleLength = 5;
-        const localTime = (time * speed - delay) % cycleLength;
-        // Ensure positive modulo
-        const cycle = localTime < 0 ? localTime + cycleLength : localTime;
+        const cycleLength = 14; // 14 seconds per post cycle
+        const cycle = time % cycleLength;
 
-        let scaleX = 0;
-        let opacity = 0;
+        const typingDuration = 8; // Takes 8 seconds to type the post completely
+        const holdDuration = 4;   // User reads it for 4 seconds
 
-        if (cycle > 0 && cycle < 2) {
-            // Typing out (growing)
-            const progress = cycle / 2;
-            // cubic ease-out for natural typing burst speed
-            scaleX = 1 - Math.pow(1 - progress, 3);
-            opacity = 0.8;
-        } else if (cycle >= 2 && cycle < 4) {
-            // Hold the filled line
-            scaleX = 1;
-            opacity = 0.8;
+        let charsToShow = 0;
+        let showCursor = false;
+        let opacity = 1;
+
+        if (cycle < typingDuration) {
+            // Typing phase: ease the speed slightly, but mostly linear
+            const progress = cycle / typingDuration;
+            charsToShow = Math.floor(progress * currentPost.length);
+            showCursor = true;
+        } else if (cycle < typingDuration + holdDuration) {
+            // Hold phase (fully typed)
+            charsToShow = currentPost.length;
+            // Blink cursor twice a second
+            showCursor = Math.floor(time * 2) % 2 === 0;
         } else {
-            // Fade out / Reset state
-            scaleX = 0.01;
-            opacity = 0;
+            // Fade out phase
+            charsToShow = currentPost.length;
+            const fadeProgress = (cycle - (typingDuration + holdDuration)) / 2; // 2 seconds to fade out
+            opacity = Math.max(0, 1 - fadeProgress);
+            showCursor = false;
+
+            // Switch to next text precisely when fully invisible to avoid flash
+            if (fadeProgress > 0.95 && fadeProgress < 1.0) {
+                // Determine next index safely
+                const nextIdx = Math.floor((time / cycleLength) + 1) % POSTS.length;
+                if (textIndex !== nextIdx) {
+                    setTextIndex(nextIdx);
+                }
+            }
         }
 
-        const currentWidth = Math.max(0.01, width * scaleX);
-        meshRef.current.scale.x = currentWidth;
-
-        // Critical: To make it grow from the left, we must shift the X position
-        // half the amount it grew from the center constraint.
-        const leftOriginX = position[0] - (width / 2);
-        meshRef.current.position.x = leftOriginX + (currentWidth / 2);
-
-        materialRef.current.opacity = opacity;
+        if (textRef.current) {
+            // Add the block cursor at the end
+            textRef.current.text = currentPost.substring(0, charsToShow) + (showCursor ? "█" : "");
+            textRef.current.fillOpacity = opacity;
+        }
     });
 
     return (
-        <mesh position={position} ref={meshRef}>
-            {/* Using BoxGeometry so scaling X doesn't warp rounded corners as badly as capsules */}
-            <boxGeometry args={[1, 0.08, 0.02]} />
-            <meshBasicMaterial ref={materialRef} color={color} transparent opacity={0.8} />
-        </mesh>
+        <Text
+            ref={textRef}
+            position={position}
+            fontSize={0.11}
+            maxWidth={2.2}
+            lineHeight={1.4}
+            font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZJhjp-Ek-_EeA.woff"
+            color="#cbd5e1" // Slate-300 for premium readability on frosted glass
+            anchorX="left"
+            anchorY="top"
+        >
+            {/* Initial empty state before useFrame takes over */}
+            {""}
+        </Text>
     );
 }
 
-function AppleGlassWidget() {
+function AIContentGlassWidget() {
     const cardRef = useRef<THREE.Group>(null);
-    const siriOrbRef = useRef<THREE.Mesh>(null);
+    const aiCoreRef = useRef<THREE.Mesh>(null);
 
     useFrame((state) => {
-        // Subtle Parallax tilt based on mouse pointer
+        // High-end smooth Parallax tilt
         if (cardRef.current) {
-            const targetX = (state.pointer.y * Math.PI) / 8;
-            const targetY = (state.pointer.x * Math.PI) / 6;
+            const targetX = (state.pointer.y * Math.PI) / 10;
+            const targetY = (state.pointer.x * Math.PI) / 8;
             cardRef.current.rotation.x = THREE.MathUtils.lerp(cardRef.current.rotation.x, targetX, 0.05);
             cardRef.current.rotation.y = THREE.MathUtils.lerp(cardRef.current.rotation.y, targetY, 0.05);
         }
 
-        // Rotate and distort the "Apple Intelligence" Siri Orb
-        if (siriOrbRef.current) {
+        // Spin and pulse the AI Generation Core indicator
+        if (aiCoreRef.current) {
             const time = state.clock.getElapsedTime();
-            siriOrbRef.current.rotation.y = time;
-            siriOrbRef.current.rotation.x = time * 0.5;
-            // Scale pulsing
-            const scale = 1 + Math.sin(time * 3) * 0.05;
-            siriOrbRef.current.scale.set(scale, scale, scale);
+            aiCoreRef.current.rotation.y = time;
+            aiCoreRef.current.rotation.x = time * 0.5;
+
+            // Pulse scale to sync with generation
+            const scale = 1 + Math.sin(time * 5) * 0.05;
+            aiCoreRef.current.scale.set(scale, scale, scale);
         }
     });
 
     return (
         <group ref={cardRef}>
             <Float
-                speed={2}
+                speed={1.5}
                 rotationIntensity={0.1}
-                floatIntensity={0.5}
+                floatIntensity={0.3}
             >
-                {/* 1. The Main iOS Frosted Glass Panel */}
-                {/* Generous radius for that iPhone app widget look */}
-                <RoundedBox args={[3.2, 4.2, 0.1]} radius={0.4} smoothness={16} position={[0, 0, 0]}>
+                {/* 1. iOS Frosted Glass Panel Container */}
+                <RoundedBox args={[2.8, 3.8, 0.1]} radius={0.3} smoothness={16} position={[0, 0, 0]}>
                     <MeshTransmissionMaterial
                         backside
-                        samples={16} // High quality glass
-                        thickness={0.2} // Thin, elegant glass pane
-                        roughness={0.25} // Frosted look (Sandblasted glass)
+                        samples={8}
+                        thickness={0.5} // Liquid volume look
+                        roughness={0.25} // Ultra frosted
                         transmission={1}
-                        ior={1.3} // Standard glass IOR
-                        clearcoat={1} // Glossy surface layer like an iPhone screen
+                        ior={1.3}
+                        clearcoat={1} // Glossy outer layer
                         clearcoatRoughness={0.1}
-                        color="#ffffff" // Crisp white frost
+                        color="#ffffff"
                     />
                 </RoundedBox>
 
-                {/* 2. Inner UI Elements (Foreground of the Glass) */}
+                {/* 2. UI Content Layer on top of the glass */}
                 <group position={[0, 0, 0.1]}>
 
-                    {/* The "Apple Intelligence" glowing liquid orb (Top Left) */}
-                    <mesh position={[-0.8, 1.3, 0.1]} ref={siriOrbRef}>
-                        <icosahedronGeometry args={[0.3, 16]} />
-                        <MeshTransmissionMaterial
-                            color="#c084fc"
-                            transmission={1}
-                            roughness={0}
-                            ior={2}
-                            thickness={1}
-                            distortion={0.5}
-                            temporalDistortion={0.5} // Liquid blob effect
-                            clearcoat={1}
-                        />
-                        {/* Inner glowing core for the orb */}
-                        <mesh scale={0.6}>
-                            <sphereGeometry args={[0.3, 16, 16]} />
-                            <meshBasicMaterial color="#ec4899" />
-                        </mesh>
+                    {/* Header: AI Generation Status Core */}
+                    <mesh position={[-1.1, 1.55, 0.05]} ref={aiCoreRef}>
+                        <icosahedronGeometry args={[0.12, 1]} />
+                        <meshStandardMaterial color="#c084fc" wireframe emissive="#c084fc" emissiveIntensity={0.5} />
                     </mesh>
 
-                    {/* Headline Loader (Short, bold) */}
-                    <mesh position={[0.2, 1.3, 0]}>
-                        <boxGeometry args={[1.2, 0.12, 0.02]} />
-                        <meshBasicMaterial color="#cbd5e1" transparent opacity={0.6} />
-                    </mesh>
+                    {/* Header Label */}
+                    <Text
+                        position={[-0.85, 1.55, 0.05]}
+                        fontSize={0.12}
+                        font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZJhjp-Ek-_EeA.woff"
+                        color="#d946ef"
+                        anchorX="left"
+                        anchorY="middle"
+                        fontWeight="bold"
+                    >
+                        LinkedGenie AI Typing...
+                    </Text>
 
                     {/* Divider Line */}
-                    <mesh position={[0, 0.9, 0]}>
-                        <planeGeometry args={[2.6, 0.02]} />
+                    <mesh position={[0, 1.35, 0.05]}>
+                        <planeGeometry args={[2.4, 0.01]} />
                         <meshBasicMaterial color="#e2e8f0" transparent opacity={0.3} />
                     </mesh>
 
-                    {/* AI Generation Typed Lines */}
-                    <AnimatedTypingLine
-                        position={[0, 0.5, 0]} width={2.4} color="#a855f7" delay={0} speed={1.2}
-                    />
-                    <AnimatedTypingLine
-                        position={[-0.2, 0.1, 0]} width={2.0} color="#d946ef" delay={0.6} speed={1.2}
-                    />
-                    <AnimatedTypingLine
-                        position={[0.1, -0.3, 0]} width={2.6} color="#3b82f6" delay={1.2} speed={1.2}
-                    />
-                    <AnimatedTypingLine
-                        position={[-0.5, -0.7, 0]} width={1.4} color="#8b5cf6" delay={1.8} speed={1.2}
-                    />
-
-                    {/* 'Generating...' status pill indicator (Bottom) */}
-                    <RoundedBox args={[1.2, 0.25, 0.02]} radius={0.1} smoothness={4} position={[0, -1.4, 0]}>
-                        <meshBasicMaterial color="#f0abfc" transparent opacity={0.8} />
-                    </RoundedBox>
+                    {/* The Live Literal Text Generation */}
+                    <TypingText position={[-1.2, 1.15, 0.05]} />
                 </group>
 
-                {/* Ambient Apple/Siri colored aura floating around */}
+                {/* Subtly glowing aura specific to this container */}
                 <Sparkles
-                    count={20}
-                    scale={5}
-                    size={6}
-                    speed={0.1}
+                    count={30}
+                    scale={4}
+                    size={3}
+                    speed={0.3}
                     opacity={0.3}
-                    color="#e0e7ff"
+                    color="#fbcfe8" // Light pink/fuchsia specs
                 />
             </Float>
         </group>
@@ -190,19 +215,17 @@ function AppleGlassWidget() {
 export default function GenieMascot() {
     return (
         <div className="w-full h-[400px] md:h-[500px] relative pointer-events-auto">
-            {/* Removed the background gradient to let the Frost Glass blur the site's natural background */}
             <Canvas camera={{ position: [0, 0, 7], fov: 45 }} className="w-full h-full">
                 <Suspense fallback={null}>
-                    <ambientLight intensity={1.5} />
-
-                    {/* Clean white directional lights for that Apple minimalist lighting */}
-                    <directionalLight position={[5, 10, 5]} intensity={3} color="#ffffff" />
-                    <directionalLight position={[-5, -5, 5]} intensity={1} color="#f8fafc" />
+                    <ambientLight intensity={1} />
+                    {/* Soft directional lights to bounce off the glossy clearcoat layer of the frost glass */}
+                    <directionalLight position={[5, 10, 5]} intensity={2} color="#ffffff" />
+                    <directionalLight position={[-5, -5, 5]} intensity={0.5} color="#e2e8f0" />
 
                     {/* HDRI Environment mapping makes the glass material look highly realistic */}
                     <Environment preset="city" />
 
-                    <AppleGlassWidget />
+                    <AIContentGlassWidget />
                 </Suspense>
             </Canvas>
         </div>
