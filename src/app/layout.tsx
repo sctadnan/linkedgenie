@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import UserBadge from "@/components/UserBadge";
-import { GenieCredits } from "@/components/GenieCredits";
 import { niches } from "@/data/niches";
 import Link from "next/link";
 
@@ -36,12 +35,15 @@ export default function RootLayout({
               <span className="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-xs">LG</span>
               LinkedGenie <span className="text-zinc-500 text-sm font-normal">v2</span>
             </a>
-            {/* Main Navigation - Minimalist (SaaS Style) */}
+            {/* Main Navigation - Tool Links Restored */}
             <div className="flex items-center gap-6">
-              <nav className="hidden md:flex items-center gap-6 text-[14px] font-medium text-zinc-400">
-                <a href="/dashboard" className="hover:text-white transition-colors">Dashboard</a>
-                <a href="/#features" className="hover:text-white transition-colors">Features</a>
-                <a href="/#pricing" className="hover:text-white transition-colors">Pricing</a>
+              <nav className="hidden lg:flex items-center gap-5 text-[13px] font-medium text-zinc-400 bg-black/50 border border-white/5 px-4 py-2 rounded-full">
+                <a href="/post-generator" className="hover:text-white transition-colors">Post AI</a>
+                <a href="/profile-optimizer" className="hover:text-white transition-colors">Profile AI</a>
+                <a href="/hook-generator" className="hover:text-white transition-colors">Hook AI</a>
+                <a href="/trend-hub" className="hover:text-white transition-colors">Trends</a>
+                <div className="w-px h-3 bg-white/10 mx-2" />
+                <a href="/dashboard" className="text-purple-400 hover:text-purple-300 font-semibold transition-colors">Dashboard</a>
               </nav>
               <div className="flex items-center gap-3">
                 {process.env.CHECKOUT_URL && (
@@ -49,7 +51,7 @@ export default function RootLayout({
                     Upgrade Pro
                   </a>
                 )}
-                <GenieCredits />
+                {/* The compact UserBadge now contains Avatar, Level, and Credits */}
                 <UserBadge />
               </div>
             </div>
