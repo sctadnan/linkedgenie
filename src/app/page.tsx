@@ -1,4 +1,19 @@
+'use client';
+
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import { Loader2 } from "lucide-react";
+
+// Dynamically import the 3D Mascot to avoid SSR issues and heavy initial bundle loads
+const GenieMascot = dynamic(() => import("@/components/GenieMascot"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[400px] md:h-[500px] flex flex-col items-center justify-center text-purple-500/50">
+      <Loader2 className="w-8 h-8 animate-spin mb-4" />
+      <span className="text-sm font-medium animate-pulse">Summoning AI Magic...</span>
+    </div>
+  )
+});
 
 export default function Home() {
   return (
@@ -9,36 +24,47 @@ export default function Home() {
         <div className="absolute top-[20%] -right-[10%] w-[40%] h-[60%] rounded-full bg-purple-600/20 blur-[120px]" />
       </div>
 
-      <main className="flex-1 w-full max-w-6xl px-6 flex flex-col items-center justify-center text-center pt-32 pb-20">
+      <main className="flex-1 w-full max-w-6xl px-6 pt-32 pb-20 mx-auto">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
 
-        {/* Badge */}
-        <div className="glass rounded-full px-4 py-2 mb-8 inline-flex items-center gap-2 animate-fade-in-up">
-          <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
-          <span className="text-sm font-medium tracking-wide text-zinc-300">New: AI Powered Workflow</span>
-        </div>
+          {/* Left Text Content */}
+          <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
+            {/* Badge */}
+            <div className="glass rounded-full px-4 py-2 mb-8 inline-flex items-center gap-2 animate-fade-in-up">
+              <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+              <span className="text-sm font-medium tracking-wide text-zinc-300">New: Live RSS AI Trends</span>
+            </div>
 
-        {/* Hero Headline */}
-        <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-8 max-w-4xl text-transparent bg-clip-text text-gradient">
-          Optimize Your LinkedIn Presence with AI
-        </h1>
+            {/* Hero Headline */}
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8 max-w-2xl text-transparent bg-clip-text text-gradient">
+              Optimize Your LinkedIn Presence with AI
+            </h1>
 
-        <p className="text-lg md:text-xl text-zinc-400 mb-12 max-w-2xl leading-relaxed">
-          The ultimate platform for generating viral posts, optimizing your profile, and boosting your professional brand visibility.
-        </p>
+            <p className="text-lg md:text-xl text-zinc-400 mb-12 max-w-xl leading-relaxed">
+              The ultimate platform for generating viral posts, predicting trends, and boosting your professional brand visibility.
+            </p>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 items-center">
-          <Link href="/post-generator" className="relative group overflow-hidden rounded-xl bg-white text-black font-semibold px-8 py-4 transition-all hover:scale-105 active:scale-95">
-            <span className="relative z-10 flex items-center gap-2">
-              Start Generating Free
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
-            </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-300 to-purple-300 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          </Link>
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 items-center">
+              <Link href="/post-generator" className="relative group overflow-hidden rounded-xl bg-white text-black font-semibold px-8 py-4 transition-all hover:scale-105 active:scale-95">
+                <span className="relative z-10 flex items-center gap-2">
+                  Start Generating Free
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-300 to-purple-300 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              </Link>
 
-          <Link href="#features" className="glass rounded-xl text-white font-medium px-8 py-4 transition-all hover:bg-white/10 active:scale-95">
-            View Features
-          </Link>
+              <Link href="#features" className="glass rounded-xl text-white font-medium px-8 py-4 transition-all hover:bg-white/10 active:scale-95">
+                View Features
+              </Link>
+            </div>
+          </div>
+
+          {/* Right 3D Content */}
+          <div className="flex-1 w-full max-w-lg lg:max-w-none relative animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+            <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/10 to-blue-500/10 rounded-full blur-[100px] -z-10" />
+            <GenieMascot />
+          </div>
         </div>
 
         {/* Feature Cards Grid */}
