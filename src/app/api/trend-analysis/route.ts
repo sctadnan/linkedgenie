@@ -16,34 +16,40 @@ export async function POST(req: Request) {
         }
     }
 
-    let prompt;
+    let topic;
     try {
         const body = await req.json();
-        prompt = body.prompt;
+        topic = body.topic || body.prompt; // Support both standard and AI SDK payload
     } catch (e) {
         return new Response(JSON.stringify({ error: "Invalid request body" }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    if (!topic) {
+        return new Response(JSON.stringify({ error: "Missing required fields" }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
 
     if (!process.env.OPENAI_API_KEY) {
         return new Response(JSON.stringify({ error: "No OpenAI API key found. Please add OPENAI_API_KEY to your .env file." }), { status: 500, headers: { 'Content-Type': 'application/json' } });
     }
 
-    const systemPrompt = `You are a social media trend analyst specializing in LinkedIn algorithms.
-The user will provide their industry/niche.
-Your goal: Analyze current potential viral concepts for that niche.
-Provide exactly 3 distinct trend concepts they can post about right now.
-For each trend:
-- Give a catchy title.
-- Briefly explain why it works (e.g., "People love contrarian takes on X right now").
-- Provide 1 actionable post idea.
+    const systemPrompt = `You are a top-tier LinkedIn Growth Strategist and Trend Analyst.
+The user will provide a topic, niche, or a live breaking news headline.
 
-Keep it highly structured, engaging, and use bullet points and bold text where appropriate (using standard markdown). Do not write long essays. Be concise and hard-hitting.`;
+Your objective is to:
+1. Explain WHY people are talking about this topic right now.
+2. Provide 3 specific, viral "Angles" a user could take to post about this.
+3. Suggest 3 highly relevant hashtags.
+4. **VELOCITY RULE RECOMMENDATION:** Analyze the "age" or intensity of this trend.
+   - If it feels like "Breaking News" or a fresh, sudden trend: Suggest high-velocity formats like a "Text-only post" or a "Poll" to capture immediate attention.
+   - If it's a mature, ongoing trend (e.g., AI in Healthcare): Suggest deep-dive formats like a "Document/Carousel" or a "Long-form Listicle".
+
+Format the output cleanly with brief headings. No markdown bolding (**). Keep it punchy and actionable.`;
 
     try {
         const result = streamText({
             model: openai('gpt-4o'),
             system: systemPrompt,
-            prompt: `My Niche: ${prompt}`,
+            prompt: `Analyze this trend/topic: ${topic}`,
         });
 
         return result.toTextStreamResponse();

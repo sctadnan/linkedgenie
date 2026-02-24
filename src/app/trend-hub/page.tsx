@@ -1,12 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCompletion } from "@ai-sdk/react";
-import { Loader2, TrendingUp, AlertCircle, Zap, Search } from "lucide-react";
+import { Loader2, TrendingUp, Search, Hash, Copy, Send, ArrowRight, Rss, AlertCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { fetchLiveTrends, TrendItem } from "@/actions/fetch-trends";
 
-export default function TrendHub() {
-    const [niche, setNiche] = useState("");
+export default function TrendHubPage() {
+    const [topic, setTopic] = useState("");
+    const [input, setInput] = useState(""); // This will hold the user's direct input or selected trend title
+    const [liveTrends, setLiveTrends] = useState<TrendItem[]>([]);
+    const [isLoadingTrends, setIsLoadingTrends] = useState(true);
+    const [isSaving, setIsSaving] = useState(false); // Added as per instruction, though not used in provided diff
+
+    useEffect(() => {
+        const loadTrends = async () => {
+            try {
+                const trends = await fetchLiveTrends();
+                setLiveTrends(trends);
+            } catch (err) {
+                console.error("Failed to load live trends", err);
+            } finally {
+                setIsLoadingTrends(false);
+            }
+        };
+        loadTrends();
+    }, []);
 
     const { completion, complete, isLoading, error } = useCompletion({
         api: "/api/trend-analysis",
@@ -15,9 +34,13 @@ export default function TrendHub() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (niche) {
-            complete(niche);
+        if (input || topic) {
+            complete(input || topic); // Use input if available, otherwise use topic
         }
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInput(e.target.value);
     };
 
     const hasResult = completion.length > 0;
@@ -45,35 +68,25 @@ export default function TrendHub() {
             </div>
 
             <div className="w-full max-w-3xl">
-                <form onSubmit={handleSubmit} className="glass rounded-2xl p-2 flex flex-col sm:flex-row gap-2 relative z-10 mb-8">
-                    <div className="relative flex-1">
-                        <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
+                <form onSubmit={handleSubmit} className="relative mt-auto pt-6 pb-20 md:pb-0">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none md:hidden" />
+                    <div className="relative flex items-center gap-2 max-w-lg mx-auto md:w-full">
                         <input
                             type="text"
-                            className="w-full bg-transparent border-none pl-14 pr-6 py-4 text-zinc-200 outline-none placeholder:text-zinc-500"
-                            placeholder="Your Niche (e.g. B2B SaaS, Marketing, AI, Real Estate...)"
-                            value={niche}
-                            onChange={(e) => setNiche(e.target.value)}
-                            required
+                            value={input}
+                            onChange={handleInputChange}
+                            placeholder="Paste a live trend URL or keyword (e.g., GPT-5 release)..."
+                            className="flex-1 bg-zinc-900 border border-white/10 rounded-full px-6 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all placeholder:text-zinc-600 shadow-xl"
+                            disabled={isLoading}
                         />
+                        <button
+                            type="submit"
+                            disabled={isLoading || (!input && !topic)}
+                            className="bg-pink-600 hover:bg-pink-500 text-white rounded-full p-4 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex-shrink-0"
+                        >
+                            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+                        </button>
                     </div>
-                    <button
-                        type="submit"
-                        disabled={isLoading || !niche}
-                        className="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-red-500 text-white font-semibold rounded-xl px-8 py-4 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center min-w-[180px] gap-2"
-                    >
-                        {isLoading ? (
-                            <>
-                                <Loader2 className="w-5 h-5 animate-spin" />
-                                Scanning...
-                            </>
-                        ) : (
-                            <>
-                                <Zap className="w-5 h-5" />
-                                Find Trends
-                            </>
-                        )}
-                    </button>
                 </form>
 
                 {error && (
@@ -113,7 +126,7 @@ export default function TrendHub() {
                                     </div>
                                     <div>
                                         <h2 className="text-xl font-bold">Current Viral Concepts</h2>
-                                        <p className="text-zinc-400 text-sm">For "{niche}"</p>
+                                        <p className="text-zinc-400 text-sm">For "{topic || input}"</p>
                                     </div>
                                 </div>
 
