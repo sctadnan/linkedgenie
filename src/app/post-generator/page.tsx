@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCompletion } from "@ai-sdk/react";
 import { Loader2, Sparkles, Send, Copy, ThumbsUp, MessageSquare, Repeat2, BookmarkPlus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -60,11 +60,21 @@ export default function PostGenerator() {
     const isGenerating = isLoading;
     const hasResult = completion.length > 0;
 
+    // Auto-scroll on mobile when result starts generating
+    useEffect(() => {
+        if (isGenerating || hasResult) {
+            const previewSection = document.getElementById("preview-section");
+            if (previewSection && window.innerWidth < 768) {
+                previewSection.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+    }, [isGenerating, hasResult]);
+
     return (
-        <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row overflow-hidden absolute inset-0">
+        <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row relative">
 
             {/* Left Panel - Controls */}
-            <div className="w-full md:w-5/12 border-r border-white/10 glass p-6 md:p-8 flex flex-col h-full overflow-y-auto">
+            <div className="w-full md:w-5/12 border-b md:border-b-0 md:border-r border-white/10 glass p-6 md:p-8 flex flex-col h-auto md:h-screen md:sticky top-0 overflow-y-auto z-20">
                 <div className="mb-8 flex items-center gap-3 animate-fade-in-up">
                     <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400">
                         <Sparkles className="w-5 h-5" />
@@ -154,7 +164,7 @@ export default function PostGenerator() {
             </div>
 
             {/* Right Panel - Live Preview */}
-            <div className="w-full md:w-7/12 flex flex-col h-[50vh] md:h-full overflow-y-auto relative hidden md:flex items-center justify-start pt-16 pb-32">
+            <div id="preview-section" className="w-full md:w-7/12 flex flex-col relative items-center justify-start pt-12 md:pt-16 pb-32 md:min-h-screen overflow-hidden">
                 {/* Background mesh */}
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay"></div>
                 <div className="absolute -top-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-blue-600/10 blur-[120px] pointer-events-none" />
