@@ -6,15 +6,15 @@ export async function POST(req: Request) {
     const ip = req.headers.get("x-forwarded-for") ?? "127.0.0.1";
 
     // Apply rate limiting if Upstash Redis variables are present
-    // if (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_REST_KV_REST_API_URL) {
-    //     const { success } = await ratelimit.limit(ip);
-    //     if (!success) {
-    //         return new Response(
-    //             JSON.stringify({ error: "Rate limit exceeded. Please try again tomorrow or upgrade." }),
-    //             { status: 429, headers: { 'Content-Type': 'application/json' } }
-    //         );
-    //     }
-    // }
+    if (process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_REST_KV_REST_API_URL) {
+        const { success } = await ratelimit.limit(ip);
+        if (!success) {
+            return new Response(
+                JSON.stringify({ error: "Rate limit exceeded. Please try again tomorrow or upgrade." }),
+                { status: 429, headers: { 'Content-Type': 'application/json' } }
+            );
+        }
+    }
 
     let prompt;
     try {

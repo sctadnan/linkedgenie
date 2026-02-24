@@ -79,7 +79,7 @@ export default function TrendHub() {
                 {error && (
                     <div className="mb-8 bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl flex items-center gap-3">
                         <AlertCircle className="w-5 h-5 flex-shrink-0" />
-                        <p className="text-sm">Failed to fetch trends. Please ensure OPENAI_API_KEY is configured in your .env file.</p>
+                        <p className="text-sm font-medium">{error.message || "Failed to fetch trends."}</p>
                     </div>
                 )}
 

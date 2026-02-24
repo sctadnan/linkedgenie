@@ -80,7 +80,7 @@ export default function ProfileOptimizer() {
                         {error && (
                             <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl flex items-center gap-3 text-sm">
                                 <AlertCircle className="w-5 h-5 flex-shrink-0" />
-                                <p>Failed to analyze profile. Have you set your OPENAI_API_KEY?</p>
+                                <p className="font-medium">{error.message || "Failed to analyze profile."}</p>
                             </div>
                         )}
 
