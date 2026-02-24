@@ -1,7 +1,7 @@
 'use client';
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useRef, useMemo, useEffect } from 'react';
+import { useRef, useMemo, useEffect, Suspense } from 'react';
 import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
@@ -189,7 +189,9 @@ function InteractiveCanvas() {
         >
             <ambientLight intensity={1} />
             <NetworkTopologySetter />
-            <NetworkNodes />
+            <Suspense fallback={null}>
+                <NetworkNodes />
+            </Suspense>
         </Canvas>
     );
 }
