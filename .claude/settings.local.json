@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git push:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)",
+      "Bash(git mv:*)",
+      "WebFetch(domain:linkedgenie.vercel.app)",
+      "Bash(npx sharp-cli:*)",
+      "Bash(git rm:*)"
+    ]
+  }
+}

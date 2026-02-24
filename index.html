@@ -1,0 +1,2951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="61J9yNQcB_uUjvnMenXwYGuUtMkHEDFrsilpOi8HDks">
+<meta name="yandex-verification" content="c84d45e82a3feb50">
+<title>LinkedGenie — AI LinkedIn Content Suite</title>
+<meta name="description" content="Generate LinkedIn posts, optimize your profile, craft connection messages, and reply to comments — all with AI.">
+<meta name="keywords" content="LinkedIn post generator, AI content writer, LinkedIn profile optimizer, LinkedIn messages, social media tool">
+<meta property="og:title" content="LinkedGenie — AI LinkedIn Content Suite">
+<meta property="og:description" content="Generate LinkedIn posts, optimize your profile, craft connection messages, and write comment replies — all powered by AI.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://linkedgenie.co">
+<meta property="og:image" content="https://linkedgenie.co/api/og">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="LinkedGenie">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="es_ES">
+<meta property="og:locale:alternate" content="pt_BR">
+<meta property="og:locale:alternate" content="fr_FR">
+<meta property="og:locale:alternate" content="de_DE">
+<meta property="og:locale:alternate" content="ar_SA">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@LinkedGenie">
+<meta name="twitter:creator" content="@LinkedGenie">
+<meta name="twitter:title" content="LinkedGenie — AI LinkedIn Content Suite">
+<meta name="twitter:description" content="Generate LinkedIn posts, optimize your profile, craft connection messages, and write comment replies — all powered by AI.">
+<meta name="twitter:image" content="https://linkedgenie.co/api/og">
+<meta name="twitter:image:alt" content="LinkedGenie - AI LinkedIn Content Suite">
+<meta name="robots" content="index, follow">
+<meta name="author" content="LinkedGenie">
+<meta name="theme-color" content="#6366f1">
+<link rel="canonical" href="https://linkedgenie.co">
+<link rel="alternate" hreflang="en" href="https://linkedgenie.co">
+<link rel="alternate" hreflang="es" href="https://linkedgenie.co?lang=es">
+<link rel="alternate" hreflang="pt" href="https://linkedgenie.co?lang=pt">
+<link rel="alternate" hreflang="fr" href="https://linkedgenie.co?lang=fr">
+<link rel="alternate" hreflang="de" href="https://linkedgenie.co?lang=de">
+<link rel="alternate" hreflang="ar" href="https://linkedgenie.co?lang=ar">
+<link rel="alternate" hreflang="x-default" href="https://linkedgenie.co">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<script type="application/ld+json">
+[{"@context":"https://schema.org","@type":"SoftwareApplication","name":"LinkedGenie","description":"AI-Powered LinkedIn Content Suite — generate posts, optimize profiles, craft messages, and write replies.","url":"https://linkedgenie.co","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"5.00","priceCurrency":"USD"},"screenshot":"https://linkedgenie.co/api/og","inLanguage":["en","es","pt","fr","de","ar"]},{"@context":"https://schema.org","@type":"Organization","name":"LinkedGenie","url":"https://linkedgenie.co","logo":"https://linkedgenie.co/favicon.svg","sameAs":["https://x.com/LinkedGenie"]}]
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer onload="initGoogleAuth()"></script>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #06080d;
+    --bg2: #0b0f18;
+    --surface: #0f1420;
+    --surface2: #151c2c;
+    --surface3: #1a2236;
+    --border: #1e2a3f;
+    --border-light: #2a3a55;
+    --accent: #6366f1;
+    --accent2: #818cf8;
+    --accent-glow: rgba(99, 102, 241, 0.12);
+    --accent-glow2: rgba(99, 102, 241, 0.06);
+    --green: #34d399;
+    --green-dim: rgba(52, 211, 153, 0.1);
+    --orange: #fbbf24;
+    --orange-dim: rgba(251, 191, 36, 0.1);
+    --red: #f87171;
+    --text: #e8ecf4;
+    --text2: #c1c9d9;
+    --text-dim: #8694ad;
+    --text-muted: #5a6a84;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* === BACKGROUND === */
+  .bg-grid {
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+  .bg-glow {
+    position: fixed; top: -200px; left: 50%; transform: translateX(-50%);
+    width: 800px; height: 600px;
+    background: radial-gradient(ellipse, rgba(99,102,241,0.08) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+  .bg-glow2 {
+    position: fixed; bottom: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(ellipse, rgba(52,211,153,0.04) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* === LAYOUT === */
+  .container { max-width: 720px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+  /* === NAVBAR === */
+  .navbar {
+    padding: 16px 0;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), #a855f7);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 2px 16px rgba(99,102,241,0.25);
+  }
+  .nav-name {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px; font-weight: 400;
+    color: var(--text);
+  }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .onboard-tip {
+    position: relative;
+    margin-bottom: 8px; padding: 10px 14px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(168,85,247,0.12));
+    border: 1px solid rgba(99,102,241,0.3);
+    border-radius: 10px;
+    font-size: 13px; color: var(--text); line-height: 1.5;
+    animation: pulse-tip 2s ease-in-out infinite;
+  }
+  .onboard-tip .tip-close {
+    position: absolute; top: 6px; right: 8px;
+    background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px;
+  }
+  @keyframes pulse-tip { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+  .streak-badge {
+    padding: 4px 10px; border-radius: 100px;
+    background: linear-gradient(135deg, rgba(249,115,22,0.15), rgba(234,179,8,0.15));
+    border: 1px solid rgba(249,115,22,0.3);
+    font-size: 12px; font-weight: 600; color: #f59e0b;
+    cursor: default;
+  }
+  .usage-pill {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 12px; font-weight: 500;
+    color: var(--text-dim);
+  }
+  .usage-indicator {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px rgba(52,211,153,0.5);
+  }
+  .usage-indicator.warn { background: var(--orange); box-shadow: 0 0 8px rgba(251,191,36,0.5); }
+  .usage-indicator.out { background: var(--red); box-shadow: 0 0 8px rgba(248,113,113,0.5); }
+  .settings-btn {
+    width: 36px; height: 36px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-dim);
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .settings-btn:hover { border-color: var(--accent); color: var(--text); }
+
+  /* === AUTH === */
+  .auth-area { display: flex; align-items: center; gap: 10px; }
+  .user-info {
+    display: flex; align-items: center; gap: 8px;
+    padding: 4px 12px 4px 4px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .user-info:hover { border-color: var(--border-light); }
+  .user-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+  .user-name { font-size: 12px; font-weight: 500; color: var(--text2); }
+  .signout-btn {
+    padding: 6px 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .signout-btn:hover { border-color: var(--red); color: var(--red); }
+  .pro-badge {
+    padding: 2px 8px;
+    background: linear-gradient(135deg, var(--orange), #f97316);
+    border-radius: 100px;
+    font-size: 10px; font-weight: 700;
+    color: #1a1a1a;
+  }
+  .free-badge {
+    padding: 2px 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 10px; font-weight: 700;
+    color: var(--text-dim);
+  }
+
+  /* === ACCOUNT DROPDOWN === */
+  .account-dropdown-wrapper { position: relative; }
+  .account-avatar-btn {
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 2px solid var(--border); cursor: pointer;
+    transition: border-color 0.2s; object-fit: cover;
+  }
+  .account-avatar-btn:hover { border-color: var(--accent); }
+  .account-dropdown {
+    position: absolute; top: calc(100% + 8px); right: 0;
+    width: 280px; background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    z-index: 50; padding: 0;
+    opacity: 0; visibility: hidden;
+    transform: translateY(-8px);
+    transition: all 0.2s ease;
+  }
+  .account-dropdown.open {
+    opacity: 1; visibility: visible;
+    transform: translateY(0);
+  }
+  .dropdown-header {
+    padding: 16px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .dropdown-avatar {
+    width: 40px; height: 40px; border-radius: 50%; object-fit: cover;
+  }
+  .dropdown-user-info { flex: 1; min-width: 0; }
+  .dropdown-name {
+    font-size: 14px; font-weight: 600; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .dropdown-email {
+    font-size: 11px; color: var(--text-muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .dropdown-plan-box {
+    margin: 12px 16px; padding: 12px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .dropdown-plan-box.pro {
+    background: linear-gradient(135deg, rgba(249,115,22,0.1), rgba(234,179,8,0.1));
+    border-color: rgba(249,115,22,0.3);
+  }
+  .dropdown-plan-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .dropdown-plan-row:last-child { margin-bottom: 0; }
+  .dropdown-plan-label {
+    font-size: 12px; font-weight: 600; color: var(--text);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .dropdown-plan-value {
+    font-size: 11px; color: var(--text-dim);
+  }
+  .dropdown-plan-days {
+    font-size: 11px; color: var(--accent2); font-weight: 500;
+  }
+  .dropdown-usage-bar {
+    height: 4px; background: var(--surface); border-radius: 4px;
+    margin-top: 8px; overflow: hidden;
+  }
+  .dropdown-usage-fill {
+    height: 100%; border-radius: 4px;
+    background: var(--green); transition: width 0.3s;
+  }
+  .dropdown-usage-fill.warn { background: var(--orange); }
+  .dropdown-usage-fill.out { background: var(--red); }
+  .dropdown-upgrade-btn {
+    display: block; width: 100%; margin-top: 8px;
+    padding: 8px; border: none; border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent), #a855f7);
+    color: #fff; font-family: 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+    transition: opacity 0.2s; text-align: center;
+  }
+  .dropdown-upgrade-btn:hover { opacity: 0.9; }
+  .dropdown-menu { padding: 6px 0; }
+  .dropdown-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 16px; cursor: pointer;
+    font-size: 13px; color: var(--text2);
+    transition: background 0.15s;
+  }
+  .dropdown-item:hover { background: var(--surface2); }
+  .dropdown-item-icon { font-size: 15px; width: 20px; text-align: center; }
+  .dropdown-divider {
+    height: 1px; background: var(--border); margin: 4px 0;
+  }
+  .dropdown-signout {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 16px; cursor: pointer; width: 100%;
+    font-size: 13px; color: var(--text-muted); border: none;
+    background: none; font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+  .dropdown-signout:hover { background: var(--surface2); color: var(--red); }
+
+  /* === HERO === */
+  .hero { text-align: center; padding: 40px 0 24px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 16px;
+    background: var(--accent-glow);
+    border: 1px solid rgba(99,102,241,0.15);
+    border-radius: 100px;
+    font-size: 12px; font-weight: 500;
+    color: var(--accent2);
+    margin-bottom: 16px;
+  }
+  .hero-badge-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent2); }
+  .hero h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 400; line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    background: linear-gradient(135deg, var(--accent2), #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero p { font-size: 15px; line-height: 1.6; color: var(--text-dim); max-width: 460px; margin: 0 auto; }
+
+  /* === MAIN TABS === */
+  .tabs-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px;
+  }
+  .main-tabs {
+    flex: 1;
+    display: flex; gap: 4px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 4px;
+  }
+  .global-lang {
+    padding: 8px 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%2399a' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 24px;
+  }
+  .global-lang:hover { border-color: var(--border-light); color: var(--text); }
+  .global-lang:focus { border-color: var(--accent); outline: none; }
+
+  .usage-pill.pro {
+    background: linear-gradient(135deg, rgba(249,115,22,0.15), rgba(234,179,8,0.15));
+    border-color: rgba(249,115,22,0.4);
+    color: #f59e0b;
+  }
+  .usage-pill .upgrade-link {
+    color: var(--accent); text-decoration: none; font-weight: 600; cursor: pointer; margin-left: 4px;
+  }
+  .usage-pill .upgrade-link:hover { text-decoration: underline; }
+
+  .main-tab {
+    flex: 1; padding: 10px 8px;
+    background: transparent;
+    border: none; border-radius: 10px;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    text-align: center;
+  }
+  .main-tab:hover { color: var(--text-dim); background: var(--surface2); }
+  .main-tab.active {
+    color: var(--text);
+    background: var(--accent-glow);
+    border: 1px solid rgba(99,102,241,0.2);
+  }
+  @media (max-width: 520px) { .main-tab { font-size: 12px; padding: 8px 4px; } }
+  @media (max-width: 520px) {
+    .account-dropdown { width: calc(100vw - 32px); right: -8px; }
+    .nav-name { display: none; }
+  }
+
+  /* === GENERATOR CARD === */
+  .gen-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* === SUB TABS === */
+  .sub-tabs {
+    display: flex; gap: 4px;
+    margin-bottom: 18px;
+    background: var(--bg2);
+    border-radius: 10px;
+    padding: 3px;
+  }
+  .sub-tab {
+    padding: 7px 16px;
+    background: transparent;
+    border: none; border-radius: 8px;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .sub-tab:hover { color: var(--text-dim); }
+  .sub-tab.active { color: var(--accent2); background: var(--surface2); }
+  .sub-tab .pro-lock { font-size: 10px; margin-left: 4px; }
+
+  /* === FORM ELEMENTS === */
+  .field-label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 600;
+    color: var(--text2);
+    margin-bottom: 8px;
+  }
+  .field-label-icon { font-size: 15px; }
+
+  .idea-textarea, .form-input {
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; line-height: 1.6;
+    outline: none;
+    transition: all 0.25s;
+  }
+  .idea-textarea { height: 100px; resize: vertical; }
+  .idea-textarea.large { height: 180px; }
+  .idea-textarea:focus, .form-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+  .idea-textarea::placeholder, .form-input::placeholder { color: var(--text-muted); }
+
+  .textarea-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 6px; margin-bottom: 16px;
+  }
+  .char-info { font-size: 11px; color: var(--text-muted); }
+
+  .form-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 520px) { .form-row { grid-template-columns: 1fr; } }
+  .form-group { margin-bottom: 16px; }
+  .form-group:last-child { margin-bottom: 0; }
+
+  /* === STYLE CARDS === */
+  .styles-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 520px) { .styles-grid { grid-template-columns: repeat(2, 1fr); } }
+  .style-card {
+    padding: 12px 6px;
+    background: var(--bg2);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer; transition: all 0.25s;
+    text-align: center; user-select: none;
+    position: relative;
+  }
+  .style-card:hover { border-color: var(--border-light); background: var(--surface2); }
+  .style-card.active {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+    box-shadow: 0 0 0 3px var(--accent-glow2);
+  }
+  .style-card.pro-only { opacity: 0.6; }
+  .style-card.pro-only::after {
+    content: 'PRO';
+    position: absolute; top: 4px; right: 4px;
+    padding: 1px 5px; border-radius: 4px;
+    background: var(--orange); color: #1a1a1a;
+    font-size: 8px; font-weight: 700;
+  }
+  .style-icon { font-size: 20px; margin-bottom: 4px; }
+  .style-title { font-size: 11px; font-weight: 600; color: var(--text); }
+  .style-sub { font-size: 9px; color: var(--text-muted); margin-top: 2px; }
+
+  /* === OPTIONS === */
+  .options-row { display: flex; gap: 6px; margin-bottom: 16px; }
+  .opt-btn {
+    flex: 1; padding: 8px;
+    background: var(--bg2);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 500;
+    cursor: pointer; transition: all 0.2s;
+    text-align: center;
+  }
+  .opt-btn:hover { border-color: var(--border-light); }
+  .opt-btn.active { border-color: var(--accent); background: var(--accent-glow); color: var(--text); }
+
+  .tone-row { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+  .tone-chip {
+    padding: 5px 12px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 12px; font-weight: 500;
+    color: var(--text-dim);
+    cursor: pointer; transition: all 0.2s;
+    user-select: none;
+  }
+  .tone-chip:hover { border-color: var(--border-light); }
+  .tone-chip.active { border-color: var(--accent); background: var(--accent-glow); color: var(--accent2); }
+
+  /* === GENERATE BUTTON === */
+  .gen-btn {
+    width: 100%; padding: 13px;
+    background: linear-gradient(135deg, var(--accent), #8b5cf6);
+    border: none; border-radius: 12px;
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: all 0.3s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    position: relative; overflow: hidden;
+  }
+  .gen-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(99,102,241,0.35); }
+  .gen-btn:active { transform: translateY(0); }
+  .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+  .gen-btn .shimmer {
+    position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    animation: shimmer 2.5s infinite;
+  }
+  @keyframes shimmer { 100% { left: 100%; } }
+  .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* === OUTPUT === */
+  .output-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .output-card.visible { display: block; animation: slideUp 0.4s ease; }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .output-top {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px; flex-wrap: wrap; gap: 8px;
+  }
+  .output-badge {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 600; color: var(--green);
+  }
+  .output-badge-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px rgba(52,211,153,0.4); }
+  .output-actions { display: flex; gap: 6px; }
+  .act-btn {
+    padding: 6px 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 500;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .act-btn:hover { border-color: var(--accent); color: var(--text); }
+  .act-btn.copied { border-color: var(--green); color: var(--green); background: var(--green-dim); }
+  .output-text {
+    padding: 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px; line-height: 1.8;
+    color: var(--text2);
+    white-space: pre-wrap;
+    max-height: 360px;
+    overflow-y: auto;
+  }
+  .output-text::-webkit-scrollbar { width: 4px; }
+  .output-text::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  .output-stats {
+    display: flex; gap: 16px; margin-top: 10px;
+    padding: 8px 14px;
+    background: var(--surface2);
+    border-radius: 8px; flex-wrap: wrap;
+  }
+  .stat-item { font-size: 11px; color: var(--text-muted); }
+  .stat-item b { color: var(--text-dim); font-weight: 600; }
+
+  /* === HOOKS OUTPUT === */
+  .hooks-output { display: none; }
+  .hooks-output.visible { display: block; animation: slideUp 0.4s ease; }
+  .hook-card {
+    padding: 14px 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+  }
+  .hook-text { font-size: 14px; line-height: 1.6; color: var(--text2); flex: 1; white-space: pre-wrap; }
+  .hook-actions { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+  .hook-btn {
+    padding: 5px 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px; font-weight: 500;
+    cursor: pointer; transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .hook-btn:hover { border-color: var(--accent); color: var(--text); }
+  .hook-btn-write { background: var(--accent-glow); border-color: var(--accent); color: var(--accent); }
+  .hook-btn-write:hover { background: var(--accent); color: #fff; }
+
+  /* === MULTI OUTPUT (Profile headlines, Reply options) === */
+  .multi-output { display: none; }
+  .multi-output.visible { display: block; animation: slideUp 0.4s ease; }
+  .multi-card {
+    padding: 14px 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    position: relative;
+  }
+  .multi-card-text { font-size: 14px; line-height: 1.7; color: var(--text2); white-space: pre-wrap; margin-bottom: 8px; }
+  .multi-card-actions { display: flex; gap: 6px; }
+
+  /* === PAYWALL === */
+  .paywall-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 24px;
+    text-align: center;
+    display: none;
+  }
+  .paywall-card.visible { display: block; animation: slideUp 0.4s ease; }
+  .paywall-icon { font-size: 48px; margin-bottom: 14px; }
+  .paywall-title { font-family: 'Instrument Serif', serif; font-size: 24px; margin-bottom: 8px; }
+  .paywall-desc { font-size: 14px; color: var(--text-dim); line-height: 1.6; margin-bottom: 20px; }
+  .upgrade-btn {
+    width: 100%; padding: 13px;
+    background: linear-gradient(135deg, var(--orange), #f97316);
+    border: none; border-radius: 12px;
+    color: #1a1a1a; font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: all 0.3s;
+    margin-bottom: 8px;
+  }
+  .upgrade-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(251,191,36,0.3); }
+  .paywall-price { font-size: 12px; color: var(--text-muted); }
+
+  /* === DEMO BANNER === */
+  .demo-banner {
+    display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px;
+    padding: 10px 16px; margin-bottom: 12px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(168,85,247,0.1));
+    border: 1px solid rgba(99,102,241,0.25);
+    border-radius: 12px;
+    font-size: 13px; color: var(--text-dim);
+  }
+
+  /* === MODAL === */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.visible { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    width: 100%; max-width: 440px;
+    animation: slideUp 0.3s ease;
+  }
+  .modal-title { font-family: 'Instrument Serif', serif; font-size: 22px; margin-bottom: 6px; }
+  .modal-desc { font-size: 13px; color: var(--text-dim); margin-bottom: 16px; line-height: 1.5; }
+  .modal-actions { display: flex; gap: 8px; margin-top: 16px; }
+  .modal-btn {
+    flex: 1; padding: 10px;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .modal-btn-secondary { background: var(--surface2); border: 1px solid var(--border); color: var(--text-dim); }
+  .modal-btn-secondary:hover { border-color: var(--border-light); color: var(--text); }
+  .modal-btn-primary { background: var(--accent); border: none; color: white; }
+  .modal-btn-primary:hover { background: var(--accent2); }
+
+  /* === FEATURES === */
+  .features {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 10px; margin: 28px 0 36px;
+  }
+  @media (max-width: 520px) { .features { grid-template-columns: 1fr; } }
+  .feature-card {
+    padding: 18px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    text-align: center; transition: all 0.3s;
+  }
+  .feature-card:hover { border-color: var(--border-light); transform: translateY(-2px); }
+  .feature-icon { font-size: 22px; margin-bottom: 6px; }
+  .feature-title { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .feature-desc { font-size: 10px; color: var(--text-muted); line-height: 1.4; }
+
+  /* === FOOTER === */
+  .footer {
+    padding: 20px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 12px; color: var(--text-muted);
+    margin-top: 16px;
+  }
+  .footer a { color: var(--accent2); text-decoration: none; }
+
+  /* === NEWSLETTER === */
+  .newsletter {
+    margin-top: 24px; padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    text-align: center;
+  }
+  .newsletter h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .newsletter p { font-size: 12px; color: var(--text-dim); margin-bottom: 12px; }
+  .newsletter-form { display: flex; gap: 8px; max-width: 400px; margin: 0 auto; }
+  .newsletter-form input {
+    flex: 1; padding: 8px 12px;
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text); font-size: 13px; outline: none;
+  }
+  .newsletter-form input:focus { border-color: var(--accent); }
+  .newsletter-form button {
+    padding: 8px 16px;
+    background: var(--accent); color: #fff; border: none; border-radius: 8px;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: opacity .15s;
+  }
+  .newsletter-form button:hover { opacity: .85; }
+  .newsletter-success { color: var(--green); font-size: 13px; font-weight: 500; }
+
+  /* === GROWTH BADGE === */
+  .growth-overlay {
+    display: none; position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0,0,0,.7); backdrop-filter: blur(4px);
+    align-items: center; justify-content: center;
+  }
+  .growth-overlay.visible { display: flex; }
+  .growth-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+    padding: 32px; text-align: center; max-width: 340px; width: 90%;
+    animation: modalIn .3s ease;
+  }
+  .growth-card .badge-icon { font-size: 48px; margin-bottom: 12px; }
+  .growth-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .growth-card p { font-size: 13px; color: var(--text-dim); margin-bottom: 16px; }
+  .growth-card .badge-count { font-size: 28px; font-weight: 800; color: var(--accent2); }
+  .growth-share-btns {
+    display: flex; gap: 8px; justify-content: center; margin-top: 12px;
+  }
+  .growth-share-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 16px;
+    color: #fff; border: none; border-radius: 10px;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: opacity .15s;
+  }
+  .growth-share-btn.li { background: #0A66C2; }
+  .growth-share-btn.tw { background: #000; }
+  .growth-share-btn:hover { opacity: .85; }
+  .growth-dismiss {
+    display: block; margin-top: 10px; background: none; border: none;
+    color: var(--text-muted); font-size: 12px; cursor: pointer;
+  }
+
+  /* === KEYBOARD HINT === */
+  .kb-hint {
+    font-size: 10px; color: var(--text-muted);
+    text-align: center; margin-top: 8px;
+  }
+  .kb-hint kbd {
+    padding: 1px 5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+  }
+
+  /* === RTL SUPPORT === */
+  [dir="rtl"] { direction: rtl; text-align: right; }
+  [dir="rtl"] .navbar { flex-direction: row-reverse; }
+  [dir="rtl"] .nav-logo { flex-direction: row-reverse; }
+  [dir="rtl"] .nav-right { flex-direction: row-reverse; }
+  [dir="rtl"] .tabs-row { flex-direction: row-reverse; }
+  [dir="rtl"] .main-tabs { flex-direction: row-reverse; }
+  [dir="rtl"] .sub-tabs { flex-direction: row-reverse; }
+  [dir="rtl"] .tone-row { flex-direction: row-reverse; }
+  [dir="rtl"] .styles-grid { direction: rtl; }
+  [dir="rtl"] .form-row { flex-direction: row-reverse; }
+  [dir="rtl"] .output-top { flex-direction: row-reverse; }
+  [dir="rtl"] .output-actions { flex-direction: row-reverse; }
+  [dir="rtl"] .output-stats { flex-direction: row-reverse; }
+  [dir="rtl"] .modal-actions { flex-direction: row-reverse; }
+  [dir="rtl"] .features { direction: rtl; }
+  [dir="rtl"] .global-lang {
+    background-position: left 8px center;
+    padding-right: 10px; padding-left: 24px;
+  }
+  [dir="rtl"] .textarea-footer { flex-direction: row-reverse; }
+  [dir="rtl"] .hero { text-align: center; }
+  [dir="rtl"] .usage-pill .upgrade-link { margin-left: 0; margin-right: 4px; }
+  [dir="rtl"] .account-dropdown { right: auto; left: 0; }
+  [dir="rtl"] .dropdown-header { flex-direction: row-reverse; text-align: right; }
+  [dir="rtl"] .dropdown-plan-row { flex-direction: row-reverse; }
+  [dir="rtl"] .dropdown-item { flex-direction: row-reverse; text-align: right; }
+  [dir="rtl"] .dropdown-signout { flex-direction: row-reverse; text-align: right; }
+
+  /* === HISTORY === */
+  .history-btn {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 6px 10px; cursor: pointer; font-size: 14px; transition: all 0.2s;
+    color: var(--text-dim);
+  }
+  .history-btn:hover { border-color: var(--accent); color: var(--text); }
+  .history-list { max-height: 400px; overflow-y: auto; }
+  .history-item {
+    padding: 12px; background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s;
+  }
+  .history-item:hover { border-color: var(--accent); }
+  .history-item-text {
+    font-size: 13px; color: var(--text2); line-height: 1.5;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .history-item-meta {
+    font-size: 10px; color: var(--text-muted); margin-top: 4px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .history-item-copy {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 4px;
+    padding: 2px 8px; font-size: 10px; color: var(--text-dim); cursor: pointer;
+  }
+  .history-item-copy:hover { border-color: var(--accent); color: var(--text); }
+  .history-item-delete {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 4px;
+    padding: 2px 8px; font-size: 10px; color: var(--red, #ef4444); cursor: pointer;
+  }
+  .history-item-delete:hover { border-color: var(--red, #ef4444); background: rgba(239,68,68,0.1); }
+  .history-item-actions { display: flex; gap: 4px; }
+  .history-clear-btn {
+    background: transparent; border: 1px solid var(--red, #ef4444); border-radius: 8px;
+    padding: 8px 16px; font-size: 13px; color: var(--red, #ef4444); cursor: pointer; font-weight: 600;
+  }
+  .history-clear-btn:hover { background: rgba(239,68,68,0.1); }
+  .history-empty { text-align: center; padding: 30px; color: var(--text-muted); font-size: 13px; }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+<div class="bg-glow2"></div>
+
+<div class="container">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="#" class="nav-logo">
+      <div class="nav-icon">✨</div>
+      <span class="nav-name">LinkedGenie</span>
+    </a>
+    <div class="nav-right">
+      <select class="global-lang" id="globalLang" onchange="pickLang(this.value)">
+        <option value="english">🌐 EN</option>
+        <option value="spanish">🌐 ES</option>
+        <option value="portuguese">🌐 PT</option>
+        <option value="french">🌐 FR</option>
+        <option value="german">🌐 DE</option>
+        <option value="arabic">🌐 AR</option>
+      </select>
+      <div class="auth-area" id="authArea">
+        <div id="googleBtnNav"></div>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      <span id="heroBadgeText">AI-Powered LinkedIn Content Suite</span>
+    </div>
+    <h1 id="heroTitleText">Your complete toolkit for <em>LinkedIn content</em></h1>
+    <p id="heroDescText">Generate posts, optimize your profile, craft messages, and write replies — all with AI.</p>
+  </section>
+
+  <!-- Login Banner (shown when not signed in) -->
+  <div class="demo-banner" id="loginPromptCard">
+    <span id="loginPromptText">Sign in with Google for 3 free generations per day</span>
+    <div id="googleBtnMain" style="display:inline-block;margin-left:12px;"></div>
+  </div>
+
+  <!-- App (always visible) -->
+  <div id="appContent">
+
+    <!-- Main Tabs + Global Language -->
+    <div class="tabs-row">
+      <div class="main-tabs">
+        <button class="main-tab active" data-tab="post" onclick="switchTab('post')">✍️ Post</button>
+        <button class="main-tab" data-tab="profile" onclick="switchTab('profile')">👤 Profile</button>
+        <button class="main-tab" data-tab="message" onclick="switchTab('message')">📩 Message</button>
+        <button class="main-tab" data-tab="reply" onclick="switchTab('reply')">💬 Reply</button>
+      </div>
+    </div>
+
+
+    <!-- ==================== TAB: POST ==================== -->
+    <div class="gen-card">
+      <div class="tab-content active" id="tabPost">
+        <!-- Sub tabs -->
+        <div class="sub-tabs">
+          <button class="sub-tab active" onclick="switchPostMode('write')">✍️ Write</button>
+          <button class="sub-tab" onclick="switchPostMode('rewrite')">🔄 Rewrite</button>
+          <button class="sub-tab" onclick="switchPostMode('hooks')">🎣 Hooks</button>
+        </div>
+
+        <!-- Onboarding tip (first visit only) -->
+        <div class="onboard-tip" id="onboardTip" style="display:none;">
+          <span id="onboardText">Start here — type your idea and we'll turn it into a professional LinkedIn post</span>
+          <button class="tip-close" onclick="dismissOnboard()">✕</button>
+        </div>
+
+        <!-- Write mode input -->
+        <div id="postWriteInput">
+          <div class="field-label" id="labelIdea"><span class="field-label-icon">💡</span> Your idea or topic</div>
+          <textarea class="idea-textarea" id="ideaInput" placeholder="e.g. Why I turned down a $200K offer to stay at my startup...&#10;e.g. 5 mistakes I made as a first-time manager&#10;e.g. How AI is changing the hiring process" maxlength="500"></textarea>
+          <div class="textarea-footer">
+            <span class="char-info" id="hintIdea">Be specific for better results</span>
+            <span class="char-info"><span id="charCount">0</span>/500</span>
+          </div>
+        </div>
+
+        <!-- Rewrite mode input -->
+        <div id="postRewriteInput" style="display:none;">
+          <div class="field-label" id="labelRewrite"><span class="field-label-icon">🔄</span> Paste your post or draft</div>
+          <textarea class="idea-textarea large" id="rewriteInput" placeholder="Paste your existing LinkedIn post or rough draft here...&#10;&#10;The AI will rewrite it with better hooks, formatting, and engagement elements while keeping your core message." maxlength="2000"></textarea>
+          <div class="textarea-footer">
+            <span class="char-info" id="hintRewrite">Paste your draft — AI will improve it</span>
+            <span class="char-info"><span id="rewriteCharCount">0</span>/2000</span>
+          </div>
+        </div>
+
+        <!-- Hooks mode input -->
+        <div id="postHooksInput" style="display:none;">
+          <div class="field-label" id="labelHooks"><span class="field-label-icon">🎣</span> What's your post about?</div>
+          <textarea class="idea-textarea" id="hooksInput" placeholder="e.g. The biggest mistake new managers make&#10;e.g. Why remote work is here to stay&#10;e.g. Lessons from scaling a startup to $1M ARR" maxlength="300" style="height:70px;"></textarea>
+          <div class="textarea-footer">
+            <span class="char-info" id="hintHooks">We'll generate 5 scroll-stopping hooks</span>
+            <span class="char-info"><span id="hooksCharCount">0</span>/300</span>
+          </div>
+        </div>
+
+        <!-- Style cards (shown in Write & Rewrite modes) -->
+        <div id="postStyleSection">
+          <div class="field-label" id="labelStyle"><span class="field-label-icon">🎨</span> Writing style</div>
+          <div class="styles-grid">
+            <div class="style-card active" data-style="storytelling" onclick="pickStyle(this)">
+              <div class="style-icon">📖</div>
+              <div class="style-title">Story</div>
+              <div class="style-sub">Personal narrative</div>
+            </div>
+            <div class="style-card" data-style="educational" onclick="pickStyle(this)">
+              <div class="style-icon">🎓</div>
+              <div class="style-title">Tips</div>
+              <div class="style-sub">Frameworks & lists</div>
+            </div>
+            <div class="style-card" data-style="motivational" onclick="pickStyle(this)">
+              <div class="style-icon">🔥</div>
+              <div class="style-title">Motivational</div>
+              <div class="style-sub">Inspire action</div>
+            </div>
+            <div class="style-card" data-style="contrarian" onclick="pickStyle(this)">
+              <div class="style-icon">🤔</div>
+              <div class="style-title">Hot Take</div>
+              <div class="style-sub">Bold opinion</div>
+            </div>
+            <div class="style-card" data-style="career_update" onclick="pickStyle(this)">
+              <div class="style-icon">🎉</div>
+              <div class="style-title">Career Update</div>
+              <div class="style-sub">New role / promo</div>
+            </div>
+            <div class="style-card" data-style="achievement" onclick="pickStyle(this)">
+              <div class="style-icon">🏆</div>
+              <div class="style-title">Achievement</div>
+              <div class="style-sub">Milestone win</div>
+            </div>
+            <div class="style-card" data-style="job_posting" onclick="pickStyle(this)">
+              <div class="style-icon">💼</div>
+              <div class="style-title">Job Post</div>
+              <div class="style-sub">Hiring ad</div>
+            </div>
+            <div class="style-card" data-style="open_to_work" onclick="pickStyle(this)">
+              <div class="style-icon">🔍</div>
+              <div class="style-title">Open to Work</div>
+              <div class="style-sub">Job search</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tone (shown in all post modes) -->
+        <div class="field-label" id="labelTonePost"><span class="field-label-icon">🎭</span> Tone</div>
+        <div class="tone-row">
+          <div class="tone-chip active" data-tone="professional" onclick="pickTone(this)">Professional</div>
+          <div class="tone-chip" data-tone="casual" onclick="pickTone(this)">Casual</div>
+          <div class="tone-chip" data-tone="bold" onclick="pickTone(this)">Bold</div>
+          <div class="tone-chip" data-tone="humorous" onclick="pickTone(this)">Humorous</div>
+        </div>
+
+        <button class="gen-btn" id="genBtn" onclick="handleGenerate()">
+          <span class="shimmer"></span>
+          <span id="genBtnText">⚡ Generate</span>
+        </button>
+        <div class="kb-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> to generate</div>
+      </div>
+
+      <!-- ==================== TAB: PROFILE ==================== -->
+      <div class="tab-content" id="tabProfile">
+        <div class="sub-tabs">
+          <button class="sub-tab active" onclick="switchProfileMode('headline')">💫 Headline</button>
+          <button class="sub-tab" onclick="switchProfileMode('about')">📝 About</button>
+          <button class="sub-tab" onclick="switchProfileMode('experience')">💼 Experience</button>
+        </div>
+
+        <!-- Headline -->
+        <div id="profileHeadline">
+          <div class="form-row">
+            <div class="form-group">
+              <div class="field-label" id="labelHlRole">Current role / title</div>
+              <input class="form-input" id="hlRole" placeholder="e.g. Product Manager">
+            </div>
+            <div class="form-group">
+              <div class="field-label" id="labelHlSkill">Key skill or specialty</div>
+              <input class="form-input" id="hlSkill" placeholder="e.g. AI/ML, Growth, Design">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <div class="field-label" id="labelHlValue">What value do you provide?</div>
+              <input class="form-input" id="hlValue" placeholder="e.g. Helping startups scale to $1M ARR">
+            </div>
+            <div class="form-group">
+              <div class="field-label" id="labelHlAudience">Target audience</div>
+              <input class="form-input" id="hlAudience" placeholder="e.g. Recruiters, Clients, Founders">
+            </div>
+          </div>
+        </div>
+
+        <!-- About -->
+        <div id="profileAbout" style="display:none;">
+          <div class="form-group">
+            <div class="field-label" id="labelAboutBg">Career background (1-2 sentences)</div>
+            <textarea class="idea-textarea" id="aboutBg" placeholder="e.g. 6 years in B2B SaaS marketing, led content strategy at 3 startups from seed to Series B" style="height:60px;"></textarea>
+          </div>
+          <div class="form-group">
+            <div class="field-label" id="labelAboutAch">Top achievements (2-3)</div>
+            <textarea class="idea-textarea" id="aboutAchievements" placeholder="e.g. Generated $12M in pipeline&#10;Grew subscriber base from 0 to 100K&#10;Built a team of 15 marketers" style="height:70px;"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <div class="field-label" id="labelAboutExp">Areas of expertise</div>
+              <input class="form-input" id="aboutExpertise" placeholder="e.g. SEO, Content Strategy, AI">
+            </div>
+            <div class="form-group">
+              <div class="field-label" id="labelAboutGoal">What are you looking for?</div>
+              <input class="form-input" id="aboutGoal" placeholder="e.g. New clients, Hiring, Collaboration">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="field-label" id="labelAboutLen">Length</div>
+            <select class="form-input" id="aboutLength">
+              <option value="short" id="optAboutShort">Short (~500 chars)</option>
+              <option value="medium" selected id="optAboutMedium">Medium (~1200 chars)</option>
+              <option value="long" id="optAboutLong">Long (~2400 chars)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Experience -->
+        <div id="profileExperience" style="display:none;">
+          <div class="form-row">
+            <div class="form-group">
+              <div class="field-label" id="labelExpTitle">Job title</div>
+              <input class="form-input" id="expTitle" placeholder="e.g. Senior Product Manager">
+            </div>
+            <div class="form-group">
+              <div class="field-label" id="labelExpCompany">Company</div>
+              <input class="form-input" id="expCompany" placeholder="e.g. Acme AI (Series B Startup)">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="field-label" id="labelExpDetails">Key responsibilities & achievements</div>
+            <textarea class="idea-textarea" id="expDetails" placeholder="e.g. Led product strategy for core AI platform&#10;Grew users from 5K to 150K&#10;Shipped 12 features, increasing retention by 34%&#10;Built team from 2 to 8 people" style="height:100px;"></textarea>
+          </div>
+        </div>
+
+        <!-- Tone for Profile -->
+        <div class="field-label" id="labelToneProfile" style="margin-top:8px;"><span class="field-label-icon">🎭</span> Tone</div>
+        <div class="tone-row">
+          <div class="tone-chip active" data-tone="professional" onclick="pickTone(this)">Professional</div>
+          <div class="tone-chip" data-tone="casual" onclick="pickTone(this)">Conversational</div>
+          <div class="tone-chip" data-tone="bold" onclick="pickTone(this)">Bold</div>
+        </div>
+
+        <button class="gen-btn" onclick="handleGenerate()">
+          <span class="shimmer"></span>
+          <span id="genBtnProfile">⚡ Generate</span>
+        </button>
+        <div class="kb-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> to generate</div>
+      </div>
+
+      <!-- ==================== TAB: MESSAGE ==================== -->
+      <div class="tab-content" id="tabMessage">
+        <div class="sub-tabs">
+          <button class="sub-tab active" onclick="switchMessageMode('connection')">🤝 Connection</button>
+          <button class="sub-tab" onclick="switchMessageMode('followup')">📨 Follow-up</button>
+          <button class="sub-tab" onclick="switchMessageMode('thankyou')">🙏 Thank You</button>
+        </div>
+
+        <!-- Connection Request -->
+        <div id="msgConnection">
+          <div class="form-row">
+            <div class="form-group">
+              <div class="field-label" id="labelConnName">Their name & role</div>
+              <input class="form-input" id="connName" placeholder="e.g. Sarah, VP of Marketing at Acme">
+            </div>
+            <div class="form-group">
+              <div class="field-label" id="labelConnCommon">What you have in common</div>
+              <input class="form-input" id="connCommon" placeholder="e.g. Saw their post about AI, mutual connection">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="field-label" id="labelConnGoal">Your goal</div>
+            <div class="tone-row">
+              <div class="tone-chip active" data-goal="networking" onclick="pickGoal(this)">Networking</div>
+              <div class="tone-chip" data-goal="collaboration" onclick="pickGoal(this)">Collaboration</div>
+              <div class="tone-chip" data-goal="learning" onclick="pickGoal(this)">Learn from them</div>
+              <div class="tone-chip" data-goal="hiring" onclick="pickGoal(this)">Hiring</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Follow-up -->
+        <div id="msgFollowup" style="display:none;">
+          <div class="form-row">
+            <div class="form-group">
+              <div class="field-label" id="labelFuName">Their name</div>
+              <input class="form-input" id="fuName" placeholder="e.g. Mark">
+            </div>
+            <div class="form-group">
+              <div class="field-label" id="labelFuContext">How you connected</div>
+              <input class="form-input" id="fuContext" placeholder="e.g. Met at conference, connected last week">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="field-label" id="labelFuAsk">What do you want?</div>
+            <input class="form-input" id="fuAsk" placeholder="e.g. 15-min call, advice on career move, job opportunity">
+          </div>
+        </div>
+
+        <!-- Thank You -->
+        <div id="msgThankyou" style="display:none;">
+          <div class="form-row">
+            <div class="form-group">
+              <div class="field-label" id="labelTyName">Their name</div>
+              <input class="form-input" id="tyName" placeholder="e.g. Jennifer">
+            </div>
+            <div class="form-group">
+              <div class="field-label" id="labelTyContext">Context</div>
+              <input class="form-input" id="tyContext" placeholder="e.g. Interview, coffee chat, advice call">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="field-label" id="labelTyTakeaway">Key takeaway from the conversation</div>
+            <input class="form-input" id="tyTakeaway" placeholder="e.g. Loved learning about their approach to scaling teams">
+          </div>
+        </div>
+
+        <button class="gen-btn" onclick="handleGenerate()">
+          <span class="shimmer"></span>
+          <span id="genBtnMessage">⚡ Generate Message</span>
+        </button>
+        <div class="kb-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> to generate</div>
+      </div>
+
+      <!-- ==================== TAB: REPLY ==================== -->
+      <div class="tab-content" id="tabReply">
+        <div class="form-group">
+          <div class="field-label" id="labelReplyComment"><span class="field-label-icon">💬</span> Paste the comment you want to reply to</div>
+          <textarea class="idea-textarea large" id="replyComment" placeholder="Paste the LinkedIn comment here..." maxlength="1000"></textarea>
+        </div>
+
+        <div class="field-label" id="labelReplyStyle"><span class="field-label-icon">🎯</span> Reply style</div>
+        <div class="tone-row">
+          <div class="tone-chip active" data-replystyle="supportive" onclick="pickReplyStyle(this)">Supportive</div>
+          <div class="tone-chip" data-replystyle="insightful" onclick="pickReplyStyle(this)">Add value</div>
+          <div class="tone-chip" data-replystyle="question" onclick="pickReplyStyle(this)">Ask question</div>
+          <div class="tone-chip" data-replystyle="disagree" onclick="pickReplyStyle(this)">Respectful disagree</div>
+        </div>
+
+        <button class="gen-btn" onclick="handleGenerate()">
+          <span class="shimmer"></span>
+          <span id="genBtnReply">⚡ Generate Replies</span>
+        </button>
+        <div class="kb-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> to generate</div>
+      </div>
+    </div>
+
+    <!-- Output (single text) -->
+    <div class="output-card" id="outputCard">
+      <div class="output-top">
+        <div class="output-badge">
+          <div class="output-badge-dot"></div>
+          <span id="outputTitle">Your LinkedIn Post</span>
+        </div>
+        <div class="output-actions">
+          <button class="act-btn" id="copyBtn" onclick="copyResult()" aria-label="Copy to clipboard"><span id="copyBtnText">📋 Copy</span></button>
+          <button class="act-btn" onclick="handleGenerate()" aria-label="Regenerate content"><span id="regenBtnText">🔄 Regenerate</span></button>
+        </div>
+      </div>
+      <div class="output-text" id="outputText"></div>
+      <div class="output-stats" id="outputStats">
+        <div class="stat-item"><span id="statWordsLabel">Words</span>: <b id="statWords">0</b></div>
+        <div class="stat-item"><span id="statCharsLabel">Characters</span>: <b id="statChars">0</b></div>
+      </div>
+    </div>
+
+    <!-- Multi output (hooks, headlines, replies) -->
+    <div class="multi-output" id="multiOutput">
+      <div class="output-top">
+        <div class="output-badge">
+          <div class="output-badge-dot"></div>
+          <span id="multiTitle">Your Hooks</span>
+        </div>
+      </div>
+      <div id="multiCards"></div>
+    </div>
+
+    <!-- Paywall -->
+    <div class="paywall-card" id="paywallCard">
+      <div class="paywall-icon">✨</div>
+      <div class="paywall-title" id="paywallTitleText">You've used all free credits today</div>
+      <div class="paywall-desc" id="paywallDescText">
+        Upgrade to <b>LinkedGenie Pro</b> for unlimited access to all tools,
+        exclusive templates, and priority generation.
+      </div>
+      <button class="upgrade-btn" onclick="openUpgrade()" id="paywallBtnText">🚀 Upgrade to Pro — $5/month</button>
+      <div class="paywall-price" id="paywallCancelText">Cancel anytime</div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">✍️</div>
+      <div class="feature-title" id="featPostsTitle">Smart Posts</div>
+      <div class="feature-desc" id="featPostsDesc">8 templates including Career Update & Job Posting</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">👤</div>
+      <div class="feature-title" id="featProfileTitle">Profile Optimizer</div>
+      <div class="feature-desc" id="featProfileDesc">Headline, About section & Experience descriptions</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📩</div>
+      <div class="feature-title" id="featMessagesTitle">Messages & Replies</div>
+      <div class="feature-desc" id="featMessagesDesc">Connection requests, follow-ups & comment replies</div>
+    </div>
+  </div>
+
+  <div class="newsletter" id="newsletterBox">
+    <h3 id="nlTitle">Get weekly LinkedIn content tips</h3>
+    <p id="nlDesc">Join our newsletter — strategies, trends & prompts delivered every Monday.</p>
+    <div class="newsletter-form" id="nlForm">
+      <input type="email" id="nlEmail" placeholder="your@email.com">
+      <button onclick="subscribeNewsletter()" id="nlBtn">Subscribe</button>
+    </div>
+  </div>
+
+  </main>
+  <footer class="footer" id="footerText">
+    LinkedGenie © 2026 · Built with ❤️ and AI
+    <br><a href="#" onclick="showLegal('privacy')">Privacy Policy</a> · <a href="#" onclick="showLegal('terms')">Terms of Service</a>
+  </footer>
+
+  <!-- Growth Badge Modal -->
+  <div class="growth-overlay" id="growthModal" onclick="if(event.target===this)closeGrowth()">
+    <div class="growth-card">
+      <div class="badge-icon" id="growthIcon">🏆</div>
+      <h3 id="growthTitle">Milestone Reached!</h3>
+      <div class="badge-count" id="growthCount">10</div>
+      <p id="growthDesc">LinkedIn posts created with LinkedGenie</p>
+      <div class="growth-share-btns">
+        <button class="growth-share-btn li" onclick="shareLinkedIn()" id="growthShareLI">LinkedIn</button>
+        <button class="growth-share-btn tw" onclick="shareTwitter()" id="growthShareTW">X / Twitter</button>
+      </div>
+      <button class="growth-dismiss" onclick="closeGrowth()" id="growthDismissBtn">Maybe later</button>
+    </div>
+  </div>
+
+  <!-- Legal Modal -->
+  <div class="modal-overlay" id="legalModal">
+    <div class="modal" style="max-height:80vh;overflow-y:auto;">
+      <div class="modal-title" id="legalTitle"></div>
+      <div id="legalBody" style="font-size:12px;line-height:1.7;color:var(--text-muted);text-align:left;"></div>
+      <button class="modal-close" onclick="document.getElementById('legalModal').classList.remove('visible')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Info Modal -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal">
+    <div class="modal-title" id="modalTitleText">ℹ️ About LinkedGenie</div>
+    <div class="modal-desc" id="modalDescText">
+      LinkedGenie is your complete AI toolkit for LinkedIn content creation.
+      <br><br>
+      <b>Free plan:</b> Sign in with Google — 3 generations per day.<br>
+      <b>Pro plan:</b> $5/month — unlimited access to all tools and templates.
+      <br><br>
+      <b>Tools included:</b><br>
+      ✍️ Post generator (8 styles + rewrite + hooks)<br>
+      👤 Profile optimizer (headline, about, experience)<br>
+      📩 Message crafter (connection, follow-up, thank you)<br>
+      💬 Comment reply generator
+      <br><br>
+      <span style="color:var(--text-muted);font-size:11px;">Built by <a href="https://github.com/sctadnan" style="color:var(--accent2);">sctadnan</a></span>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-secondary" onclick="openUpgrade()" style="flex:1" id="modalUpgradeBtn">Upgrade to Pro</button>
+      <button class="modal-btn modal-btn-primary" onclick="toggleSettings()" style="flex:1" id="modalGotItBtn">Got it!</button>
+    </div>
+  </div>
+</div>
+
+<!-- History Modal -->
+<div class="modal-overlay" id="historyModal">
+  <div class="modal">
+    <div class="modal-title" id="historyModalTitle">📋 History</div>
+    <div class="history-list" id="historyList"></div>
+    <div class="modal-actions">
+      <button class="history-clear-btn" id="historyClearBtn" onclick="clearAllHistory()">Clear All</button>
+      <button class="modal-btn modal-btn-primary" onclick="toggleHistory()" style="flex:1" id="historyCloseBtn">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============ STATE ============
+let currentTab = 'post';
+let currentPostMode = 'write';
+let currentProfileMode = 'headline';
+let currentMessageMode = 'connection';
+let currentStyle = 'storytelling';
+let currentLang = 'english';
+let currentTone = 'professional';
+let currentGoal = 'networking';
+let currentReplyStyle = 'supportive';
+let resultText = '';
+let idToken = null;
+let currentUser = null;
+const FREE_LIMIT = 3;
+const GOOGLE_CLIENT_ID = '518315582553-qg3onsjs8r7d6u5kue1fugppan66a2k9.apps.googleusercontent.com';
+
+// Demo mode fingerprint
+function getDemoId() {
+  let id = localStorage.getItem('lg_demo_id');
+  if (!id) { id = crypto.randomUUID(); localStorage.setItem('lg_demo_id', id); }
+  return id;
+}
+let demoUsed = localStorage.getItem('lg_demo_date') === new Date().toISOString().slice(0, 10);
+
+// ============ TRANSLATIONS ============
+const T = {
+  english: {
+    heroBadge: "AI-Powered LinkedIn Content Suite",
+    heroTitle: 'Your complete toolkit for <em>LinkedIn content</em>',
+    heroDesc: "Generate posts, optimize your profile, craft messages, and write replies — all with AI.",
+    loginPrompt: "Sign in with Google for 3 free generations per day",
+    tabPost: "✍️ Post", tabProfile: "👤 Profile", tabMessage: "📩 Message", tabReply: "💬 Reply",
+    subWrite: "✍️ Write", subRewrite: "🔄 Rewrite", subHooks: "🎣 Hooks",
+    subHeadline: "💫 Headline", subAbout: "📝 About", subExperience: "💼 Experience",
+    subConnection: "🤝 Connection", subFollowup: "📨 Follow-up", subThankyou: "🙏 Thank You",
+    ideaLabel: "💡 Your idea or topic",
+    ideaPh: "e.g. Why I turned down a $200K offer to stay at my startup...\ne.g. 5 mistakes I made as a first-time manager\ne.g. How AI is changing the hiring process",
+    ideaHint: "Be specific for better results",
+    rewriteLabel: "🔄 Paste your post or draft",
+    rewritePh: "Paste your existing LinkedIn post or rough draft here...\n\nThe AI will rewrite it with better hooks, formatting, and engagement elements while keeping your core message.",
+    rewriteHint: "Paste your draft — AI will improve it",
+    hooksLabel: "🎣 What's your post about?",
+    hooksPh: "e.g. The biggest mistake new managers make\ne.g. Why remote work is here to stay\ne.g. Lessons from scaling a startup to $1M ARR",
+    hooksHint: "We'll generate 5 scroll-stopping hooks",
+    styleLabel: "🎨 Writing style",
+    sStory: "Story", sStorySub: "Personal narrative",
+    sTips: "Tips", sTipsSub: "Frameworks & lists",
+    sMotivational: "Motivational", sMotivationalSub: "Inspire action",
+    sHotTake: "Hot Take", sHotTakeSub: "Bold opinion",
+    sCareer: "Career Update", sCareerSub: "New role / promo",
+    sAchievement: "Achievement", sAchievementSub: "Milestone win",
+    sJobPost: "Job Post", sJobPostSub: "Hiring ad",
+    sOpenToWork: "Open to Work", sOpenToWorkSub: "Job search",
+    toneLabel: "🎭 Tone",
+    tProfessional: "Professional", tCasual: "Casual", tBold: "Bold", tHumorous: "Humorous", tConversational: "Conversational",
+    generate: "⚡ Generate", generating: "Generating...",
+    genMessage: "⚡ Generate Message", genReplies: "⚡ Generate Replies",
+    kbHint: "to generate",
+    hlRole: "Current role / title", hlRolePh: "e.g. Product Manager",
+    hlSkill: "Key skill or specialty", hlSkillPh: "e.g. AI/ML, Growth, Design",
+    hlValue: "What value do you provide?", hlValuePh: "e.g. Helping startups scale to $1M ARR",
+    hlAudience: "Target audience", hlAudiencePh: "e.g. Recruiters, Clients, Founders",
+    aboutBg: "Career background (1-2 sentences)", aboutBgPh: "e.g. 6 years in B2B SaaS marketing, led content strategy at 3 startups from seed to Series B",
+    aboutAch: "Top achievements (2-3)", aboutAchPh: "e.g. Generated $12M in pipeline\nGrew subscriber base from 0 to 100K\nBuilt a team of 15 marketers",
+    aboutExp: "Areas of expertise", aboutExpPh: "e.g. SEO, Content Strategy, AI",
+    aboutGoal: "What are you looking for?", aboutGoalPh: "e.g. New clients, Hiring, Collaboration",
+    aboutLen: "Length", aboutShort: "Short (~500 chars)", aboutMedium: "Medium (~1200 chars)", aboutLong: "Long (~2400 chars)",
+    expTitle: "Job title", expTitlePh: "e.g. Senior Product Manager",
+    expCompany: "Company", expCompanyPh: "e.g. Acme AI (Series B Startup)",
+    expDetails: "Key responsibilities & achievements", expDetailsPh: "e.g. Led product strategy for core AI platform\nGrew users from 5K to 150K\nShipped 12 features, increasing retention by 34%\nBuilt team from 2 to 8 people",
+    connName: "Their name & role", connNamePh: "e.g. Sarah, VP of Marketing at Acme",
+    connCommon: "What you have in common", connCommonPh: "e.g. Saw their post about AI, mutual connection",
+    connGoal: "Your goal",
+    gNetworking: "Networking", gCollaboration: "Collaboration", gLearn: "Learn from them", gHiring: "Hiring",
+    fuName: "Their name", fuNamePh: "e.g. Mark",
+    fuContext: "How you connected", fuContextPh: "e.g. Met at conference, connected last week",
+    fuAsk: "What do you want?", fuAskPh: "e.g. 15-min call, advice on career move, job opportunity",
+    tyName: "Their name", tyNamePh: "e.g. Jennifer",
+    tyContext: "Context", tyContextPh: "e.g. Interview, coffee chat, advice call",
+    tyTakeaway: "Key takeaway from the conversation", tyTakeawayPh: "e.g. Loved learning about their approach to scaling teams",
+    replyLabel: "💬 Paste the comment you want to reply to",
+    replyPh: "Paste the LinkedIn comment here...",
+    replyStyleLabel: "🎯 Reply style",
+    rSupportive: "Supportive", rValue: "Add value", rQuestion: "Ask question", rDisagree: "Respectful disagree",
+    copy: "📋 Copy", copied: "✅ Copied!", regenerate: "🔄 Regenerate",
+    words: "Words", characters: "Characters",
+    paywallTitle: "You've used all free credits today",
+    paywallDesc: 'Upgrade to <b>LinkedGenie Pro</b> for unlimited access to all tools, exclusive templates, and priority generation.',
+    paywallBtn: "🚀 Upgrade to Pro — $5/month", paywallCancel: "Cancel anytime",
+    featPosts: "Smart Posts", featPostsDesc: "8 templates including Career Update & Job Posting",
+    featProfile: "Profile Optimizer", featProfileDesc: "Headline, About section & Experience descriptions",
+    featMessages: "Messages & Replies", featMessagesDesc: "Connection requests, follow-ups & comment replies",
+    footer: 'LinkedGenie © 2026 · Built with ❤️ and AI<br><a href="#" onclick="showLegal(\'privacy\')">Privacy Policy</a> · <a href="#" onclick="showLegal(\'terms\')">Terms of Service</a>',
+    modalTitle: "ℹ️ About LinkedGenie",
+    modalDesc: 'LinkedGenie is your complete AI toolkit for LinkedIn content creation.<br><br><b>Free plan:</b> Sign in with Google — 3 generations per day.<br><b>Pro plan:</b> $5/month — unlimited access to all tools and templates.<br><br><b>Tools included:</b><br>✍️ Post generator (8 styles + rewrite + hooks)<br>👤 Profile optimizer (headline, about, experience)<br>📩 Message crafter (connection, follow-up, thank you)<br>💬 Comment reply generator',
+    modalUpgrade: "Upgrade to Pro", modalGotIt: "Got it!",
+    hookOptionsTitle: "Hook Options", headlineOptionsTitle: "Headline Options", replyOptionsTitle: "Reply Options",
+    writeAboutThis: "✍️ Write", signOut: "Sign out",
+    usagePro: "Pro", usageFree: "Free", upgrade: "Upgrade",
+    planPro: "Pro Plan", planFree: "Free Plan", monthlyPlan: "Monthly", yearlyPlan: "Yearly", trialPlan: "Trial", giftPlan: "Gift",
+    renewsOn: "Renews", expiresOn: "Expires", daysLeft: "days left",
+    todayUsage: "Today", history: "History", settings: "Settings",
+    historyTitle: "History", historyEmpty: "No history yet", historyBtn: "📋", historyDelete: "Delete", historyClearAll: "Clear All", historyClearConfirm: "Delete all history?",
+    streakTooltip: "{n} day streak!",
+    onboardTip: "Start here — type your idea and we'll turn it into a professional LinkedIn post",
+    nlTitle: "Get weekly LinkedIn content tips",
+    nlDesc: "Join our newsletter — strategies, trends & prompts delivered every Monday.",
+    nlBtn: "Subscribe",
+    growthTitle: "Milestone Reached!",
+    growthDesc: "{n} LinkedIn posts created with LinkedGenie",
+    growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
+    growthDismiss: "Maybe later",
+    shareText: "I just created {n} LinkedIn posts with LinkedGenie! 🚀",
+    clipboardCopied: "Text copied! Paste it in your LinkedIn post ✅"
+  },
+  spanish: {
+    heroBadge: "Suite de Contenido LinkedIn con IA",
+    heroTitle: 'Tu kit completo para <em>contenido en LinkedIn</em>',
+    heroDesc: "Genera publicaciones, optimiza tu perfil, redacta mensajes y escribe respuestas — todo con IA.",
+    loginPrompt: "Inicia sesión con Google para 3 generaciones gratis al día",
+    tabPost: "✍️ Post", tabProfile: "👤 Perfil", tabMessage: "📩 Mensaje", tabReply: "💬 Respuesta",
+    subWrite: "✍️ Escribir", subRewrite: "🔄 Reescribir", subHooks: "🎣 Ganchos",
+    subHeadline: "💫 Titular", subAbout: "📝 Acerca de", subExperience: "💼 Experiencia",
+    subConnection: "🤝 Conexión", subFollowup: "📨 Seguimiento", subThankyou: "🙏 Agradecimiento",
+    ideaLabel: "💡 Tu idea o tema",
+    ideaPh: "ej. Por qué rechacé una oferta de $200K para quedarme en mi startup...\nej. 5 errores que cometí como gerente primerizo\nej. Cómo la IA está cambiando el proceso de contratación",
+    ideaHint: "Sé específico para mejores resultados",
+    rewriteLabel: "🔄 Pega tu publicación o borrador",
+    rewritePh: "Pega tu publicación de LinkedIn o borrador aquí...\n\nLa IA lo reescribirá con mejores ganchos, formato y elementos de interacción manteniendo tu mensaje principal.",
+    rewriteHint: "Pega tu borrador — la IA lo mejorará",
+    hooksLabel: "🎣 ¿De qué trata tu publicación?",
+    hooksPh: "ej. El mayor error de los nuevos gerentes\nej. Por qué el trabajo remoto llegó para quedarse\nej. Lecciones de escalar una startup a $1M ARR",
+    hooksHint: "Generaremos 5 ganchos irresistibles",
+    styleLabel: "🎨 Estilo de escritura",
+    sStory: "Historia", sStorySub: "Narrativa personal",
+    sTips: "Consejos", sTipsSub: "Marcos y listas",
+    sMotivational: "Motivacional", sMotivationalSub: "Inspirar acción",
+    sHotTake: "Opinión Fuerte", sHotTakeSub: "Opinión audaz",
+    sCareer: "Actualización", sCareerSub: "Nuevo rol / ascenso",
+    sAchievement: "Logro", sAchievementSub: "Hito alcanzado",
+    sJobPost: "Empleo", sJobPostSub: "Anuncio de trabajo",
+    sOpenToWork: "Buscando Empleo", sOpenToWorkSub: "Búsqueda laboral",
+    toneLabel: "🎭 Tono",
+    tProfessional: "Profesional", tCasual: "Casual", tBold: "Audaz", tHumorous: "Humorístico", tConversational: "Conversacional",
+    generate: "⚡ Generar", generating: "Generando...",
+    genMessage: "⚡ Generar Mensaje", genReplies: "⚡ Generar Respuestas",
+    kbHint: "para generar",
+    hlRole: "Cargo actual", hlRolePh: "ej. Product Manager",
+    hlSkill: "Habilidad clave", hlSkillPh: "ej. IA/ML, Growth, Diseño",
+    hlValue: "¿Qué valor ofreces?", hlValuePh: "ej. Ayudo a startups a escalar a $1M ARR",
+    hlAudience: "Audiencia objetivo", hlAudiencePh: "ej. Reclutadores, Clientes, Fundadores",
+    aboutBg: "Experiencia profesional (1-2 frases)", aboutBgPh: "ej. 6 años en marketing SaaS B2B, lideré estrategia de contenido en 3 startups",
+    aboutAch: "Logros principales (2-3)", aboutAchPh: "ej. Generé $12M en pipeline\nCrecí base de suscriptores de 0 a 100K\nConstruí equipo de 15 marketers",
+    aboutExp: "Áreas de experiencia", aboutExpPh: "ej. SEO, Estrategia de Contenido, IA",
+    aboutGoal: "¿Qué buscas?", aboutGoalPh: "ej. Nuevos clientes, Contratación, Colaboración",
+    aboutLen: "Longitud", aboutShort: "Corta (~500 chars)", aboutMedium: "Media (~1200 chars)", aboutLong: "Larga (~2400 chars)",
+    expTitle: "Cargo", expTitlePh: "ej. Senior Product Manager",
+    expCompany: "Empresa", expCompanyPh: "ej. Acme AI (Startup Serie B)",
+    expDetails: "Responsabilidades y logros clave", expDetailsPh: "ej. Lideré estrategia de producto para plataforma de IA\nCrecí usuarios de 5K a 150K\nLancé 12 funciones, aumentando retención un 34%",
+    connName: "Nombre y cargo", connNamePh: "ej. Sara, VP de Marketing en Acme",
+    connCommon: "Qué tienen en común", connCommonPh: "ej. Vi su publicación sobre IA, contacto mutuo",
+    connGoal: "Tu objetivo",
+    gNetworking: "Networking", gCollaboration: "Colaboración", gLearn: "Aprender", gHiring: "Contratación",
+    fuName: "Su nombre", fuNamePh: "ej. Marco",
+    fuContext: "Cómo se conectaron", fuContextPh: "ej. Nos conocimos en conferencia, conectamos la semana pasada",
+    fuAsk: "¿Qué deseas?", fuAskPh: "ej. Llamada de 15 min, consejo sobre cambio de carrera",
+    tyName: "Su nombre", tyNamePh: "ej. Jennifer",
+    tyContext: "Contexto", tyContextPh: "ej. Entrevista, café, llamada de consejo",
+    tyTakeaway: "Lo más valioso de la conversación", tyTakeawayPh: "ej. Me encantó aprender sobre su enfoque para escalar equipos",
+    replyLabel: "💬 Pega el comentario al que quieres responder",
+    replyPh: "Pega el comentario de LinkedIn aquí...",
+    replyStyleLabel: "🎯 Estilo de respuesta",
+    rSupportive: "Apoyo", rValue: "Aportar valor", rQuestion: "Hacer pregunta", rDisagree: "Desacuerdo respetuoso",
+    copy: "📋 Copiar", copied: "✅ ¡Copiado!", regenerate: "🔄 Regenerar",
+    words: "Palabras", characters: "Caracteres",
+    paywallTitle: "Has usado todos los créditos gratuitos hoy",
+    paywallDesc: 'Actualiza a <b>LinkedGenie Pro</b> para acceso ilimitado a todas las herramientas, plantillas exclusivas y generación prioritaria.',
+    paywallBtn: "🚀 Actualizar a Pro — $5/mes", paywallCancel: "Cancela cuando quieras",
+    featPosts: "Posts Inteligentes", featPostsDesc: "8 plantillas incluyendo Actualización de Carrera y Empleo",
+    featProfile: "Optimizador de Perfil", featProfileDesc: "Titular, sección Acerca de y descripciones de Experiencia",
+    featMessages: "Mensajes y Respuestas", featMessagesDesc: "Solicitudes de conexión, seguimientos y respuestas a comentarios",
+    footer: 'LinkedGenie © 2026 · Hecho con ❤️ e IA<br><a href="#" onclick="showLegal(\'privacy\')">Privacidad</a> · <a href="#" onclick="showLegal(\'terms\')">Términos</a>',
+    modalTitle: "ℹ️ Acerca de LinkedGenie",
+    modalDesc: 'LinkedGenie es tu kit completo de IA para crear contenido en LinkedIn.<br><br><b>Plan Gratis:</b> Inicia sesión con Google — 3 generaciones por día.<br><b>Plan Pro:</b> $5/mes — acceso ilimitado a todas las herramientas.<br><br><b>Herramientas:</b><br>✍️ Generador de posts (8 estilos + reescritura + ganchos)<br>👤 Optimizador de perfil (titular, acerca de, experiencia)<br>📩 Redactor de mensajes (conexión, seguimiento, agradecimiento)<br>💬 Generador de respuestas a comentarios',
+    modalUpgrade: "Actualizar a Pro", modalGotIt: "¡Entendido!",
+    hookOptionsTitle: "Opciones de Gancho", headlineOptionsTitle: "Opciones de Titular", replyOptionsTitle: "Opciones de Respuesta",
+    writeAboutThis: "✍️ Escribir", signOut: "Cerrar sesión",
+    usagePro: "Pro", usageFree: "Gratis", upgrade: "Mejorar",
+    planPro: "Plan Pro", planFree: "Plan Gratis", monthlyPlan: "Mensual", yearlyPlan: "Anual", trialPlan: "Prueba", giftPlan: "Regalo",
+    renewsOn: "Renueva", expiresOn: "Expira", daysLeft: "días restantes",
+    todayUsage: "Hoy", history: "Historial", settings: "Ajustes",
+    historyTitle: "Historial", historyEmpty: "Sin historial aún", historyBtn: "📋", historyDelete: "Eliminar", historyClearAll: "Borrar todo", historyClearConfirm: "¿Eliminar todo el historial?",
+    streakTooltip: "¡{n} días seguidos!",
+    onboardTip: "Empieza aquí — escribe tu idea y la convertiremos en un post profesional de LinkedIn",
+    nlTitle: "Recibe consejos semanales para LinkedIn",
+    nlDesc: "Únete a nuestro newsletter — estrategias, tendencias y prompts cada lunes.",
+    nlBtn: "Suscribirse",
+    growthTitle: "¡Meta alcanzada!",
+    growthDesc: "{n} publicaciones de LinkedIn creadas con LinkedGenie",
+    growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
+    growthDismiss: "Quizás después",
+    shareText: "¡Acabo de crear {n} publicaciones de LinkedIn con LinkedGenie! 🚀",
+    clipboardCopied: "¡Texto copiado! Pégalo en tu publicación de LinkedIn ✅"
+  },
+  portuguese: {
+    heroBadge: "Suite de Conteúdo LinkedIn com IA",
+    heroTitle: 'Seu kit completo para <em>conteúdo no LinkedIn</em>',
+    heroDesc: "Gere posts, otimize seu perfil, crie mensagens e escreva respostas — tudo com IA.",
+    loginPrompt: "Faça login com Google para 3 gerações grátis por dia",
+    tabPost: "✍️ Post", tabProfile: "👤 Perfil", tabMessage: "📩 Mensagem", tabReply: "💬 Resposta",
+    subWrite: "✍️ Escrever", subRewrite: "🔄 Reescrever", subHooks: "🎣 Ganchos",
+    subHeadline: "💫 Título", subAbout: "📝 Sobre", subExperience: "💼 Experiência",
+    subConnection: "🤝 Conexão", subFollowup: "📨 Follow-up", subThankyou: "🙏 Agradecimento",
+    ideaLabel: "💡 Sua ideia ou tema",
+    ideaPh: "ex. Por que recusei uma oferta de $200K para ficar na minha startup...\nex. 5 erros que cometi como gerente iniciante\nex. Como a IA está mudando o processo de contratação",
+    ideaHint: "Seja específico para melhores resultados",
+    rewriteLabel: "🔄 Cole seu post ou rascunho",
+    rewritePh: "Cole seu post do LinkedIn ou rascunho aqui...\n\nA IA vai reescrever com melhores ganchos, formatação e elementos de engajamento mantendo sua mensagem principal.",
+    rewriteHint: "Cole seu rascunho — a IA vai melhorar",
+    hooksLabel: "🎣 Sobre o que é seu post?",
+    hooksPh: "ex. O maior erro de novos gerentes\nex. Por que o trabalho remoto veio para ficar\nex. Lições de escalar uma startup para $1M ARR",
+    hooksHint: "Vamos gerar 5 ganchos irresistíveis",
+    styleLabel: "🎨 Estilo de escrita",
+    sStory: "História", sStorySub: "Narrativa pessoal",
+    sTips: "Dicas", sTipsSub: "Frameworks e listas",
+    sMotivational: "Motivacional", sMotivationalSub: "Inspirar ação",
+    sHotTake: "Opinião Forte", sHotTakeSub: "Opinião ousada",
+    sCareer: "Atualização", sCareerSub: "Novo cargo / promoção",
+    sAchievement: "Conquista", sAchievementSub: "Marco alcançado",
+    sJobPost: "Vaga", sJobPostSub: "Anúncio de emprego",
+    sOpenToWork: "Buscando Emprego", sOpenToWorkSub: "Busca de trabalho",
+    toneLabel: "🎭 Tom",
+    tProfessional: "Profissional", tCasual: "Casual", tBold: "Ousado", tHumorous: "Humorístico", tConversational: "Conversacional",
+    generate: "⚡ Gerar", generating: "Gerando...",
+    genMessage: "⚡ Gerar Mensagem", genReplies: "⚡ Gerar Respostas",
+    kbHint: "para gerar",
+    hlRole: "Cargo atual", hlRolePh: "ex. Product Manager",
+    hlSkill: "Habilidade principal", hlSkillPh: "ex. IA/ML, Growth, Design",
+    hlValue: "Que valor você oferece?", hlValuePh: "ex. Ajudo startups a escalar para $1M ARR",
+    hlAudience: "Público-alvo", hlAudiencePh: "ex. Recrutadores, Clientes, Fundadores",
+    aboutBg: "Experiência profissional (1-2 frases)", aboutBgPh: "ex. 6 anos em marketing SaaS B2B, liderei estratégia de conteúdo em 3 startups",
+    aboutAch: "Principais conquistas (2-3)", aboutAchPh: "ex. Gerei $12M em pipeline\nCresci base de assinantes de 0 a 100K\nConstruí equipe de 15 marketers",
+    aboutExp: "Áreas de expertise", aboutExpPh: "ex. SEO, Estratégia de Conteúdo, IA",
+    aboutGoal: "O que você busca?", aboutGoalPh: "ex. Novos clientes, Contratação, Colaboração",
+    aboutLen: "Comprimento", aboutShort: "Curto (~500 chars)", aboutMedium: "Médio (~1200 chars)", aboutLong: "Longo (~2400 chars)",
+    expTitle: "Cargo", expTitlePh: "ex. Senior Product Manager",
+    expCompany: "Empresa", expCompanyPh: "ex. Acme AI (Startup Série B)",
+    expDetails: "Responsabilidades e conquistas", expDetailsPh: "ex. Liderei estratégia de produto para plataforma de IA\nCresci usuários de 5K a 150K\nLancei 12 funcionalidades, aumentando retenção em 34%",
+    connName: "Nome e cargo", connNamePh: "ex. Sara, VP de Marketing na Acme",
+    connCommon: "O que têm em comum", connCommonPh: "ex. Vi o post sobre IA, contato mútuo",
+    connGoal: "Seu objetivo",
+    gNetworking: "Networking", gCollaboration: "Colaboração", gLearn: "Aprender", gHiring: "Contratação",
+    fuName: "Nome", fuNamePh: "ex. Marco",
+    fuContext: "Como se conectaram", fuContextPh: "ex. Nos conhecemos em conferência, conectamos semana passada",
+    fuAsk: "O que deseja?", fuAskPh: "ex. Ligação de 15 min, conselho sobre mudança de carreira",
+    tyName: "Nome", tyNamePh: "ex. Jennifer",
+    tyContext: "Contexto", tyContextPh: "ex. Entrevista, café, ligação de conselho",
+    tyTakeaway: "Principal aprendizado da conversa", tyTakeawayPh: "ex. Adorei aprender sobre a abordagem deles para escalar equipes",
+    replyLabel: "💬 Cole o comentário que quer responder",
+    replyPh: "Cole o comentário do LinkedIn aqui...",
+    replyStyleLabel: "🎯 Estilo de resposta",
+    rSupportive: "Apoio", rValue: "Agregar valor", rQuestion: "Fazer pergunta", rDisagree: "Discordar com respeito",
+    copy: "📋 Copiar", copied: "✅ Copiado!", regenerate: "🔄 Regenerar",
+    words: "Palavras", characters: "Caracteres",
+    paywallTitle: "Você usou todos os créditos gratuitos hoje",
+    paywallDesc: 'Atualize para <b>LinkedGenie Pro</b> para acesso ilimitado a todas as ferramentas, templates exclusivos e geração prioritária.',
+    paywallBtn: "🚀 Atualizar para Pro — $5/mês", paywallCancel: "Cancele quando quiser",
+    featPosts: "Posts Inteligentes", featPostsDesc: "8 templates incluindo Atualização de Carreira e Vaga",
+    featProfile: "Otimizador de Perfil", featProfileDesc: "Título, seção Sobre e descrições de Experiência",
+    featMessages: "Mensagens e Respostas", featMessagesDesc: "Pedidos de conexão, follow-ups e respostas a comentários",
+    footer: 'LinkedGenie © 2026 · Feito com ❤️ e IA<br><a href="#" onclick="showLegal(\'privacy\')">Privacidade</a> · <a href="#" onclick="showLegal(\'terms\')">Termos</a>',
+    modalTitle: "ℹ️ Sobre o LinkedGenie",
+    modalDesc: 'LinkedGenie é seu kit completo de IA para criar conteúdo no LinkedIn.<br><br><b>Plano Grátis:</b> Login com Google — 3 gerações por dia.<br><b>Plano Pro:</b> $5/mês — acesso ilimitado a todas as ferramentas.<br><br><b>Ferramentas:</b><br>✍️ Gerador de posts (8 estilos + reescrita + ganchos)<br>👤 Otimizador de perfil (título, sobre, experiência)<br>📩 Criador de mensagens (conexão, follow-up, agradecimento)<br>💬 Gerador de respostas a comentários',
+    modalUpgrade: "Atualizar para Pro", modalGotIt: "Entendi!",
+    hookOptionsTitle: "Opções de Gancho", headlineOptionsTitle: "Opções de Título", replyOptionsTitle: "Opções de Resposta",
+    writeAboutThis: "✍️ Escrever", signOut: "Sair",
+    usagePro: "Pro", usageFree: "Grátis", upgrade: "Atualizar",
+    planPro: "Plano Pro", planFree: "Plano Grátis", monthlyPlan: "Mensal", yearlyPlan: "Anual", trialPlan: "Teste", giftPlan: "Presente",
+    renewsOn: "Renova", expiresOn: "Expira", daysLeft: "dias restantes",
+    todayUsage: "Hoje", history: "Histórico", settings: "Configurações",
+    historyTitle: "Histórico", historyEmpty: "Nenhum histórico ainda", historyBtn: "📋", historyDelete: "Excluir", historyClearAll: "Limpar tudo", historyClearConfirm: "Excluir todo o histórico?",
+    streakTooltip: "{n} dias seguidos!",
+    onboardTip: "Comece aqui — digite sua ideia e a transformaremos em um post profissional do LinkedIn",
+    nlTitle: "Receba dicas semanais para o LinkedIn",
+    nlDesc: "Inscreva-se — estratégias, tendências e prompts toda segunda-feira.",
+    nlBtn: "Inscrever-se",
+    growthTitle: "Meta alcançada!",
+    growthDesc: "{n} posts do LinkedIn criados com LinkedGenie",
+    growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
+    growthDismiss: "Talvez depois",
+    shareText: "Acabei de criar {n} posts do LinkedIn com LinkedGenie! 🚀",
+    clipboardCopied: "Texto copiado! Cole na sua publicação do LinkedIn ✅"
+  },
+  french: {
+    heroBadge: "Suite de Contenu LinkedIn propulsée par l'IA",
+    heroTitle: 'Votre boîte à outils complète pour le <em>contenu LinkedIn</em>',
+    heroDesc: "Générez des publications, optimisez votre profil, rédigez des messages et écrivez des réponses — le tout avec l'IA.",
+    loginPrompt: "Connectez-vous avec Google pour 3 générations gratuites par jour",
+    tabPost: "✍️ Post", tabProfile: "👤 Profil", tabMessage: "📩 Message", tabReply: "💬 Réponse",
+    subWrite: "✍️ Écrire", subRewrite: "🔄 Réécrire", subHooks: "🎣 Accroches",
+    subHeadline: "💫 Titre", subAbout: "📝 À propos", subExperience: "💼 Expérience",
+    subConnection: "🤝 Connexion", subFollowup: "📨 Suivi", subThankyou: "🙏 Remerciement",
+    ideaLabel: "💡 Votre idée ou sujet",
+    ideaPh: "ex. Pourquoi j'ai refusé une offre à 200K$ pour rester dans ma startup...\nex. 5 erreurs que j'ai faites en tant que nouveau manager\nex. Comment l'IA change le recrutement",
+    ideaHint: "Soyez précis pour de meilleurs résultats",
+    rewriteLabel: "🔄 Collez votre publication ou brouillon",
+    rewritePh: "Collez votre publication LinkedIn ou brouillon ici...\n\nL'IA la réécrira avec de meilleures accroches, mise en forme et éléments d'engagement.",
+    rewriteHint: "Collez votre brouillon — l'IA l'améliorera",
+    hooksLabel: "🎣 De quoi parle votre publication ?",
+    hooksPh: "ex. La plus grande erreur des nouveaux managers\nex. Pourquoi le télétravail est là pour rester\nex. Leçons de la croissance d'une startup à 1M$ ARR",
+    hooksHint: "Nous générerons 5 accroches irrésistibles",
+    styleLabel: "🎨 Style d'écriture",
+    sStory: "Histoire", sStorySub: "Récit personnel",
+    sTips: "Conseils", sTipsSub: "Cadres et listes",
+    sMotivational: "Motivant", sMotivationalSub: "Inspirer l'action",
+    sHotTake: "Prise de Position", sHotTakeSub: "Opinion audacieuse",
+    sCareer: "Évolution Pro", sCareerSub: "Nouveau poste / promo",
+    sAchievement: "Accomplissement", sAchievementSub: "Jalon atteint",
+    sJobPost: "Offre d'Emploi", sJobPostSub: "Annonce de recrutement",
+    sOpenToWork: "En Recherche", sOpenToWorkSub: "Recherche d'emploi",
+    toneLabel: "🎭 Ton",
+    tProfessional: "Professionnel", tCasual: "Décontracté", tBold: "Audacieux", tHumorous: "Humoristique", tConversational: "Conversationnel",
+    generate: "⚡ Générer", generating: "Génération...",
+    genMessage: "⚡ Générer Message", genReplies: "⚡ Générer Réponses",
+    kbHint: "pour générer",
+    hlRole: "Poste actuel", hlRolePh: "ex. Product Manager",
+    hlSkill: "Compétence clé", hlSkillPh: "ex. IA/ML, Growth, Design",
+    hlValue: "Quelle valeur apportez-vous ?", hlValuePh: "ex. J'aide les startups à atteindre 1M$ ARR",
+    hlAudience: "Public cible", hlAudiencePh: "ex. Recruteurs, Clients, Fondateurs",
+    aboutBg: "Parcours professionnel (1-2 phrases)", aboutBgPh: "ex. 6 ans en marketing SaaS B2B, dirigé la stratégie de contenu dans 3 startups",
+    aboutAch: "Réalisations principales (2-3)", aboutAchPh: "ex. Généré 12M$ en pipeline\nDéveloppé la base d'abonnés de 0 à 100K\nConstruit une équipe de 15 marketeurs",
+    aboutExp: "Domaines d'expertise", aboutExpPh: "ex. SEO, Stratégie de Contenu, IA",
+    aboutGoal: "Que recherchez-vous ?", aboutGoalPh: "ex. Nouveaux clients, Recrutement, Collaboration",
+    aboutLen: "Longueur", aboutShort: "Court (~500 chars)", aboutMedium: "Moyen (~1200 chars)", aboutLong: "Long (~2400 chars)",
+    expTitle: "Poste", expTitlePh: "ex. Senior Product Manager",
+    expCompany: "Entreprise", expCompanyPh: "ex. Acme AI (Startup Série B)",
+    expDetails: "Responsabilités et réalisations", expDetailsPh: "ex. Dirigé la stratégie produit pour la plateforme IA\nDéveloppé les utilisateurs de 5K à 150K\nLancé 12 fonctionnalités, augmentant la rétention de 34%",
+    connName: "Nom et poste", connNamePh: "ex. Sarah, VP Marketing chez Acme",
+    connCommon: "Ce que vous avez en commun", connCommonPh: "ex. J'ai vu leur post sur l'IA, contact mutuel",
+    connGoal: "Votre objectif",
+    gNetworking: "Réseautage", gCollaboration: "Collaboration", gLearn: "Apprendre", gHiring: "Recrutement",
+    fuName: "Leur nom", fuNamePh: "ex. Marc",
+    fuContext: "Comment vous êtes connectés", fuContextPh: "ex. Rencontrés en conférence, connectés la semaine dernière",
+    fuAsk: "Que souhaitez-vous ?", fuAskPh: "ex. Appel de 15 min, conseil sur changement de carrière",
+    tyName: "Leur nom", tyNamePh: "ex. Jennifer",
+    tyContext: "Contexte", tyContextPh: "ex. Entretien, café, appel conseil",
+    tyTakeaway: "Point clé de la conversation", tyTakeawayPh: "ex. J'ai adoré découvrir leur approche pour développer les équipes",
+    replyLabel: "💬 Collez le commentaire auquel répondre",
+    replyPh: "Collez le commentaire LinkedIn ici...",
+    replyStyleLabel: "🎯 Style de réponse",
+    rSupportive: "Soutien", rValue: "Apporter valeur", rQuestion: "Poser question", rDisagree: "Désaccord respectueux",
+    copy: "📋 Copier", copied: "✅ Copié !", regenerate: "🔄 Régénérer",
+    words: "Mots", characters: "Caractères",
+    paywallTitle: "Vous avez utilisé tous vos crédits gratuits aujourd'hui",
+    paywallDesc: "Passez à <b>LinkedGenie Pro</b> pour un accès illimité à tous les outils, modèles exclusifs et génération prioritaire.",
+    paywallBtn: "🚀 Passer à Pro — 5$/mois", paywallCancel: "Annulez à tout moment",
+    featPosts: "Posts Intelligents", featPostsDesc: "8 modèles dont Évolution Pro et Offre d'Emploi",
+    featProfile: "Optimiseur de Profil", featProfileDesc: "Titre, section À propos et descriptions d'Expérience",
+    featMessages: "Messages et Réponses", featMessagesDesc: "Demandes de connexion, suivis et réponses aux commentaires",
+    footer: 'LinkedGenie © 2026 · Fait avec ❤️ et IA<br><a href="#" onclick="showLegal(\'privacy\')">Confidentialité</a> · <a href="#" onclick="showLegal(\'terms\')">Conditions</a>',
+    modalTitle: "ℹ️ À propos de LinkedGenie",
+    modalDesc: "LinkedGenie est votre boîte à outils IA complète pour créer du contenu LinkedIn.<br><br><b>Plan Gratuit :</b> Connectez-vous avec Google — 3 générations par jour.<br><b>Plan Pro :</b> 5$/mois — accès illimité à tous les outils.<br><br><b>Outils inclus :</b><br>✍️ Générateur de posts (8 styles + réécriture + accroches)<br>👤 Optimiseur de profil (titre, à propos, expérience)<br>📩 Rédacteur de messages (connexion, suivi, remerciement)<br>💬 Générateur de réponses aux commentaires",
+    modalUpgrade: "Passer à Pro", modalGotIt: "Compris !",
+    hookOptionsTitle: "Options d'Accroche", headlineOptionsTitle: "Options de Titre", replyOptionsTitle: "Options de Réponse",
+    writeAboutThis: "✍️ Écrire", signOut: "Se déconnecter",
+    usagePro: "Pro", usageFree: "Gratuit", upgrade: "Améliorer",
+    planPro: "Plan Pro", planFree: "Plan Gratuit", monthlyPlan: "Mensuel", yearlyPlan: "Annuel", trialPlan: "Essai", giftPlan: "Cadeau",
+    renewsOn: "Renouvelle", expiresOn: "Expire", daysLeft: "jours restants",
+    todayUsage: "Aujourd'hui", history: "Historique", settings: "Paramètres",
+    historyTitle: "Historique", historyEmpty: "Aucun historique", historyBtn: "📋", historyDelete: "Supprimer", historyClearAll: "Tout effacer", historyClearConfirm: "Effacer tout l'historique ?",
+    streakTooltip: "{n} jours consécutifs !",
+    onboardTip: "Commencez ici — tapez votre idée et nous la transformerons en un post LinkedIn professionnel",
+    nlTitle: "Recevez des conseils LinkedIn chaque semaine",
+    nlDesc: "Rejoignez notre newsletter — stratégies, tendances et prompts chaque lundi.",
+    nlBtn: "S'abonner",
+    growthTitle: "Objectif atteint !",
+    growthDesc: "{n} publications LinkedIn créées avec LinkedGenie",
+    growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
+    growthDismiss: "Peut-être plus tard",
+    shareText: "Je viens de créer {n} publications LinkedIn avec LinkedGenie ! 🚀",
+    clipboardCopied: "Texte copié ! Collez-le dans votre publication LinkedIn ✅"
+  },
+  german: {
+    heroBadge: "KI-gestützte LinkedIn Content Suite",
+    heroTitle: 'Ihr komplettes Toolkit für <em>LinkedIn Content</em>',
+    heroDesc: "Erstellen Sie Beiträge, optimieren Sie Ihr Profil, verfassen Sie Nachrichten und schreiben Sie Antworten — alles mit KI.",
+    loginPrompt: "Mit Google anmelden für 3 kostenlose Generierungen pro Tag",
+    tabPost: "✍️ Beitrag", tabProfile: "👤 Profil", tabMessage: "📩 Nachricht", tabReply: "💬 Antwort",
+    subWrite: "✍️ Schreiben", subRewrite: "🔄 Umschreiben", subHooks: "🎣 Hooks",
+    subHeadline: "💫 Überschrift", subAbout: "📝 Über mich", subExperience: "💼 Erfahrung",
+    subConnection: "🤝 Vernetzung", subFollowup: "📨 Follow-up", subThankyou: "🙏 Danke",
+    ideaLabel: "💡 Ihre Idee oder Ihr Thema",
+    ideaPh: "z.B. Warum ich ein 200K$-Angebot abgelehnt habe, um bei meinem Startup zu bleiben...\nz.B. 5 Fehler, die ich als neuer Manager gemacht habe\nz.B. Wie KI den Einstellungsprozess verändert",
+    ideaHint: "Seien Sie spezifisch für bessere Ergebnisse",
+    rewriteLabel: "🔄 Fügen Sie Ihren Beitrag oder Entwurf ein",
+    rewritePh: "Fügen Sie Ihren LinkedIn-Beitrag oder Entwurf hier ein...\n\nDie KI wird ihn mit besseren Hooks, Formatierung und Engagement-Elementen umschreiben.",
+    rewriteHint: "Entwurf einfügen — KI verbessert ihn",
+    hooksLabel: "🎣 Worum geht es in Ihrem Beitrag?",
+    hooksPh: "z.B. Der größte Fehler neuer Manager\nz.B. Warum Remote-Arbeit bleiben wird\nz.B. Lektionen vom Skalieren eines Startups auf 1M$ ARR",
+    hooksHint: "Wir generieren 5 unwiderstehliche Hooks",
+    styleLabel: "🎨 Schreibstil",
+    sStory: "Geschichte", sStorySub: "Persönliche Erzählung",
+    sTips: "Tipps", sTipsSub: "Frameworks & Listen",
+    sMotivational: "Motivierend", sMotivationalSub: "Zum Handeln inspirieren",
+    sHotTake: "Meinungsstark", sHotTakeSub: "Mutige Meinung",
+    sCareer: "Karriere-Update", sCareerSub: "Neue Rolle / Beförderung",
+    sAchievement: "Erfolg", sAchievementSub: "Meilenstein erreicht",
+    sJobPost: "Stellenanzeige", sJobPostSub: "Jobangebot",
+    sOpenToWork: "Offen für Arbeit", sOpenToWorkSub: "Jobsuche",
+    toneLabel: "🎭 Ton",
+    tProfessional: "Professionell", tCasual: "Locker", tBold: "Mutig", tHumorous: "Humorvoll", tConversational: "Gesprächig",
+    generate: "⚡ Generieren", generating: "Wird generiert...",
+    genMessage: "⚡ Nachricht generieren", genReplies: "⚡ Antworten generieren",
+    kbHint: "zum Generieren",
+    hlRole: "Aktuelle Position", hlRolePh: "z.B. Product Manager",
+    hlSkill: "Kernkompetenz", hlSkillPh: "z.B. KI/ML, Growth, Design",
+    hlValue: "Welchen Mehrwert bieten Sie?", hlValuePh: "z.B. Ich helfe Startups auf 1M$ ARR zu skalieren",
+    hlAudience: "Zielgruppe", hlAudiencePh: "z.B. Recruiter, Kunden, Gründer",
+    aboutBg: "Beruflicher Werdegang (1-2 Sätze)", aboutBgPh: "z.B. 6 Jahre B2B SaaS Marketing, Content-Strategie in 3 Startups geleitet",
+    aboutAch: "Top-Erfolge (2-3)", aboutAchPh: "z.B. 12M$ Pipeline generiert\nAbonnenten von 0 auf 100K gesteigert\nTeam von 15 Marketern aufgebaut",
+    aboutExp: "Fachgebiete", aboutExpPh: "z.B. SEO, Content-Strategie, KI",
+    aboutGoal: "Was suchen Sie?", aboutGoalPh: "z.B. Neue Kunden, Einstellungen, Zusammenarbeit",
+    aboutLen: "Länge", aboutShort: "Kurz (~500 Zeichen)", aboutMedium: "Mittel (~1200 Zeichen)", aboutLong: "Lang (~2400 Zeichen)",
+    expTitle: "Position", expTitlePh: "z.B. Senior Product Manager",
+    expCompany: "Unternehmen", expCompanyPh: "z.B. Acme AI (Serie B Startup)",
+    expDetails: "Verantwortlichkeiten & Erfolge", expDetailsPh: "z.B. Produktstrategie für KI-Plattform geleitet\nNutzer von 5K auf 150K gesteigert\n12 Features geliefert, Retention um 34% erhöht",
+    connName: "Name und Position", connNamePh: "z.B. Sarah, VP Marketing bei Acme",
+    connCommon: "Gemeinsamkeiten", connCommonPh: "z.B. Ihren Beitrag über KI gesehen, gemeinsamer Kontakt",
+    connGoal: "Ihr Ziel",
+    gNetworking: "Networking", gCollaboration: "Zusammenarbeit", gLearn: "Lernen", gHiring: "Einstellung",
+    fuName: "Name", fuNamePh: "z.B. Markus",
+    fuContext: "Wie Sie verbunden sind", fuContextPh: "z.B. Auf Konferenz getroffen, letzte Woche vernetzt",
+    fuAsk: "Was möchten Sie?", fuAskPh: "z.B. 15-Min-Anruf, Karriereberatung",
+    tyName: "Name", tyNamePh: "z.B. Jennifer",
+    tyContext: "Kontext", tyContextPh: "z.B. Interview, Kaffee-Chat, Beratungsgespräch",
+    tyTakeaway: "Wichtigste Erkenntnis aus dem Gespräch", tyTakeawayPh: "z.B. Beeindruckt von ihrem Ansatz zum Teamaufbau",
+    replyLabel: "💬 Kommentar einfügen, auf den Sie antworten möchten",
+    replyPh: "LinkedIn-Kommentar hier einfügen...",
+    replyStyleLabel: "🎯 Antwortstil",
+    rSupportive: "Unterstützend", rValue: "Mehrwert", rQuestion: "Frage stellen", rDisagree: "Respektvoller Widerspruch",
+    copy: "📋 Kopieren", copied: "✅ Kopiert!", regenerate: "🔄 Neu generieren",
+    words: "Wörter", characters: "Zeichen",
+    paywallTitle: "Sie haben heute alle kostenlosen Credits verbraucht",
+    paywallDesc: 'Upgraden Sie auf <b>LinkedGenie Pro</b> für unbegrenzten Zugang zu allen Tools, exklusiven Vorlagen und priorisierter Generierung.',
+    paywallBtn: "🚀 Auf Pro upgraden — 5$/Monat", paywallCancel: "Jederzeit kündbar",
+    featPosts: "Smarte Beiträge", featPostsDesc: "8 Vorlagen inkl. Karriere-Update & Stellenanzeige",
+    featProfile: "Profil-Optimierer", featProfileDesc: "Überschrift, Über-mich-Bereich & Erfahrungsbeschreibungen",
+    featMessages: "Nachrichten & Antworten", featMessagesDesc: "Vernetzungsanfragen, Follow-ups & Kommentarantworten",
+    footer: 'LinkedGenie © 2026 · Mit ❤️ und KI erstellt<br><a href="#" onclick="showLegal(\'privacy\')">Datenschutz</a> · <a href="#" onclick="showLegal(\'terms\')">AGB</a>',
+    modalTitle: "ℹ️ Über LinkedGenie",
+    modalDesc: 'LinkedGenie ist Ihr komplettes KI-Toolkit für LinkedIn Content.<br><br><b>Kostenlos:</b> Mit Google anmelden — 3 Generierungen pro Tag.<br><b>Pro:</b> 5$/Monat — unbegrenzter Zugang zu allen Tools.<br><br><b>Tools:</b><br>✍️ Beitragsgenerator (8 Stile + Umschreiben + Hooks)<br>👤 Profil-Optimierer (Überschrift, Über mich, Erfahrung)<br>📩 Nachrichtenverfasser (Vernetzung, Follow-up, Dank)<br>💬 Kommentarantwort-Generator',
+    modalUpgrade: "Auf Pro upgraden", modalGotIt: "Verstanden!",
+    hookOptionsTitle: "Hook-Optionen", headlineOptionsTitle: "Überschrift-Optionen", replyOptionsTitle: "Antwort-Optionen",
+    writeAboutThis: "✍️ Schreiben", signOut: "Abmelden",
+    usagePro: "Pro", usageFree: "Kostenlos", upgrade: "Upgraden",
+    planPro: "Pro-Plan", planFree: "Kostenloser Plan", monthlyPlan: "Monatlich", yearlyPlan: "Jährlich", trialPlan: "Testversion", giftPlan: "Geschenk",
+    renewsOn: "Erneuert", expiresOn: "Läuft ab", daysLeft: "Tage übrig",
+    todayUsage: "Heute", history: "Verlauf", settings: "Einstellungen",
+    historyTitle: "Verlauf", historyEmpty: "Noch kein Verlauf", historyBtn: "📋", historyDelete: "Löschen", historyClearAll: "Alles löschen", historyClearConfirm: "Gesamten Verlauf löschen?",
+    streakTooltip: "{n} Tage in Folge!",
+    onboardTip: "Starten Sie hier — geben Sie Ihre Idee ein und wir erstellen einen professionellen LinkedIn-Post",
+    nlTitle: "Wöchentliche LinkedIn-Tipps erhalten",
+    nlDesc: "Abonnieren Sie — Strategien, Trends & Prompts jeden Montag.",
+    nlBtn: "Abonnieren",
+    growthTitle: "Meilenstein erreicht!",
+    growthDesc: "{n} LinkedIn-Beiträge mit LinkedGenie erstellt",
+    growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
+    growthDismiss: "Vielleicht später",
+    shareText: "Ich habe gerade {n} LinkedIn-Beiträge mit LinkedGenie erstellt! 🚀",
+    clipboardCopied: "Text kopiert! Füge ihn in deinen LinkedIn-Beitrag ein ✅"
+  },
+  arabic: {
+    heroBadge: "مجموعة محتوى LinkedIn مدعومة بالذكاء الاصطناعي",
+    heroTitle: 'أدواتك المتكاملة لمحتوى <em>LinkedIn</em>',
+    heroDesc: "أنشئ منشورات، حسّن ملفك الشخصي، اكتب رسائل وردود — كل ذلك بالذكاء الاصطناعي.",
+    loginPrompt: "سجّل الدخول بحساب Google للحصول على 3 توليدات مجانية يومياً",
+    tabPost: "✍️ منشور", tabProfile: "👤 الملف الشخصي", tabMessage: "📩 رسالة", tabReply: "💬 رد",
+    subWrite: "✍️ كتابة", subRewrite: "🔄 إعادة كتابة", subHooks: "🎣 عناوين جذب",
+    subHeadline: "💫 العنوان", subAbout: "📝 نبذة عني", subExperience: "💼 الخبرة",
+    subConnection: "🤝 طلب تواصل", subFollowup: "📨 متابعة", subThankyou: "🙏 شكر",
+    ideaLabel: "💡 فكرتك أو موضوعك",
+    ideaPh: "مثال: لماذا رفضت عرض بـ200 ألف دولار لأبقى في شركتي الناشئة...\nمثال: 5 أخطاء ارتكبتها كمدير جديد\nمثال: كيف يغيّر الذكاء الاصطناعي عملية التوظيف",
+    ideaHint: "كن محدداً للحصول على نتائج أفضل",
+    rewriteLabel: "🔄 الصق منشورك أو مسودتك",
+    rewritePh: "الصق منشور LinkedIn أو مسودتك هنا...\n\nسيعيد الذكاء الاصطناعي كتابته بعناوين أفضل وتنسيق وعناصر تفاعل محسّنة مع الحفاظ على رسالتك الأساسية.",
+    rewriteHint: "الصق مسودتك — الذكاء الاصطناعي سيحسّنها",
+    hooksLabel: "🎣 ما موضوع منشورك؟",
+    hooksPh: "مثال: أكبر خطأ يرتكبه المدراء الجدد\nمثال: لماذا العمل عن بُعد باقٍ\nمثال: دروس من تنمية شركة ناشئة إلى مليون دولار",
+    hooksHint: "سننشئ 5 عناوين جذب لا تُقاوم",
+    styleLabel: "🎨 أسلوب الكتابة",
+    sStory: "قصة", sStorySub: "سرد شخصي",
+    sTips: "نصائح", sTipsSub: "أطر عمل وقوائم",
+    sMotivational: "تحفيزي", sMotivationalSub: "إلهام للعمل",
+    sHotTake: "رأي جريء", sHotTakeSub: "وجهة نظر مختلفة",
+    sCareer: "تحديث مهني", sCareerSub: "منصب جديد / ترقية",
+    sAchievement: "إنجاز", sAchievementSub: "معلم مهني",
+    sJobPost: "إعلان وظيفة", sJobPostSub: "توظيف",
+    sOpenToWork: "أبحث عن عمل", sOpenToWorkSub: "بحث وظيفي",
+    toneLabel: "🎭 النبرة",
+    tProfessional: "مهني", tCasual: "عفوي", tBold: "جريء", tHumorous: "فكاهي", tConversational: "حواري",
+    generate: "⚡ إنشاء", generating: "جارٍ الإنشاء...",
+    genMessage: "⚡ إنشاء رسالة", genReplies: "⚡ إنشاء ردود",
+    kbHint: "للإنشاء",
+    hlRole: "المنصب الحالي", hlRolePh: "مثال: مدير منتجات",
+    hlSkill: "المهارة الرئيسية", hlSkillPh: "مثال: ذكاء اصطناعي، نمو، تصميم",
+    hlValue: "ما القيمة التي تقدمها؟", hlValuePh: "مثال: أساعد الشركات الناشئة على النمو",
+    hlAudience: "الجمهور المستهدف", hlAudiencePh: "مثال: مسؤولو توظيف، عملاء، مؤسسون",
+    aboutBg: "الخلفية المهنية (جملة أو جملتين)", aboutBgPh: "مثال: 6 سنوات في تسويق SaaS، قدت استراتيجية المحتوى في 3 شركات ناشئة",
+    aboutAch: "أبرز الإنجازات (2-3)", aboutAchPh: "مثال: حققت 12 مليون$ في المبيعات\nنميت قاعدة المشتركين من 0 إلى 100 ألف\nبنيت فريق من 15 مسوّق",
+    aboutExp: "مجالات الخبرة", aboutExpPh: "مثال: SEO، استراتيجية المحتوى، الذكاء الاصطناعي",
+    aboutGoal: "ماذا تبحث عنه؟", aboutGoalPh: "مثال: عملاء جدد، توظيف، تعاون",
+    aboutLen: "الطول", aboutShort: "قصيرة (~500 حرف)", aboutMedium: "متوسطة (~1200 حرف)", aboutLong: "طويلة (~2400 حرف)",
+    expTitle: "المسمى الوظيفي", expTitlePh: "مثال: مدير منتجات أول",
+    expCompany: "الشركة", expCompanyPh: "مثال: شركة Acme AI (سلسلة B)",
+    expDetails: "المسؤوليات والإنجازات", expDetailsPh: "مثال: قدت استراتيجية المنتج لمنصة الذكاء الاصطناعي\nنميت المستخدمين من 5 آلاف إلى 150 ألف\nأطلقت 12 ميزة، وزادت نسبة الاحتفاظ 34%",
+    connName: "الاسم والمنصب", connNamePh: "مثال: سارة، نائب رئيس التسويق في Acme",
+    connCommon: "ما المشترك بينكما", connCommonPh: "مثال: رأيت منشورهم عن الذكاء الاصطناعي، معرفة مشتركة",
+    connGoal: "هدفك",
+    gNetworking: "تواصل مهني", gCollaboration: "تعاون", gLearn: "تعلّم", gHiring: "توظيف",
+    fuName: "اسمهم", fuNamePh: "مثال: أحمد",
+    fuContext: "كيف تواصلتم", fuContextPh: "مثال: التقينا في مؤتمر، تواصلنا الأسبوع الماضي",
+    fuAsk: "ماذا تريد؟", fuAskPh: "مثال: مكالمة 15 دقيقة، نصيحة مهنية",
+    tyName: "اسمهم", tyNamePh: "مثال: محمد",
+    tyContext: "السياق", tyContextPh: "مثال: مقابلة، لقاء، مكالمة استشارية",
+    tyTakeaway: "أهم ما استفدته من المحادثة", tyTakeawayPh: "مثال: أعجبني أسلوبهم في بناء الفرق",
+    replyLabel: "💬 الصق التعليق الذي تريد الرد عليه",
+    replyPh: "الصق تعليق LinkedIn هنا...",
+    replyStyleLabel: "🎯 أسلوب الرد",
+    rSupportive: "داعم", rValue: "إضافة قيمة", rQuestion: "طرح سؤال", rDisagree: "اختلاف باحترام",
+    copy: "📋 نسخ", copied: "✅ تم النسخ!", regenerate: "🔄 إعادة إنشاء",
+    words: "كلمات", characters: "أحرف",
+    paywallTitle: "لقد استخدمت جميع الرصيد المجاني اليوم",
+    paywallDesc: 'قم بالترقية إلى <b>LinkedGenie Pro</b> للوصول غير المحدود لجميع الأدوات والقوالب الحصرية.',
+    paywallBtn: "🚀 ترقية إلى Pro — 5$/شهرياً", paywallCancel: "إلغاء في أي وقت",
+    featPosts: "منشورات ذكية", featPostsDesc: "8 قوالب تشمل تحديث مهني وإعلان وظيفة",
+    featProfile: "محسّن الملف الشخصي", featProfileDesc: "العنوان، نبذة عني، ووصف الخبرة",
+    featMessages: "رسائل وردود", featMessagesDesc: "طلبات تواصل، متابعات، وردود على التعليقات",
+    footer: 'LinkedGenie © 2026 · صُنع بـ ❤️ والذكاء الاصطناعي<br><a href="#" onclick="showLegal(\'privacy\')">سياسة الخصوصية</a> · <a href="#" onclick="showLegal(\'terms\')">شروط الاستخدام</a>',
+    modalTitle: "ℹ️ عن LinkedGenie",
+    modalDesc: 'LinkedGenie هو مجموعة أدوات الذكاء الاصطناعي المتكاملة لإنشاء محتوى LinkedIn.<br><br><b>الخطة المجانية:</b> سجّل بحساب Google — 3 عمليات إنشاء يومياً.<br><b>خطة Pro:</b> 5$/شهرياً — وصول غير محدود لجميع الأدوات.<br><br><b>الأدوات:</b><br>✍️ منشئ المنشورات (8 أساليب + إعادة كتابة + عناوين جذب)<br>👤 محسّن الملف الشخصي (العنوان، نبذة عني، الخبرة)<br>📩 كاتب الرسائل (تواصل، متابعة، شكر)<br>💬 منشئ ردود التعليقات',
+    modalUpgrade: "ترقية إلى Pro", modalGotIt: "فهمت!",
+    hookOptionsTitle: "خيارات العناوين الجاذبة", headlineOptionsTitle: "خيارات العنوان", replyOptionsTitle: "خيارات الرد",
+    writeAboutThis: "✍️ اكتب عنه", signOut: "تسجيل الخروج",
+    usagePro: "Pro", usageFree: "مجاني", upgrade: "ترقية",
+    planPro: "خطة Pro", planFree: "خطة مجانية", monthlyPlan: "شهري", yearlyPlan: "سنوي", trialPlan: "تجريبي", giftPlan: "هدية",
+    renewsOn: "يتجدد", expiresOn: "ينتهي", daysLeft: "يوم متبقي",
+    todayUsage: "اليوم", history: "السجل", settings: "الإعدادات",
+    historyTitle: "السجل", historyEmpty: "لا يوجد سجل بعد", historyBtn: "📋", historyDelete: "حذف", historyClearAll: "حذف الكل", historyClearConfirm: "حذف كل السجل؟",
+    streakTooltip: "{n} أيام متتالية!",
+    onboardTip: "ابدأ هنا — اكتب فكرتك وسنحولها إلى منشور LinkedIn احترافي",
+    nlTitle: "نصائح أسبوعية لمحتوى LinkedIn",
+    nlDesc: "اشترك في نشرتنا — استراتيجيات واتجاهات وأفكار كل يوم اثنين.",
+    nlBtn: "اشتراك",
+    growthTitle: "تم تحقيق الهدف!",
+    growthDesc: "{n} منشورة LinkedIn تم إنشاؤها بواسطة LinkedGenie",
+    growthShareLI: "LinkedIn", growthShareTW: "X / Twitter",
+    growthDismiss: "ربما لاحقاً",
+    shareText: "أنشأت {n} منشورة على LinkedIn بواسطة LinkedGenie! 🚀",
+    clipboardCopied: "تم نسخ النص! الصقه في منشورك على LinkedIn ✅"
+  }
+};
+
+function applyLanguage(lang) {
+  const t = T[lang] || T.english;
+  const isRTL = lang === 'arabic';
+  document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
+  const langCodeMap = {english:'en',spanish:'es',portuguese:'pt',french:'fr',german:'de',arabic:'ar'};
+  document.documentElement.setAttribute('lang', langCodeMap[lang] || 'en');
+
+  // Helper
+  const txt = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = t[key]; };
+  const htm = (id, key) => { const el = document.getElementById(id); if (el) el.innerHTML = t[key]; };
+  const ph = (id, key) => { const el = document.getElementById(id); if (el) el.placeholder = t[key]; };
+
+  // Hero
+  htm('heroBadgeText', 'heroBadge');
+  htm('heroTitleText', 'heroTitle');
+  txt('heroDescText', 'heroDesc');
+  txt('loginPromptText', 'loginPrompt');
+
+  // Main tabs
+  document.querySelectorAll('.main-tab').forEach(tab => {
+    const key = 'tab' + tab.dataset.tab.charAt(0).toUpperCase() + tab.dataset.tab.slice(1);
+    tab.textContent = t[key];
+  });
+
+  // Post sub-tabs
+  const postSubs = document.querySelectorAll('#tabPost > .sub-tabs .sub-tab');
+  if (postSubs[0]) postSubs[0].textContent = t.subWrite;
+  if (postSubs[1]) postSubs[1].textContent = t.subRewrite;
+  if (postSubs[2]) postSubs[2].textContent = t.subHooks;
+
+  // Profile sub-tabs
+  const profSubs = document.querySelectorAll('#tabProfile > .sub-tabs .sub-tab');
+  if (profSubs[0]) profSubs[0].textContent = t.subHeadline;
+  if (profSubs[1]) profSubs[1].textContent = t.subAbout;
+  if (profSubs[2]) profSubs[2].textContent = t.subExperience;
+
+  // Message sub-tabs
+  const msgSubs = document.querySelectorAll('#tabMessage > .sub-tabs .sub-tab');
+  if (msgSubs[0]) msgSubs[0].textContent = t.subConnection;
+  if (msgSubs[1]) msgSubs[1].textContent = t.subFollowup;
+  if (msgSubs[2]) msgSubs[2].textContent = t.subThankyou;
+
+  // Post inputs
+  htm('labelIdea', 'ideaLabel'); ph('ideaInput', 'ideaPh'); txt('hintIdea', 'ideaHint');
+  htm('labelRewrite', 'rewriteLabel'); ph('rewriteInput', 'rewritePh'); txt('hintRewrite', 'rewriteHint');
+  htm('labelHooks', 'hooksLabel'); ph('hooksInput', 'hooksPh'); txt('hintHooks', 'hooksHint');
+
+  // Styles
+  htm('labelStyle', 'styleLabel');
+  const styles = [
+    ['storytelling','sStory','sStorySub'], ['educational','sTips','sTipsSub'], ['motivational','sMotivational','sMotivationalSub'],
+    ['contrarian','sHotTake','sHotTakeSub'], ['career_update','sCareer','sCareerSub'], ['achievement','sAchievement','sAchievementSub'],
+    ['job_posting','sJobPost','sJobPostSub'], ['open_to_work','sOpenToWork','sOpenToWorkSub']
+  ];
+  styles.forEach(([ds, tKey, sKey]) => {
+    const card = document.querySelector(`.style-card[data-style="${ds}"]`);
+    if (card) { card.querySelector('.style-title').textContent = t[tKey]; card.querySelector('.style-sub').textContent = t[sKey]; }
+  });
+
+  // Tones (Post)
+  htm('labelTonePost', 'toneLabel');
+  document.querySelectorAll('#tabPost .tone-chip[data-tone]').forEach(c => {
+    const m = { professional: 'tProfessional', casual: 'tCasual', bold: 'tBold', humorous: 'tHumorous' };
+    if (m[c.dataset.tone]) c.textContent = t[m[c.dataset.tone]];
+  });
+
+  // Tones (Profile)
+  htm('labelToneProfile', 'toneLabel');
+  document.querySelectorAll('#tabProfile .tone-chip[data-tone]').forEach(c => {
+    const m = { professional: 'tProfessional', casual: 'tConversational', bold: 'tBold' };
+    if (m[c.dataset.tone]) c.textContent = t[m[c.dataset.tone]];
+  });
+
+  // Generate buttons
+  txt('genBtnText', 'generate');
+  txt('genBtnProfile', 'generate');
+  txt('genBtnMessage', 'genMessage');
+  txt('genBtnReply', 'genReplies');
+
+  // Keyboard hints
+  document.querySelectorAll('.kb-hint').forEach(el => { el.innerHTML = `<kbd>Ctrl</kbd>+<kbd>Enter</kbd> ${t.kbHint}`; });
+
+  // Profile fields
+  txt('labelHlRole', 'hlRole'); ph('hlRole', 'hlRolePh');
+  txt('labelHlSkill', 'hlSkill'); ph('hlSkill', 'hlSkillPh');
+  txt('labelHlValue', 'hlValue'); ph('hlValue', 'hlValuePh');
+  txt('labelHlAudience', 'hlAudience'); ph('hlAudience', 'hlAudiencePh');
+  txt('labelAboutBg', 'aboutBg'); ph('aboutBg', 'aboutBgPh');
+  txt('labelAboutAch', 'aboutAch'); ph('aboutAchievements', 'aboutAchPh');
+  txt('labelAboutExp', 'aboutExp'); ph('aboutExpertise', 'aboutExpPh');
+  txt('labelAboutGoal', 'aboutGoal'); ph('aboutGoal', 'aboutGoalPh');
+  txt('labelAboutLen', 'aboutLen');
+  if (t.aboutShort) document.getElementById('optAboutShort').textContent = t.aboutShort;
+  if (t.aboutMedium) document.getElementById('optAboutMedium').textContent = t.aboutMedium;
+  if (t.aboutLong) document.getElementById('optAboutLong').textContent = t.aboutLong;
+  txt('labelExpTitle', 'expTitle'); ph('expTitle', 'expTitlePh');
+  txt('labelExpCompany', 'expCompany'); ph('expCompany', 'expCompanyPh');
+  txt('labelExpDetails', 'expDetails'); ph('expDetails', 'expDetailsPh');
+
+  // Message fields
+  txt('labelConnName', 'connName'); ph('connName', 'connNamePh');
+  txt('labelConnCommon', 'connCommon'); ph('connCommon', 'connCommonPh');
+  txt('labelConnGoal', 'connGoal');
+  document.querySelectorAll('#msgConnection .tone-chip[data-goal]').forEach(c => {
+    const m = { networking: 'gNetworking', collaboration: 'gCollaboration', learning: 'gLearn', hiring: 'gHiring' };
+    if (m[c.dataset.goal]) c.textContent = t[m[c.dataset.goal]];
+  });
+  txt('labelFuName', 'fuName'); ph('fuName', 'fuNamePh');
+  txt('labelFuContext', 'fuContext'); ph('fuContext', 'fuContextPh');
+  txt('labelFuAsk', 'fuAsk'); ph('fuAsk', 'fuAskPh');
+  txt('labelTyName', 'tyName'); ph('tyName', 'tyNamePh');
+  txt('labelTyContext', 'tyContext'); ph('tyContext', 'tyContextPh');
+  txt('labelTyTakeaway', 'tyTakeaway'); ph('tyTakeaway', 'tyTakeawayPh');
+
+  // Reply
+  htm('labelReplyComment', 'replyLabel'); ph('replyComment', 'replyPh');
+  htm('labelReplyStyle', 'replyStyleLabel');
+  document.querySelectorAll('#tabReply .tone-chip[data-replystyle]').forEach(c => {
+    const m = { supportive: 'rSupportive', insightful: 'rValue', question: 'rQuestion', disagree: 'rDisagree' };
+    if (m[c.dataset.replystyle]) c.textContent = t[m[c.dataset.replystyle]];
+  });
+
+  // Output
+  txt('copyBtnText', 'copy'); txt('regenBtnText', 'regenerate');
+  htm('statWordsLabel', 'words'); htm('statCharsLabel', 'characters');
+
+  // Paywall
+  txt('paywallTitleText', 'paywallTitle');
+  htm('paywallDescText', 'paywallDesc');
+  txt('paywallBtnText', 'paywallBtn');
+  txt('paywallCancelText', 'paywallCancel');
+
+  // Features
+  txt('featPostsTitle', 'featPosts'); txt('featPostsDesc', 'featPostsDesc');
+  txt('featProfileTitle', 'featProfile'); txt('featProfileDesc', 'featProfileDesc');
+  txt('featMessagesTitle', 'featMessages'); txt('featMessagesDesc', 'featMessagesDesc');
+
+  // Footer
+  htm('footerText', 'footer');
+
+  // Newsletter
+  txt('nlTitle', 'nlTitle');
+  txt('nlDesc', 'nlDesc');
+  txt('nlBtn', 'nlBtn');
+
+  // Modal
+  txt('modalTitleText', 'modalTitle');
+  htm('modalDescText', 'modalDesc');
+  txt('modalUpgradeBtn', 'modalUpgrade');
+  txt('modalGotItBtn', 'modalGotIt');
+
+  // Refresh account dropdown with new language
+  if (currentUser) renderAccountDropdown();
+}
+
+// ============ TAB SWITCHING ============
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.main-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+  // Hide outputs when switching tabs
+  document.getElementById('outputCard').classList.remove('visible');
+  document.getElementById('multiOutput').classList.remove('visible');
+  document.getElementById('paywallCard').classList.remove('visible');
+}
+
+function switchPostMode(mode) {
+  currentPostMode = mode;
+  document.querySelectorAll('#tabPost .sub-tab').forEach((t, i) => t.classList.toggle('active', ['write','rewrite','hooks'][i] === mode));
+  document.getElementById('postWriteInput').style.display = mode === 'write' ? '' : 'none';
+  document.getElementById('postRewriteInput').style.display = mode === 'rewrite' ? '' : 'none';
+  document.getElementById('postHooksInput').style.display = mode === 'hooks' ? '' : 'none';
+  document.getElementById('postStyleSection').style.display = mode === 'hooks' ? 'none' : '';
+}
+
+function switchProfileMode(mode) {
+  currentProfileMode = mode;
+  document.querySelectorAll('#tabProfile .sub-tab').forEach((t, i) => t.classList.toggle('active', ['headline','about','experience'][i] === mode));
+  document.getElementById('profileHeadline').style.display = mode === 'headline' ? '' : 'none';
+  document.getElementById('profileAbout').style.display = mode === 'about' ? '' : 'none';
+  document.getElementById('profileExperience').style.display = mode === 'experience' ? '' : 'none';
+}
+
+function switchMessageMode(mode) {
+  currentMessageMode = mode;
+  document.querySelectorAll('#tabMessage .sub-tab').forEach((t, i) => t.classList.toggle('active', ['connection','followup','thankyou'][i] === mode));
+  document.getElementById('msgConnection').style.display = mode === 'connection' ? '' : 'none';
+  document.getElementById('msgFollowup').style.display = mode === 'followup' ? '' : 'none';
+  document.getElementById('msgThankyou').style.display = mode === 'thankyou' ? '' : 'none';
+}
+
+// ============ PICKERS ============
+function pickStyle(el) {
+  if (el.classList.contains('pro-only') && currentUser && !currentUser.isPro) {
+    openUpgrade(); return;
+  }
+  document.querySelectorAll('.style-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active'); currentStyle = el.dataset.style;
+}
+function pickLang(val) { currentLang = val; applyLanguage(val); }
+function pickTone(el) {
+  const row = el.parentElement;
+  row.querySelectorAll('.tone-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active'); currentTone = el.dataset.tone;
+}
+function pickGoal(el) {
+  el.parentElement.querySelectorAll('.tone-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active'); currentGoal = el.dataset.goal;
+}
+function pickReplyStyle(el) {
+  el.parentElement.querySelectorAll('.tone-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active'); currentReplyStyle = el.dataset.replystyle;
+}
+
+// ============ CHAR COUNTERS ============
+document.getElementById('ideaInput').addEventListener('input', function() {
+  document.getElementById('charCount').textContent = this.value.length;
+  localStorage.setItem('lg_draft_write', this.value);
+  if (!localStorage.getItem('lg_onboarded')) dismissOnboard();
+});
+document.getElementById('rewriteInput').addEventListener('input', function() {
+  document.getElementById('rewriteCharCount').textContent = this.value.length;
+});
+document.getElementById('hooksInput').addEventListener('input', function() {
+  document.getElementById('hooksCharCount').textContent = this.value.length;
+});
+
+// ============ AUTO-SAVE DRAFT ============
+const savedDraft = localStorage.getItem('lg_draft_write');
+if (savedDraft) {
+  document.getElementById('ideaInput').value = savedDraft;
+  document.getElementById('charCount').textContent = savedDraft.length;
+}
+
+// ============ KEYBOARD SHORTCUT ============
+document.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+    e.preventDefault();
+    handleGenerate();
+  }
+});
+
+// ============ GOOGLE AUTH ============
+function renderGoogleButtons() {
+  const options = { theme: 'outline', size: 'medium', shape: 'pill', text: 'signin' };
+  const navBtn = document.getElementById('googleBtnNav');
+  const mainBtn = document.getElementById('googleBtnMain');
+  if (navBtn) google.accounts.id.renderButton(navBtn, { ...options, size: 'small' });
+  if (mainBtn) google.accounts.id.renderButton(mainBtn, { ...options, size: 'large', width: 280 });
+}
+
+function isTokenExpired(token) {
+  try { const p = JSON.parse(atob(token.split('.')[1])); return Date.now() >= p.exp * 1000; } catch { return true; }
+}
+
+function decodeJwtPayload(token) {
+  const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+  const raw = atob(base64);
+  const utf8 = new TextDecoder().decode(new Uint8Array([...raw].map(c => c.charCodeAt(0))));
+  return JSON.parse(utf8);
+}
+
+function handleCredentialResponse(response) {
+  idToken = response.credential;
+  sessionStorage.setItem('gsi_token', idToken);
+  const payload = decodeJwtPayload(idToken);
+  currentUser = { email: payload.email, name: payload.name, picture: payload.picture };
+  onSignIn();
+}
+
+function restoreSession() {
+  const saved = sessionStorage.getItem('gsi_token');
+  if (!saved || isTokenExpired(saved)) { sessionStorage.removeItem('gsi_token'); return false; }
+  idToken = saved;
+  const payload = decodeJwtPayload(idToken);
+  currentUser = { email: payload.email, name: payload.name, picture: payload.picture };
+  onSignIn();
+  return true;
+}
+
+function onSignIn() {
+  const authArea = document.getElementById('authArea');
+  authArea.innerHTML = `
+    <div class="account-dropdown-wrapper">
+      <img class="account-avatar-btn" id="accountAvatarBtn" src="${currentUser.picture}" alt="User Profile" referrerpolicy="no-referrer" onclick="toggleAccountDropdown(event)">
+      <div class="account-dropdown" id="accountDropdown"></div>
+    </div>
+  `;
+  document.getElementById('loginPromptCard').style.display = 'none';
+  fetchUserStatus();
+}
+
+async function fetchUserStatus() {
+  try {
+    const res = await fetch('/api/user', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` } });
+    if (!res.ok) return;
+    let data; try { data = await res.json(); } catch { return; }
+    currentUser.isPro = data.isPro;
+    currentUser.remaining = data.remaining;
+    currentUser.limit = data.isPro ? 'unlimited' : FREE_LIMIT;
+    currentUser.subscription = data.subscription || null;
+    if (data.isPro) {
+      document.querySelectorAll('.style-card.pro-only').forEach(c => c.classList.remove('pro-only'));
+    }
+    renderAccountDropdown();
+  } catch (e) { console.error('Failed to fetch user status:', e); }
+}
+
+function signOut() {
+  google.accounts.id.disableAutoSelect();
+  idToken = null; currentUser = null;
+  sessionStorage.removeItem('gsi_token');
+  const authArea = document.getElementById('authArea');
+  authArea.innerHTML = `<div id="googleBtnNav"></div>`;
+  renderGoogleButtons();
+  document.getElementById('loginPromptCard').style.display = '';
+  document.getElementById('outputCard').classList.remove('visible');
+  document.getElementById('multiOutput').classList.remove('visible');
+  document.getElementById('paywallCard').classList.remove('visible');
+}
+
+function updateUsageUI(remaining, limit) {
+  if (currentUser) {
+    currentUser.remaining = remaining;
+    currentUser.limit = limit;
+    renderAccountDropdown();
+  }
+}
+
+function toggleAccountDropdown(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('accountDropdown');
+  if (dd) dd.classList.toggle('open');
+}
+
+function renderAccountDropdown() {
+  const dd = document.getElementById('accountDropdown');
+  if (!dd || !currentUser) return;
+  const t = T[currentLang] || T.english;
+  const isPro = currentUser.isPro;
+  const sub = currentUser.subscription;
+  const remaining = currentUser.remaining ?? '—';
+  const limit = currentUser.limit;
+  const streak = window._streakCount || 0;
+
+  // Plan section
+  let planHTML = '';
+  if (isPro) {
+    const planTypeMap = { yearly: t.yearlyPlan || 'Yearly', monthly: t.monthlyPlan || 'Monthly', trial: t.trialPlan || 'Trial', gift: t.giftPlan || 'Gift' };
+    const planType = planTypeMap[sub?.planType] || (t.monthlyPlan || 'Monthly');
+    planHTML = `<div class="dropdown-plan-box pro">
+      <div class="dropdown-plan-row">
+        <span class="dropdown-plan-label"><span class="pro-badge">PRO</span> ${planType}</span>
+      </div>`;
+    if (sub?.renewalDate || sub?.expiryDate) {
+      const dateStr = sub.expiryDate && sub.status === 'cancelled'
+        ? sub.expiryDate : sub.renewalDate;
+      const label = sub.status === 'cancelled' ? (t.expiresOn || 'Expires') : (t.renewsOn || 'Renews');
+      if (dateStr) {
+        const d = new Date(dateStr);
+        const formatted = d.toLocaleDateString(currentLang === 'arabic' ? 'ar' : currentLang === 'spanish' ? 'es' : currentLang === 'portuguese' ? 'pt' : currentLang === 'french' ? 'fr' : currentLang === 'german' ? 'de' : 'en', { month: 'short', day: 'numeric', year: 'numeric' });
+        planHTML += `<div class="dropdown-plan-row">
+          <span class="dropdown-plan-value">${label}: ${formatted}</span>
+        </div>`;
+      }
+      if (sub.daysRemaining != null) {
+        planHTML += `<div class="dropdown-plan-row">
+          <span class="dropdown-plan-days">${sub.daysRemaining} ${t.daysLeft || 'days left'}</span>
+        </div>`;
+      }
+    }
+    planHTML += `</div>`;
+  } else {
+    const freeLabel = t.planFree || 'Free Plan';
+    const usageLabel = t.todayUsage || 'Today';
+    const usedCount = limit && limit !== 'unlimited' ? limit - remaining : 0;
+    const barPct = limit && limit !== 'unlimited' ? Math.round((remaining / limit) * 100) : 100;
+    const barClass = remaining === 0 ? 'out' : remaining === 1 ? 'warn' : '';
+    planHTML = `<div class="dropdown-plan-box">
+      <div class="dropdown-plan-row">
+        <span class="dropdown-plan-label"><span class="free-badge">FREE</span> ${freeLabel}</span>
+      </div>
+      <div class="dropdown-plan-row">
+        <span class="dropdown-plan-value">${usageLabel}: ${remaining}/${limit}</span>
+      </div>
+      <div class="dropdown-usage-bar"><div class="dropdown-usage-fill ${barClass}" style="width:${barPct}%"></div></div>
+      <button class="dropdown-upgrade-btn" onclick="openUpgrade(); toggleAccountDropdown(event);">${t.upgrade || 'Upgrade'} →</button>
+    </div>`;
+  }
+
+  // Streak
+  let streakHTML = '';
+  if (streak >= 2) {
+    const tip = (t.streakTooltip || '{n} day streak!').replace('{n}', streak);
+    streakHTML = `<div class="dropdown-item" style="cursor:default;">
+      <span class="dropdown-item-icon">🔥</span><span>${tip}</span>
+    </div>`;
+  }
+
+  dd.innerHTML = `
+    <div class="dropdown-header">
+      <img class="dropdown-avatar" src="${currentUser.picture}" alt="User Profile" referrerpolicy="no-referrer">
+      <div class="dropdown-user-info">
+        <div class="dropdown-name">${currentUser.name}</div>
+        <div class="dropdown-email">${currentUser.email}</div>
+      </div>
+    </div>
+    ${planHTML}
+    <div class="dropdown-menu">
+      ${streakHTML}
+      <div class="dropdown-item" onclick="toggleHistory(); toggleAccountDropdown(event);">
+        <span class="dropdown-item-icon">📋</span><span>${t.history || 'History'}</span>
+      </div>
+      <div class="dropdown-item" onclick="toggleSettings(); toggleAccountDropdown(event);">
+        <span class="dropdown-item-icon">⚙️</span><span>${t.settings || 'Settings'}</span>
+      </div>
+    </div>
+    <div class="dropdown-divider"></div>
+    <button class="dropdown-signout" onclick="signOut()">
+      <span class="dropdown-item-icon">🚪</span><span>${t.signOut || 'Sign out'}</span>
+    </button>
+  `;
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+  const dd = document.getElementById('accountDropdown');
+  if (dd && dd.classList.contains('open')) {
+    const wrapper = dd.closest('.account-dropdown-wrapper');
+    if (wrapper && !wrapper.contains(e.target)) {
+      dd.classList.remove('open');
+    }
+  }
+});
+
+// ============ BUILD REQUEST ============
+function buildRequest() {
+  if (currentTab === 'post') {
+    if (currentPostMode === 'write') {
+      const idea = document.getElementById('ideaInput').value.trim();
+      if (!idea) return null;
+      return { type: 'post', mode: 'write', idea, style: currentStyle, tone: currentTone, lang: currentLang };
+    } else if (currentPostMode === 'rewrite') {
+      const draft = document.getElementById('rewriteInput').value.trim();
+      if (!draft) return null;
+      return { type: 'post', mode: 'rewrite', idea: draft, style: currentStyle, tone: currentTone, lang: currentLang };
+    } else if (currentPostMode === 'hooks') {
+      const topic = document.getElementById('hooksInput').value.trim();
+      if (!topic) return null;
+      return { type: 'post', mode: 'hooks', idea: topic, lang: currentLang };
+    }
+  } else if (currentTab === 'profile') {
+    if (currentProfileMode === 'headline') {
+      const role = document.getElementById('hlRole').value.trim();
+      if (!role) return null;
+      return { type: 'profile', mode: 'headline', inputs: { role, skill: document.getElementById('hlSkill').value.trim(), value: document.getElementById('hlValue').value.trim(), audience: document.getElementById('hlAudience').value.trim() }, tone: currentTone, lang: currentLang };
+    } else if (currentProfileMode === 'about') {
+      const bg = document.getElementById('aboutBg').value.trim();
+      if (!bg) return null;
+      return { type: 'profile', mode: 'about', inputs: { background: bg, achievements: document.getElementById('aboutAchievements').value.trim(), expertise: document.getElementById('aboutExpertise').value.trim(), goal: document.getElementById('aboutGoal').value.trim(), aboutLength: document.getElementById('aboutLength').value }, tone: currentTone, lang: currentLang };
+    } else if (currentProfileMode === 'experience') {
+      const title = document.getElementById('expTitle').value.trim();
+      if (!title) return null;
+      return { type: 'profile', mode: 'experience', inputs: { title, company: document.getElementById('expCompany').value.trim(), details: document.getElementById('expDetails').value.trim() }, tone: currentTone, lang: currentLang };
+    }
+  } else if (currentTab === 'message') {
+    if (currentMessageMode === 'connection') {
+      const name = document.getElementById('connName').value.trim();
+      if (!name) return null;
+      return { type: 'message', mode: 'connection', inputs: { name, common: document.getElementById('connCommon').value.trim(), goal: currentGoal }, lang: currentLang };
+    } else if (currentMessageMode === 'followup') {
+      const name = document.getElementById('fuName').value.trim();
+      if (!name) return null;
+      return { type: 'message', mode: 'followup', inputs: { name, context: document.getElementById('fuContext').value.trim(), ask: document.getElementById('fuAsk').value.trim() }, lang: currentLang };
+    } else if (currentMessageMode === 'thankyou') {
+      const name = document.getElementById('tyName').value.trim();
+      if (!name) return null;
+      return { type: 'message', mode: 'thankyou', inputs: { name, context: document.getElementById('tyContext').value.trim(), takeaway: document.getElementById('tyTakeaway').value.trim() }, lang: currentLang };
+    }
+  } else if (currentTab === 'reply') {
+    const comment = document.getElementById('replyComment').value.trim();
+    if (!comment) return null;
+    return { type: 'reply', mode: currentReplyStyle, idea: comment, lang: currentLang };
+  }
+  return null;
+}
+
+// ============ GENERATE ============
+async function handleGenerate() {
+  const isDemo = !idToken;
+
+  // If demo already used today, prompt sign-in
+  if (isDemo && demoUsed) {
+    document.getElementById('loginPromptCard').style.display = '';
+    document.getElementById('loginPromptCard').scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
+
+  const reqBody = buildRequest();
+  if (!reqBody) return;
+
+  const btn = document.getElementById('genBtn');
+  const btnText = document.getElementById('genBtnText');
+  if (btn) btn.disabled = true;
+  const t = T[currentLang] || T.english;
+  if (btnText) btnText.innerHTML = `<span class="spinner"></span> ${t.generating}`;
+  document.getElementById('paywallCard').classList.remove('visible');
+  document.getElementById('outputCard').classList.remove('visible');
+  document.getElementById('multiOutput').classList.remove('visible');
+
+  try {
+    const headers = { 'Content-Type': 'application/json' };
+    if (idToken) {
+      headers['Authorization'] = `Bearer ${idToken}`;
+    } else {
+      headers['X-Demo-Id'] = getDemoId();
+    }
+
+    const response = await fetch('/api/generate', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(reqBody)
+    });
+
+    let data;
+    try { data = await response.json(); } catch { throw new Error(`Server error (${response.status})`); }
+
+    if (response.status === 429) {
+      document.getElementById('paywallCard').classList.add('visible');
+      updateUsageUI(0, FREE_LIMIT);
+      resetBtn(); return;
+    }
+    if (response.status === 401) {
+      if (data.error === 'demo_limit') {
+        demoUsed = true;
+        localStorage.setItem('lg_demo_date', new Date().toISOString().slice(0, 10));
+        document.getElementById('loginPromptCard').style.display = '';
+        document.getElementById('loginPromptCard').scrollIntoView({ behavior: 'smooth' });
+      } else if (idToken) {
+        signOut();
+      }
+      resetBtn(); return;
+    }
+    if (!response.ok) throw new Error(data.error || 'Server error');
+
+    // Mark demo as used
+    if (data.demo) {
+      demoUsed = true;
+      localStorage.setItem('lg_demo_date', new Date().toISOString().slice(0, 10));
+    }
+
+    // Handle multi-output (hooks, headlines, replies)
+    if (data.items) {
+      showMultiOutput(data.items, data.title || 'Results');
+      saveToHistory(data.items.join('\n---\n'), reqBody.type, reqBody.mode);
+    } else {
+      resultText = data.post;
+      showOutput(data.post, data.outputTitle);
+      saveToHistory(data.post, reqBody.type, reqBody.mode);
+    }
+
+    if (data.remaining !== undefined && currentUser) {
+      updateUsageUI(data.remaining, currentUser.isPro ? 'unlimited' : FREE_LIMIT);
+    }
+  } catch (err) {
+    console.error('Generate error:', err);
+    if (btnText) btnText.textContent = `❌ ${err.message || 'Error'}`;
+    setTimeout(resetBtn, 3000);
+    return;
+  }
+  resetBtn();
+}
+
+function resetBtn() {
+  const btn = document.getElementById('genBtn');
+  const btnText = document.getElementById('genBtnText');
+  const t = T[currentLang] || T.english;
+  if (btn) btn.disabled = false;
+  if (btnText) btnText.textContent = t.generate;
+}
+
+function showOutput(text, title) {
+  document.getElementById('outputTitle').textContent = title || 'Your Content';
+  document.getElementById('outputText').textContent = text;
+  const words = text.split(/\s+/).filter(w => w).length;
+  document.getElementById('statWords').textContent = words;
+  document.getElementById('statChars').textContent = text.length.toLocaleString();
+  document.getElementById('outputCard').classList.add('visible');
+  document.getElementById('outputCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function showMultiOutput(items, apiTitle) {
+  const t = T[currentLang] || T.english;
+  // Translate titles from API
+  const titleMap = { 'Hook Options': t.hookOptionsTitle || 'Hook Options', 'Headline Options': t.headlineOptionsTitle || 'Headline Options', 'Reply Options': t.replyOptionsTitle || 'Reply Options' };
+  document.getElementById('multiTitle').textContent = titleMap[apiTitle] || apiTitle;
+  const container = document.getElementById('multiCards');
+  const isHooks = (apiTitle === 'Hook Options');
+  container.innerHTML = items.map((item, i) => `
+    <div class="hook-card">
+      <div class="hook-text">${item}</div>
+      <div class="hook-actions">
+        <button class="hook-btn" onclick="copyItem(this, ${i})">${t.copy}</button>
+        ${isHooks ? `<button class="hook-btn hook-btn-write" onclick="useHook(${i})">${t.writeAboutThis || '✍️ Write'}</button>` : ''}
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('multiOutput').classList.add('visible');
+  document.getElementById('multiOutput').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function useHook(index) {
+  const text = document.querySelectorAll('.hook-text')[index].textContent;
+  switchTab('post');
+  switchPostMode('write');
+  document.getElementById('ideaInput').value = text;
+  document.getElementById('charCount').textContent = text.length;
+  document.getElementById('multiOutput').classList.remove('visible');
+  document.getElementById('ideaInput').focus();
+}
+
+function addWatermark(text) {
+  if (currentUser && currentUser.isPro) return text;
+  return text + '\n\n---\n✨ Created with LinkedGenie — linkedgenie.co';
+}
+
+function copyResult() {
+  const t = T[currentLang] || T.english;
+  navigator.clipboard.writeText(addWatermark(resultText)).then(() => {
+    const btn = document.getElementById('copyBtnText');
+    btn.textContent = t.copied;
+    setTimeout(() => { btn.textContent = t.copy; }, 2000);
+  });
+}
+
+function copyItem(btn, index) {
+  const text = document.querySelectorAll('.hook-text')[index].textContent;
+  navigator.clipboard.writeText(addWatermark(text)).then(() => {
+    btn.textContent = '✅'; setTimeout(() => { btn.textContent = '📋 Copy'; }, 1500);
+  });
+}
+
+function openUpgrade() { window.open('/api/checkout', '_blank'); }
+
+async function subscribeNewsletter() {
+  const input = document.getElementById('nlEmail');
+  const email = input.value.trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    input.style.borderColor = 'var(--red)';
+    return;
+  }
+  const btn = document.getElementById('nlBtn');
+  btn.disabled = true;
+  btn.textContent = '...';
+  try {
+    const res = await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    if (res.ok) {
+      document.getElementById('nlForm').innerHTML = '<span class="newsletter-success">✓ Subscribed!</span>';
+      localStorage.setItem('lg_subscribed', '1');
+    } else {
+      btn.textContent = 'Try again';
+      btn.disabled = false;
+    }
+  } catch {
+    btn.textContent = 'Try again';
+    btn.disabled = false;
+  }
+}
+// Hide newsletter if already subscribed
+if (localStorage.getItem('lg_subscribed')) {
+  document.addEventListener('DOMContentLoaded', () => {
+    const nl = document.getElementById('newsletterBox');
+    if (nl) nl.style.display = 'none';
+  });
+}
+function toggleSettings() { document.getElementById('settingsModal').classList.toggle('visible'); }
+
+function showLegal(type) {
+  const modal = document.getElementById('legalModal');
+  const title = document.getElementById('legalTitle');
+  const body = document.getElementById('legalBody');
+  if (type === 'privacy') {
+    title.textContent = 'Privacy Policy';
+    body.innerHTML = `<p><b>Last updated:</b> February 2026</p>
+<p><b>What we collect:</b> When you sign in with Google, we receive your name, email, and profile picture. We store your email and usage count to manage your account.</p>
+<p><b>How we use it:</b> Your data is used solely to provide the LinkedGenie service — authenticating your account and tracking daily usage limits. We do not sell, share, or transfer your personal data to third parties.</p>
+<p><b>Content you generate:</b> The text you input and the AI-generated output are processed through OpenAI's API. We do not store your generated content on our servers. History is saved only in your browser's local storage.</p>
+<p><b>Cookies & Storage:</b> We use sessionStorage for your authentication token (cleared when you close the tab) and localStorage for your content history and preferences.</p>
+<p><b>Third-party services:</b> Google (authentication), OpenAI (content generation), LemonSqueezy/Stripe (payments), Upstash (account database).</p>
+<p><b>Data deletion:</b> To delete your account data, email us at <b>sct.adnan@gmail.com</b>. You can clear your local history anytime by clearing your browser data.</p>
+<p><b>GDPR:</b> If you are in the EU, you have the right to access, correct, or delete your personal data. Contact us at the email above.</p>`;
+  } else {
+    title.textContent = 'Terms of Service';
+    body.innerHTML = `<p><b>Last updated:</b> February 2026</p>
+<p><b>Service:</b> LinkedGenie is an AI-powered content generation tool for LinkedIn. It helps you create posts, optimize profiles, craft messages, and write replies.</p>
+<p><b>Usage:</b> Free users get 3 AI generations per day. Pro subscribers ($5/month) get unlimited access. You may cancel anytime.</p>
+<p><b>Content ownership:</b> You own all content generated through LinkedGenie. We claim no rights over your generated text.</p>
+<p><b>Acceptable use:</b> Do not use LinkedGenie to generate spam, misleading content, hate speech, or content that violates LinkedIn's Terms of Service.</p>
+<p><b>AI disclaimer:</b> Content is generated by AI and may not always be accurate. You are responsible for reviewing and editing content before publishing.</p>
+<p><b>No guarantees:</b> We provide the service "as is" without guarantees of uptime, accuracy, or specific results. We are not liable for any damages from using the service.</p>
+<p><b>Changes:</b> We may update these terms at any time. Continued use constitutes acceptance.</p>
+<p><b>Contact:</b> sct.adnan@gmail.com</p>`;
+  }
+  modal.classList.add('visible');
+}
+
+// ============ HISTORY ============
+function historyKey() {
+  const email = currentUser?.email || 'guest';
+  return `lg_history_${email}`;
+}
+
+function saveToHistory(text, type, mode) {
+  const key = historyKey();
+  const history = JSON.parse(localStorage.getItem(key) || '[]');
+  history.unshift({ text, type, mode, lang: currentLang, date: new Date().toISOString() });
+  if (history.length > 20) history.length = 20;
+  localStorage.setItem(key, JSON.stringify(history));
+  updateStreak();
+  checkGrowthMilestone();
+}
+
+function updateStreak() {
+  const today = new Date().toISOString().slice(0, 10);
+  const data = JSON.parse(localStorage.getItem('lg_streak') || '{}');
+  if (data.lastDate === today) return; // already counted today
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  if (data.lastDate === yesterday) {
+    data.count = (data.count || 0) + 1;
+  } else {
+    data.count = 1;
+  }
+  data.lastDate = today;
+  localStorage.setItem('lg_streak', JSON.stringify(data));
+  showStreakBadge(data.count);
+}
+
+function showStreakBadge(count) {
+  window._streakCount = count;
+  if (currentUser) renderAccountDropdown();
+}
+
+function initStreak() {
+  const data = JSON.parse(localStorage.getItem('lg_streak') || '{}');
+  const today = new Date().toISOString().slice(0, 10);
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  if (data.lastDate !== today && data.lastDate !== yesterday) {
+    data.count = 0;
+    localStorage.setItem('lg_streak', JSON.stringify(data));
+  }
+  if (data.count >= 2) showStreakBadge(data.count);
+}
+
+// ============ GROWTH BADGE ============
+const GROWTH_MILESTONES = [10, 25, 50, 100, 250, 500];
+const GROWTH_ICONS = { 10: '🏅', 25: '🥈', 50: '🥇', 100: '🏆', 250: '💎', 500: '👑' };
+
+function checkGrowthMilestone() {
+  const total = parseInt(localStorage.getItem('lg_total_gen') || '0', 10) + 1;
+  localStorage.setItem('lg_total_gen', total);
+  const shown = JSON.parse(localStorage.getItem('lg_growth_shown') || '[]');
+  for (const m of GROWTH_MILESTONES) {
+    if (total >= m && !shown.includes(m)) {
+      shown.push(m);
+      localStorage.setItem('lg_growth_shown', JSON.stringify(shown));
+      showGrowthBadge(m, total);
+      return;
+    }
+  }
+}
+
+function showGrowthBadge(milestone, total) {
+  const t = T[currentLang] || T.english;
+  const icon = GROWTH_ICONS[milestone] || '🏆';
+  document.getElementById('growthIcon').textContent = icon;
+  document.getElementById('growthTitle').textContent = t.growthTitle || 'Milestone Reached!';
+  document.getElementById('growthCount').textContent = milestone;
+  document.getElementById('growthDesc').textContent = (t.growthDesc || '{n} LinkedIn posts created with LinkedGenie').replace('{n}', milestone);
+  document.getElementById('growthShareLI').textContent = t.growthShareLI || 'LinkedIn';
+  document.getElementById('growthShareTW').textContent = t.growthShareTW || 'X / Twitter';
+  document.getElementById('growthDismissBtn').textContent = t.growthDismiss || 'Maybe later';
+  document.getElementById('growthModal').classList.add('visible');
+}
+
+function closeGrowth() {
+  document.getElementById('growthModal').classList.remove('visible');
+}
+
+function getShareText() {
+  const total = localStorage.getItem('lg_total_gen') || '0';
+  const t = T[currentLang] || T.english;
+  const text = (t.shareText || 'I just created {n} LinkedIn posts with LinkedGenie! 🚀').replace('{n}', total);
+  return text + '\n\nhttps://linkedgenie.co';
+}
+
+function shareLinkedIn() {
+  const text = getShareText();
+  navigator.clipboard.writeText(text).then(() => {
+    showToast((T[currentLang] || T.english).clipboardCopied || 'Text copied! Paste it in your LinkedIn post ✅');
+  });
+  const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent('https://linkedgenie.co')}`;
+  window.open(url, '_blank');
+  closeGrowth();
+}
+
+function showToast(msg) {
+  let t = document.getElementById('clipToast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'clipToast';
+    t.style.cssText = 'position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:#6366f1;color:#fff;padding:14px 28px;border-radius:12px;font-size:15px;font-weight:600;z-index:99999;box-shadow:0 8px 24px rgba(0,0,0,0.3);transition:opacity 0.3s;pointer-events:none;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  setTimeout(() => { t.style.opacity = '0'; }, 3000);
+}
+
+function shareTwitter() {
+  const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(getShareText())}`;
+  window.open(url, '_blank');
+  closeGrowth();
+}
+
+function toggleHistory() {
+  const modal = document.getElementById('historyModal');
+  modal.classList.toggle('visible');
+  if (modal.classList.contains('visible')) renderHistory();
+}
+
+function renderHistory() {
+  const t = T[currentLang] || T.english;
+  document.getElementById('historyModalTitle').textContent = `📋 ${t.historyTitle}`;
+  document.getElementById('historyCloseBtn').textContent = t.modalGotIt;
+  document.getElementById('historyClearBtn').textContent = t.historyClearAll;
+  const history = JSON.parse(localStorage.getItem(historyKey()) || '[]');
+  const container = document.getElementById('historyList');
+  document.getElementById('historyClearBtn').style.display = history.length ? '' : 'none';
+  if (history.length === 0) {
+    container.innerHTML = `<div class="history-empty">${t.historyEmpty}</div>`;
+    return;
+  }
+  container.innerHTML = history.map((item, i) => {
+    const preview = item.text.replace(/\n/g, ' ').slice(0, 100) + (item.text.length > 100 ? '...' : '');
+    const date = new Date(item.date).toLocaleDateString(currentLang === 'arabic' ? 'ar' : undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    const badge = item.type || 'post';
+    return `<div class="history-item" onclick="loadHistoryItem(${i})">
+      <div class="history-item-text">${preview}</div>
+      <div class="history-item-meta">
+        <span>${badge} · ${date}</span>
+        <div class="history-item-actions">
+          <button class="history-item-copy" onclick="event.stopPropagation(); copyHistoryItem(${i})">${t.copy}</button>
+          <button class="history-item-delete" onclick="event.stopPropagation(); deleteHistoryItem(${i})">${t.historyDelete}</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function deleteHistoryItem(index) {
+  const history = JSON.parse(localStorage.getItem(historyKey()) || '[]');
+  history.splice(index, 1);
+  localStorage.setItem(historyKey(), JSON.stringify(history));
+  renderHistory();
+}
+
+function clearAllHistory() {
+  const t = T[currentLang] || T.english;
+  if (confirm(t.historyClearConfirm)) {
+    localStorage.removeItem(historyKey());
+    renderHistory();
+  }
+}
+
+function copyHistoryItem(index) {
+  const history = JSON.parse(localStorage.getItem(historyKey()) || '[]');
+  if (history[index]) {
+    navigator.clipboard.writeText(addWatermark(history[index].text));
+    const btns = document.querySelectorAll('.history-item-copy');
+    const t = T[currentLang] || T.english;
+    if (btns[index]) { btns[index].textContent = t.copied; setTimeout(() => { btns[index].textContent = t.copy; }, 1500); }
+  }
+}
+
+function loadHistoryItem(index) {
+  const history = JSON.parse(localStorage.getItem(historyKey()) || '[]');
+  if (!history[index]) return;
+  resultText = history[index].text;
+  showOutput(history[index].text, (T[currentLang] || T.english).historyTitle);
+  toggleHistory();
+}
+
+// ============ INIT GOOGLE ============
+let googleInitialized = false;
+
+function initGoogleAuth() {
+  if (googleInitialized) return;
+  if (typeof google === 'undefined' || !google.accounts) return;
+  googleInitialized = true;
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleCredentialResponse,
+    auto_select: true,
+    use_fedcm_for_prompt: false
+  });
+  if (!restoreSession()) { renderGoogleButtons(); google.accounts.id.prompt(); }
+}
+
+function initOnboarding() {
+  if (!localStorage.getItem('lg_onboarded')) {
+    const tip = document.getElementById('onboardTip');
+    if (tip) {
+      const t = T[currentLang] || T.english;
+      document.getElementById('onboardText').textContent = t.onboardTip || 'Start here — type your idea and we\'ll turn it into a professional LinkedIn post';
+      tip.style.display = '';
+    }
+  }
+}
+function dismissOnboard() {
+  document.getElementById('onboardTip').style.display = 'none';
+  localStorage.setItem('lg_onboarded', '1');
+}
+
+window.onload = function() {
+  const params = new URLSearchParams(window.location.search);
+  const tabParam = params.get('tab');
+  if (tabParam && ['post','profile','message','reply'].includes(tabParam)) {
+    switchTab(tabParam);
+  }
+  const langParam = params.get('lang');
+  const langMap = {en:'english',es:'spanish',pt:'portuguese',fr:'french',de:'german',ar:'arabic'};
+  if (langParam && langMap[langParam]) {
+    currentLang = langMap[langParam];
+    document.getElementById('globalLang').value = currentLang;
+    applyLanguage(currentLang);
+  }
+  initStreak();
+  initOnboarding();
+  if (googleInitialized) return;
+  initGoogleAuth();
+  if (!googleInitialized) {
+    let attempts = 0;
+    const interval = setInterval(function() {
+      attempts++; initGoogleAuth();
+      if (googleInitialized || attempts >= 10) {
+        clearInterval(interval);
+        if (!googleInitialized) {
+          const mainBtn = document.getElementById('googleBtnMain');
+          if (mainBtn) mainBtn.innerHTML = '<p style="color:var(--red);font-size:13px;">Failed to load Google Sign-In. Please disable ad blocker or try a different browser.</p>';
+        }
+      }
+    }, 500);
+  }
+};
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FXHT5RB3L9"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-FXHT5RB3L9');</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+</body>
+</html>
