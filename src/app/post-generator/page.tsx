@@ -226,32 +226,32 @@ export default function PostGenerator() {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="w-full max-w-lg glass rounded-xl shadow-2xl z-10 overflow-hidden text-zinc-100"
+                    className="w-full max-w-[552px] bg-white dark:bg-[#1D2226] border border-zinc-300/50 dark:border-white/10 rounded-lg shadow-md z-10 overflow-hidden text-slate-900 dark:text-zinc-100"
                 >
-                    {/* LinkedIn Header Mockup */}
-                    <div className="p-4 flex items-start gap-4">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex-shrink-0 border-2 border-white dark:border-[#18181B]" />
-                        <div className="flex-1">
-                            <div className="flex items-center gap-2">
-                                <h3 className="font-semibold text-[15px]">Alex Anderson</h3>
-                                <span className="text-zinc-500 text-xs mt-0.5">• 1st</span>
+                    {/* LinkedIn Header Mockup (Desktop Scale) */}
+                    <div className="p-4 flex items-start gap-3">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex-shrink-0" />
+                        <div className="flex-1 mt-0.5">
+                            <div className="flex items-center gap-1.5 hover:underline cursor-pointer">
+                                <h3 className="font-semibold text-[15px] leading-none text-slate-900 dark:text-zinc-100">Alex Anderson</h3>
+                                <span className="text-zinc-500 text-[13px] leading-none">• 1st</span>
                             </div>
-                            <p className="text-zinc-500 text-xs truncate max-w-[280px]">Building the future of AI tools | Helping 10k+ creators</p>
-                            <div className="flex items-center gap-1 mt-0.5 text-zinc-500 text-xs">
+                            <p className="text-zinc-500 text-[12px] mt-1 pr-4">Building the future of AI tools | Helping 10k+ creators</p>
+                            <div className="flex items-center gap-1 mt-0.5 text-zinc-500 text-[12px]">
                                 <span>Just now</span> •
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="text-zinc-500"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" /></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" /></svg>
                             </div>
                         </div>
-                        <button className="text-blue-600 dark:text-blue-400 font-semibold text-sm flex items-center gap-1 px-2 py-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5v14" /></svg>
+                        <button className="text-[#0a66c2] dark:text-[#70b5f9] font-semibold text-[15px] flex items-center gap-1 px-2 py-1.5 rounded hover:bg-[#0a66c2]/10 dark:hover:bg-[#70b5f9]/10 transition-colors mt-0.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5v14" /></svg>
                             Follow
                         </button>
                     </div>
 
-                    {/* LinkedIn Body Mockup */}
-                    <div className="px-4 pb-2 text-[14px] leading-relaxed relative min-h-[150px]">
+                    {/* LinkedIn Body Mockup (Desktop Text Specs) */}
+                    <div className="px-4 pb-2 text-[14px] leading-[1.5] relative min-h-[150px] text-slate-900 dark:text-zinc-100">
                         {!hasResult && !isGenerating && (
-                            <div className="absolute inset-0 flex items-center justify-center text-zinc-400 text-sm p-4 text-center">
+                            <div className="absolute inset-0 flex items-center justify-center text-zinc-500 text-[14px] p-4 text-center">
                                 Your viral post will appear here...
                             </div>
                         )}
@@ -259,34 +259,34 @@ export default function PostGenerator() {
                         <div className="whitespace-pre-wrap font-sans break-words mb-2">
                             {completion}
                             {isGenerating && (
-                                <span className="inline-block w-2 h-4 ml-1 bg-blue-500 animate-pulse"></span>
+                                <span className="inline-block w-2 h-4 ml-1 bg-[#0a66c2] dark:bg-[#70b5f9] animate-pulse"></span>
                             )}
                         </div>
 
                         {hasResult && !isGenerating && completion.length > 200 && (
-                            <button className="text-zinc-500 hover:text-zinc-400 font-semibold cursor-pointer">
+                            <button className="text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 font-semibold cursor-pointer">
                                 ...see more
                             </button>
                         )}
                     </div>
 
-                    {/* LinkedIn Footer Mockup */}
-                    <div className="px-4 py-2 border-t border-zinc-200 dark:border-white/10 flex justify-between">
-                        <button className="flex items-center gap-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-white/5 px-3 py-2 rounded-lg transition-colors font-medium text-[14px]">
+                    {/* LinkedIn Desktop Action Bar */}
+                    <div className="px-4 py-1.5 border-t border-zinc-200 dark:border-white/10 flex justify-between mx-2 mb-1">
+                        <button className="flex-1 flex items-center justify-center gap-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-white/5 py-3 rounded-md transition-colors font-semibold text-[14px]">
                             <ThumbsUp className="w-5 h-5 -scale-x-100" />
-                            Like
+                            <span className="hidden sm:inline">Like</span>
                         </button>
-                        <button className="flex items-center gap-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-white/5 px-3 py-2 rounded-lg transition-colors font-medium text-[14px]">
+                        <button className="flex-1 flex items-center justify-center gap-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-white/5 py-3 rounded-md transition-colors font-semibold text-[14px]">
                             <MessageSquare className="w-5 h-5" />
-                            Comment
+                            <span className="hidden sm:inline">Comment</span>
                         </button>
-                        <button className="flex items-center gap-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-white/5 px-3 py-2 rounded-lg transition-colors font-medium text-[14px]">
+                        <button className="flex-1 flex items-center justify-center gap-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-white/5 py-3 rounded-md transition-colors font-semibold text-[14px]">
                             <Repeat2 className="w-5 h-5" />
-                            Repost
+                            <span className="hidden sm:inline">Repost</span>
                         </button>
-                        <button className="flex items-center gap-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-white/5 px-3 py-2 rounded-lg transition-colors font-medium text-[14px]">
+                        <button className="flex-1 flex items-center justify-center gap-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-white/5 py-3 rounded-md transition-colors font-semibold text-[14px]">
                             <Send className="w-5 h-5" />
-                            Send
+                            <span className="hidden sm:inline">Send</span>
                         </button>
                     </div>
                 </motion.div>

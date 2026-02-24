@@ -1,6 +1,6 @@
 'use client';
 
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Float, MeshTransmissionMaterial, RoundedBox, Environment, Sparkles, Text } from '@react-three/drei';
 import { useRef, Suspense, useState, useMemo } from 'react';
 import * as THREE from 'three';
@@ -122,12 +122,19 @@ function TypingText({ position }: { position: [number, number, number] }) {
 function AIContentGlassWidget() {
     const cardRef = useRef<THREE.Group>(null);
     const aiCoreRef = useRef<THREE.Mesh>(null);
+    const { viewport } = useThree();
+
+    // Responsive scaling for mobile devices
+    // Our widget's base width is roughly 3.0 units.
+    // If the mobile viewport width drops below 3.5, we scale down everything.
+    const responsiveScale = Math.min(1, viewport.width / 3.5);
 
     useFrame((state) => {
-        // High-end smooth Parallax tilt
+        // High-end smooth Parallax tilt - reduced intensity on mobile to prevent clipping
         if (cardRef.current) {
-            const targetX = (state.pointer.y * Math.PI) / 10;
-            const targetY = (state.pointer.x * Math.PI) / 8;
+            const tiltFactor = responsiveScale < 1 ? 0.05 : 0.1; // Less tilt on mobile
+            const targetX = (state.pointer.y * Math.PI) * tiltFactor;
+            const targetY = (state.pointer.x * Math.PI) * (tiltFactor * 1.5);
             cardRef.current.rotation.x = THREE.MathUtils.lerp(cardRef.current.rotation.x, targetX, 0.05);
             cardRef.current.rotation.y = THREE.MathUtils.lerp(cardRef.current.rotation.y, targetY, 0.05);
         }
@@ -145,7 +152,7 @@ function AIContentGlassWidget() {
     });
 
     return (
-        <group ref={cardRef}>
+        <group ref={cardRef} scale={responsiveScale}>
             <Float
                 speed={1.5}
                 rotationIntensity={0.1}
