@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import UserBadge from "@/components/UserBadge";
+import { GenieCredits } from "@/components/GenieCredits";
 import { niches } from "@/data/niches";
 import Link from "next/link";
 
@@ -40,6 +41,7 @@ export default function RootLayout({
               <a href="/profile-optimizer" className="hover:text-white transition-colors">Profile AI</a>
               <a href="/hook-generator" className="hover:text-white transition-colors">Hook AI</a>
               <a href="/trend-hub" className="hover:text-white transition-colors">Trends</a>
+              <a href="/dashboard" className="text-purple-400 hover:text-purple-300 font-semibold transition-colors">Dashboard</a>
             </nav>
             <div className="flex items-center gap-3">
               {process.env.CHECKOUT_URL && (
@@ -47,6 +49,7 @@ export default function RootLayout({
                   Upgrade Pro
                 </a>
               )}
+              <GenieCredits />
               <UserBadge />
             </div>
           </div>

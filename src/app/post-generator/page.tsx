@@ -6,6 +6,7 @@ import { Loader2, Sparkles, Send, Copy, ThumbsUp, MessageSquare, Repeat2, Bookma
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { DigitalFootprintModal } from "@/components/DigitalFootprintModal";
+import { triggerConfetti, triggerSmallConfetti } from "@/lib/confetti";
 
 export default function PostGenerator() {
     const [tone, setTone] = useState("Professional");
@@ -43,8 +44,13 @@ export default function PostGenerator() {
                     { user_id: session.user.id, content: completion, tone, format, prompt: input }
                 ]);
 
-            if (error) throw error;
-            setSavedMessage("Saved to Drafts!");
+            if (error) {
+                console.error("Error saving post:", error);
+                setSavedMessage("Failed to save.");
+            } else {
+                setSavedMessage("Saved to Drafts!");
+                triggerSmallConfetti(); // Gamification reward
+            }
         } catch (err: any) {
             setSavedMessage(err.message || "Failed to save");
         } finally {
@@ -67,8 +73,13 @@ export default function PostGenerator() {
         onError: (err) => {
             console.error("useCompletion failed:", err);
         },
-        onFinish: (prompt, completion) => {
-            console.log("Generation finished successfully.");
+        onFinish: (prompt, result) => {
+            console.log("Generation finished successfully. Result length:", result.length);
+            const score = calculateScore(result);
+            if (score >= 80) {
+                // Gamification: Reward high scoring posts with a confetti burst!
+                triggerConfetti();
+            }
         }
     });
 
@@ -84,6 +95,16 @@ export default function PostGenerator() {
             }
         }
     }, [isGenerating, hasResult]);
+
+    const handleCopy = () => {
+        if (completion) {
+            navigator.clipboard.writeText(completion);
+            // Mini reward for taking action
+            triggerSmallConfetti();
+            setSavedMessage("Copied to clipboard!");
+            setTimeout(() => setSavedMessage(""), 2000);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row relative">
@@ -312,7 +333,7 @@ export default function PostGenerator() {
                         >
                             <div className="flex items-center gap-4">
                                 <button
-                                    onClick={() => navigator.clipboard.writeText(completion)}
+                                    onClick={handleCopy}
                                     className="glass hover:bg-white/10 transition-colors rounded-full px-6 py-3 flex items-center gap-2 font-medium text-sm text-zinc-200"
                                 >
                                     <Copy className="w-4 h-4" />
