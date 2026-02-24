@@ -2,7 +2,7 @@
 
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, MeshTransmissionMaterial, RoundedBox, Environment, Sparkles } from '@react-three/drei';
-import { useRef } from 'react';
+import { useRef, Suspense } from 'react';
 import * as THREE from 'three';
 
 function HologramCard() {
@@ -100,13 +100,15 @@ export default function GenieMascot() {
     return (
         <div className="w-full h-[400px] md:h-[500px] relative pointer-events-auto">
             <Canvas camera={{ position: [0, 0, 6], fov: 45 }} className="w-full h-full">
-                <ambientLight intensity={1} />
-                <directionalLight position={[2, 5, 2]} intensity={2} color="#ffffff" />
+                <Suspense fallback={null}>
+                    <ambientLight intensity={1} />
+                    <directionalLight position={[2, 5, 2]} intensity={2} color="#ffffff" />
 
-                {/* HDRI Environment mapping makes the glass material look highly realistic */}
-                <Environment preset="city" />
+                    {/* HDRI Environment mapping makes the glass material look highly realistic */}
+                    <Environment preset="city" />
 
-                <HologramCard />
+                    <HologramCard />
+                </Suspense>
             </Canvas>
         </div>
     );
