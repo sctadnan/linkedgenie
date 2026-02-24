@@ -1,54 +1,36 @@
-# 🧞 LinkedGenie — AI LinkedIn Content Suite
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-**LinkedGenie** is a high-performance, minimalist AI toolkit designed to help professionals dominate LinkedIn. It automates content creation, profile optimization, and networking engagement using GPT-4o-mini, all while maintaining a lightweight, no-framework architecture for maximum speed and SEO.
+## Getting Started
 
-## ✨ Features
+First, run the development server:
 
-- **✍️ Smart Post Generator**: 8+ specialized templates (Storytelling, Educational, Motivational, etc.) + Rewrite & Hook modes.
-- **👤 Profile Optimizer**: Craft compelling headlines, "About" sections, and achievement-focused experience descriptions.
-- **📩 Message Architect**: Generate personalized connection requests, follow-ups, and thank-you notes.
-- **💬 Engagement Suite**: Intelligent comment replies to build relationships and boost visibility.
-- **🌍 Multi-language Support**: Fully localized in English, Spanish, Portuguese, French, German, and Arabic (RTL).
-- **🛡️ Production Ready**: Includes rate limiting, circuit breakers for AI calls, and a built-in admin dashboard.
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-## 🛠 Tech Stack
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- **Frontend**: Vanilla HTML5, CSS3 (Modern Variables), and Vanilla JavaScript (No frameworks, no build step).
-- **Backend**: Node.js Vercel Serverless Functions.
-- **Database**: Upstash Redis (Vercel KV) for usage tracking and auth.
-- **Auth**: Google Identity Services (GSI).
-- **AI**: OpenAI API (GPT-4o-mini).
-- **Infrastructure**: Vercel (Hosting, Cron Jobs, Serverless).
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## 🚀 Performance & SEO
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-LinkedGenie is built with a "Performance First" philosophy:
-- **Core Web Vitals**: Zero framework overhead ensures near-instant LCP and FID.
-- **Semantic HTML**: Optimized for Google Crawlers with proper heading hierarchies and Schema.org markup.
-- **Responsive**: Mobile-first design that scales perfectly across all devices.
+## Learn More
 
-## 📦 Deployment
+To learn more about Next.js, take a look at the following resources:
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/your-username/linkedgenie-v2.git
-   ```
-2. **Set Environment Variables**:
-   Create a `.env` file or set them in Vercel:
-   - `OPENAI_API_KEY`: Your OpenAI key.
-   - `UPSTASH_REDIS_REST_KV_REST_API_URL`: Your Upstash URL.
-   - `UPSTASH_REDIS_REST_KV_REST_API_TOKEN`: Your Upstash token.
-   - `GOOGLE_CLIENT_ID`: Google OAuth client ID.
-   - `ADMIN_SECRET`: Secret key for the admin dashboard.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-3. **Deploy to Vercel**:
-   ```bash
-   vercel
-   ```
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## 📄 License
+## Deploy on Vercel
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
----
-*Built with ❤️ by [sctadnan](https://github.com/sctadnan)*
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
