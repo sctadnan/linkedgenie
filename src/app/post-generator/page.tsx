@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useCompletion } from "@ai-sdk/react";
-import { Loader2, Sparkles, Send, Copy, ThumbsUp, MessageSquare, Repeat2, BookmarkPlus, Fingerprint, Activity, Check, X } from "lucide-react";
+import { Loader2, Sparkles, Send, Copy, ThumbsUp, MessageSquare, Repeat2, BookmarkPlus, Fingerprint, Activity, Check, X, Lock } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { DigitalFootprintModal } from "@/components/DigitalFootprintModal";
@@ -31,9 +31,10 @@ export default function PostGenerator() {
             if (session) {
                 setSessionToken(session.access_token);
                 setSession(session);
-                if (session.user.user_metadata?.job_title) {
-                    setLocalJobTitle(session.user.user_metadata.job_title);
-                }
+
+                const meta = session.user.user_metadata || {};
+                if (meta.job_title) setLocalJobTitle(meta.job_title);
+                if (meta.tone_of_voice) setTone(meta.tone_of_voice);
             }
         });
     }, []);
@@ -67,6 +68,17 @@ export default function PostGenerator() {
             // Optionally, show a toast here if you have a toast system
         } finally {
             setIsSavingJob(false);
+        }
+    };
+
+    const handleToneChange = async (newTone: string) => {
+        setTone(newTone);
+        try {
+            await supabase.auth.updateUser({
+                data: { tone_of_voice: newTone }
+            });
+        } catch (err) {
+            console.error("Failed to save tone preference:", err);
         }
     };
 
@@ -184,7 +196,7 @@ export default function PostGenerator() {
                             <label className="text-sm font-medium text-zinc-300">Tone</label>
                             <select
                                 value={tone}
-                                onChange={(e) => setTone(e.target.value)}
+                                onChange={(e) => handleToneChange(e.target.value)}
                                 className="w-full bg-black/40 border border-white/10 rounded-xl p-3 text-zinc-200 appearance-none outline-none focus:ring-2 focus:ring-purple-500/50"
                             >
                                 <option>Professional</option>
@@ -192,6 +204,7 @@ export default function PostGenerator() {
                                 <option>Bold & Direct</option>
                                 <option>Humorous</option>
                                 <option>Inspirational</option>
+                                <option>Educational</option>
                             </select>
                         </div>
 
@@ -289,33 +302,39 @@ export default function PostGenerator() {
                             </div>
 
                             {isEditingJob ? (
-                                <div className="flex items-center gap-2 mt-1 mb-1">
-                                    <input
-                                        type="text"
-                                        autoFocus
-                                        value={tempJobTitle}
-                                        onChange={(e) => setTempJobTitle(e.target.value)}
-                                        placeholder="e.g. Software Engineer"
-                                        className="bg-black/40 border border-white/20 rounded-md px-2 py-1 text-[12px] text-zinc-200 outline-none focus:ring-1 focus:ring-blue-500/50 flex-1 max-w-[200px]"
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter') handleSaveJobTitle();
-                                            if (e.key === 'Escape') setIsEditingJob(false);
-                                        }}
-                                    />
-                                    <button
-                                        onClick={handleSaveJobTitle}
-                                        disabled={isSavingJob}
-                                        className="p-1 hover:bg-white/10 rounded text-emerald-400 disabled:opacity-50"
-                                    >
-                                        {isSavingJob ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-4 h-4" />}
-                                    </button>
-                                    <button
-                                        onClick={() => setIsEditingJob(false)}
-                                        disabled={isSavingJob}
-                                        className="p-1 hover:bg-white/10 rounded text-red-400 disabled:opacity-50"
-                                    >
-                                        <X className="w-4 h-4" />
-                                    </button>
+                                <div className="mt-1 mb-2">
+                                    <div className="flex items-center gap-2">
+                                        <input
+                                            type="text"
+                                            autoFocus
+                                            value={tempJobTitle}
+                                            onChange={(e) => setTempJobTitle(e.target.value)}
+                                            placeholder="e.g. Software Engineer"
+                                            className="bg-black/40 border border-white/20 rounded-md px-2 py-1 text-[12px] text-zinc-200 outline-none focus:ring-1 focus:ring-blue-500/50 flex-1 max-w-[200px]"
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') handleSaveJobTitle();
+                                                if (e.key === 'Escape') setIsEditingJob(false);
+                                            }}
+                                        />
+                                        <button
+                                            onClick={handleSaveJobTitle}
+                                            disabled={isSavingJob}
+                                            className="p-1 hover:bg-white/10 rounded text-emerald-400 disabled:opacity-50 transition-colors"
+                                        >
+                                            {isSavingJob ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-4 h-4" />}
+                                        </button>
+                                        <button
+                                            onClick={() => setIsEditingJob(false)}
+                                            disabled={isSavingJob}
+                                            className="p-1 hover:bg-white/10 rounded text-red-400 disabled:opacity-50 transition-colors"
+                                        >
+                                            <X className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                    <div className="flex items-center gap-1 mt-1 text-[9px] text-zinc-500">
+                                        <Lock className="w-3 h-3 text-zinc-500" />
+                                        <span>Title securely saved for AI persona training.</span>
+                                    </div>
                                 </div>
                             ) : !localJobTitle ? (
                                 <button
@@ -360,7 +379,7 @@ export default function PostGenerator() {
                             </div>
                         )}
 
-                        <div className="whitespace-pre-wrap font-sans break-words mb-2">
+                        <div className="whitespace-pre-wrap font-sans break-words mb-2" dir="auto">
                             {isExpanded ? completion : (completion.length > 200 ? completion.substring(0, 200) + "..." : completion)}
                             {isGenerating && (
                                 <span className="inline-block w-2 h-4 ml-1 bg-[#0a66c2] dark:bg-[#70b5f9] animate-pulse"></span>
