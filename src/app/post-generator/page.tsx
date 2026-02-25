@@ -267,7 +267,9 @@ export default function PostGenerator() {
         isTruncated = true;
     }
     if (previewText.length > 210) {
-        previewText = previewText.substring(0, 210).trimEnd();
+        // Find the last space before the 210 character limit to avoid cutting mid-word
+        const lastSpace = previewText.lastIndexOf(' ', 210);
+        previewText = previewText.substring(0, lastSpace > 0 ? lastSpace : 210).trimEnd();
         isTruncated = true;
     }
 
@@ -512,7 +514,7 @@ export default function PostGenerator() {
                         <div className="whitespace-pre-wrap font-sans break-words mb-2" dir="auto">
                             {isExpanded ? completion : previewText}
                             {!isExpanded && isTruncated && (
-                                <span>...{!isGenerating && (<button onClick={() => setIsExpanded(true)} className="text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 font-semibold cursor-pointer">see more</button>)}</span>
+                                <span>...&nbsp;{!isGenerating && (<button onClick={() => setIsExpanded(true)} className="text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 font-semibold cursor-pointer">see more</button>)}</span>
                             )}
                             {isGenerating && (
                                 <span className="inline-block w-2 h-4 ml-1 bg-[#0a66c2] dark:bg-[#70b5f9] animate-pulse"></span>
