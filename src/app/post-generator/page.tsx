@@ -369,21 +369,36 @@ export default function PostGenerator() {
                     )}
 
                     <div className="flex items-center gap-4 bg-purple-500/10 border border-purple-500/20 rounded-xl p-4">
-                        <div className="flex-1">
-                            <h3 className="text-sm font-semibold text-purple-400 flex items-center gap-2">
-                                <Fingerprint className="w-4 h-4" /> Digital Footprint
+                        <div className="flex-1 min-w-0">
+                            <h3 className="text-sm font-semibold text-purple-400 flex items-center gap-2 px-1">
+                                <Fingerprint className="w-4 h-4 shrink-0" /> Digital Footprint
                             </h3>
-                            <p className="text-xs text-zinc-400 mt-1">
-                                {digitalFootprint ? "Footprint loaded! Post will mimic your style." : "Teach AI to write exactly like you."}
+                            <p className="text-xs text-purple-300/70 mt-1 px-1 line-clamp-1 break-all" dir="auto" title={digitalFootprint}>
+                                {digitalFootprint ? "Active: " + digitalFootprint : "Teach AI to write exactly like you."}
                             </p>
                         </div>
-                        <button
-                            type="button"
-                            onClick={() => setIsFootprintModalOpen(true)}
-                            className="text-xs font-semibold bg-purple-600/20 text-purple-300 hover:bg-purple-600/30 px-3 py-2 rounded-lg transition-colors"
-                        >
-                            {digitalFootprint ? "Edit Style" : "Clone Style"}
-                        </button>
+                        <div className="flex items-center gap-2 shrink-0">
+                            {digitalFootprint && (
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setDigitalFootprint("");
+                                        localStorage.removeItem('linkedgenie_footprint');
+                                    }}
+                                    className="text-xs font-semibold bg-red-500/10 text-red-400 hover:bg-red-500/20 px-2 py-2 rounded-lg transition-colors"
+                                    title="Disable Footprint"
+                                >
+                                    <X className="w-4 h-4" />
+                                </button>
+                            )}
+                            <button
+                                type="button"
+                                onClick={() => setIsFootprintModalOpen(true)}
+                                className="text-xs font-semibold bg-purple-600/20 text-purple-300 hover:bg-purple-600/30 px-3 py-2 rounded-lg transition-colors whitespace-nowrap"
+                            >
+                                {digitalFootprint ? "Edit" : "Clone Style"}
+                            </button>
+                        </div>
                     </div>
 
                     <div className="pt-4">

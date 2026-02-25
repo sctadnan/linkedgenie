@@ -138,10 +138,23 @@ export function DigitalFootprintModal({ isOpen, onClose, onFootprintExtracted, c
                         <div className="space-y-6">
                             {currentFootprint && (
                                 <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-100 text-sm">
-                                    <div className="flex items-center gap-2 font-semibold text-emerald-400 mb-2">
-                                        <Save className="w-4 h-4" /> Active Footprint Loaded!
+                                    <div className="flex items-center justify-between font-semibold text-emerald-400 mb-3 border-b border-emerald-500/20 pb-2">
+                                        <div className="flex items-center gap-2">
+                                            <Save className="w-4 h-4" /> Active Footprint Loaded!
+                                        </div>
+                                        <button
+                                            onClick={() => {
+                                                onFootprintExtracted("");
+                                                onClose();
+                                            }}
+                                            className="text-xs bg-red-500/20 text-red-400 hover:bg-red-500/30 px-2.5 py-1 rounded transition-colors flex items-center gap-1"
+                                        >
+                                            <X className="w-3 h-3" /> Clear
+                                        </button>
                                     </div>
-                                    <p className="line-clamp-3 text-emerald-200/70">{currentFootprint}</p>
+                                    <div className="max-h-40 overflow-y-auto custom-scrollbar pr-2" dir="auto">
+                                        <p className="text-emerald-200/80 whitespace-pre-wrap leading-relaxed">{currentFootprint}</p>
+                                    </div>
                                 </div>
                             )}
 
