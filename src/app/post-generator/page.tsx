@@ -52,7 +52,7 @@ export default function PostGenerator() {
         const textLength = text.length;
 
         // 1. Hook Power Score (target: first 140 chars)
-        let hookScore = 50;
+        let hookScore = 60;
         const first140 = text.slice(0, 140);
         const firstLines = first140.split('\n');
 
@@ -107,7 +107,7 @@ export default function PostGenerator() {
         });
 
         // 4. Deep Engagement Probability
-        let engagementScore = 50;
+        let engagementScore = 70;
         const lastPara = paragraphs[paragraphs.length - 1] || '';
         if (lastPara.includes('?')) {
             engagementScore += 30;
@@ -120,8 +120,13 @@ export default function PostGenerator() {
         }
 
         if (textLength > 1000) {
+            engagementScore -= 20;
             if (/I |my |me |أنا|تجربتي|تعلمت|واجهت/i.test(text)) {
                 engagementScore += 20;
+            } else {
+                if (feedback.filter(f => f.message.includes('storytelling')).length === 0) {
+                    feedback.push({ type: 'tip', message: 'Tip: For long posts, use storytelling pronouns ("I", "my") to build a deeper connection and retain readers.' });
+                }
             }
         }
 
