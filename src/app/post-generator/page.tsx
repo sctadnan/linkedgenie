@@ -255,6 +255,22 @@ export default function PostGenerator() {
 
     const scores = useMemo(() => calculateLinkedInScores(completion), [completion]);
 
+    // LinkedIn Preview Truncation Logic
+    const lines = completion.split('\n');
+    let isTruncated = false;
+    let previewText = completion;
+
+    if (lines.length > 3) {
+        // Find exactly where the 3rd line ends (if there are empty linebreaks, they count)
+        const cutoffLength = lines.slice(0, 3).join('\n').length;
+        previewText = completion.substring(0, cutoffLength);
+        isTruncated = true;
+    }
+    if (previewText.length > 210) {
+        previewText = previewText.substring(0, 210);
+        isTruncated = true;
+    }
+
     const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -494,18 +510,19 @@ export default function PostGenerator() {
                         )}
 
                         <div className="whitespace-pre-wrap font-sans break-words mb-2" dir="auto">
-                            {isExpanded ? completion : (completion.length > 200 ? completion.substring(0, 200) + "..." : completion)}
+                            {isExpanded ? completion : previewText}
+                            {!isExpanded && isTruncated && <span>...</span>}
                             {isGenerating && (
                                 <span className="inline-block w-2 h-4 ml-1 bg-[#0a66c2] dark:bg-[#70b5f9] animate-pulse"></span>
                             )}
                         </div>
 
-                        {hasResult && !isGenerating && completion.length > 200 && (
+                        {hasResult && !isGenerating && isTruncated && (
                             <button
                                 onClick={() => setIsExpanded(!isExpanded)}
                                 className="text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 font-semibold cursor-pointer"
                             >
-                                {isExpanded ? "see less" : "...see more"}
+                                {isExpanded ? "see less" : "see more"}
                             </button>
                         )}
                     </div>
