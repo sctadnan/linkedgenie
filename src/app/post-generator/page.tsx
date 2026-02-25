@@ -502,7 +502,7 @@ export default function PostGenerator() {
                     </div>
 
                     {/* LinkedIn Body Mockup (Desktop Text Specs) */}
-                    <div className="px-4 pb-2 text-[14px] leading-[1.5] relative min-h-[150px] text-slate-900 dark:text-zinc-100">
+                    <div className={`px-4 pb-2 text-[14px] leading-[1.5] relative text-slate-900 dark:text-zinc-100 ${!hasResult && !isGenerating ? 'min-h-[150px]' : ''}`}>
                         {!hasResult && !isGenerating && (
                             <div className="absolute inset-0 flex items-center justify-center text-zinc-500 text-[14px] p-4 text-center">
                                 Your viral post will appear here...
