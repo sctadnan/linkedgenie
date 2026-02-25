@@ -57,7 +57,8 @@ export default function PostGenerator() {
         const firstLines = first140.split('\n');
 
         if (/\d+/.test(first140)) hookScore += 20;
-        if (/why|how|secret|fail|mistake|فشل|سر|لماذا|كيف/i.test(first140)) hookScore += 20;
+        // Reward snappy, short opening lines (under 100 chars without linebreaks)
+        if (firstLines[0] && firstLines[0].length < 100) hookScore += 20;
 
         const cliches = [/let that sink in/i, /unpopular opinion/i, /حقيقة يجهلها/i, /رأي غير شعبي/i, /دع هذا يتغلغل/i];
         cliches.forEach(regex => { if (regex.test(first140)) hookScore -= 30; });
@@ -108,10 +109,10 @@ export default function PostGenerator() {
 
         // 4. Deep Engagement Probability
         let engagementScore = 70;
-        const lastPara = paragraphs[paragraphs.length - 1] || '';
-        if (lastPara.includes('?')) {
+        const endingText = text.slice(-300); // Check the bottom 300 chars so hashtags don't hide the question
+        if (endingText.includes('?')) {
             engagementScore += 30;
-            if (/هل|أليس|توافق|yes|no|agree|do you|are you/i.test(lastPara)) {
+            if (/هل|أليس|توافق|yes|no|agree|do you|are you|توافقني/i.test(endingText)) {
                 engagementScore -= 15;
                 feedback.push({ type: 'tip', message: 'Tip: The closing question seems to be a "Yes/No" question. Try ending with an open question to stimulate deep discussion.' });
             }
