@@ -64,9 +64,9 @@ export default function PostGenerator() {
 
         if (firstLines[0] && firstLines[0].length > 140) {
             hookScore -= 20;
-            feedback.push({ type: 'warning', message: 'تنبيه: السطر الأول طويل جداً وسيتم اقتطاعه في الموبايل. قم بإضافة مسافة أو اختصار الجملة قبل الحرف 140.' });
+            feedback.push({ type: 'warning', message: 'Warning: The first line is too long and will be truncated on mobile. Add a line break or shorten it before 140 characters.' });
         } else if (first140.length >= 140 && !first140.includes('\n')) {
-            feedback.push({ type: 'warning', message: 'تنبيه: أول 140 حرف خالية من المسافات والفواصل. أضف مسافة لتسهيل القراءة.' });
+            feedback.push({ type: 'warning', message: 'Warning: The first 140 characters lack spacing. Add line breaks to improve readability.' });
         }
 
         // 2. Readability Score
@@ -76,8 +76,8 @@ export default function PostGenerator() {
             const lines = p.split('\n');
             if (lines.length > 3) {
                 readabilityScore -= 15;
-                if (feedback.filter(f => f.message.includes('جدار نصي')).length === 0) {
-                    feedback.push({ type: 'warning', message: `تنبيه: الفقرة رقم ${index + 1} طويلة جداً (جدار نصي). قم بتقسيمها إلى نقاط.` });
+                if (feedback.filter(f => f.message.includes('wall of text')).length === 0) {
+                    feedback.push({ type: 'warning', message: `Warning: Paragraph ${index + 1} is too long (wall of text). Break it down into shorter lines.` });
                 }
             }
         });
@@ -87,21 +87,21 @@ export default function PostGenerator() {
             readabilityScore += 10;
         } else if (listLines.length > 6) {
             readabilityScore -= 10;
-            feedback.push({ type: 'tip', message: 'القائمة النقطية طويلة. يفضل أن تكون بين 3-6 نقاط.' });
+            feedback.push({ type: 'tip', message: 'Tip: The bullet list is long. It is optimal to keep it between 3-6 points.' });
         }
 
         // 3. Authenticity & Spam-Free
         let authenticityScore = 100;
         if (/https?:\/\/[^\s]+/.test(text)) {
             authenticityScore -= 60;
-            feedback.push({ type: 'critical', message: 'تحذير حرج: وجود رابط خارجي في المتن سيقلل الوصول بنسبة 60%. انقل الرابط إلى التعليقات.' });
+            feedback.push({ type: 'critical', message: 'Critical Warning: An external link in the body reduces reach by 60%. Move the link to the comments.' });
         }
         const engagementBait = [/علق بتم/i, /شارك المنشور/i, /comment below/i, /share this/i, /like if you/i, /اضغط لايك/i];
         engagementBait.forEach(regex => {
             if (regex.test(text)) {
                 authenticityScore -= 30;
-                if (feedback.filter(f => f.message.includes('طعم')).length === 0) {
-                    feedback.push({ type: 'warning', message: 'تحذير: تجنب طلب التفاعل المباشر (طعم التفاعل)، سيقلل الخوارزمية من وصولك.' });
+                if (feedback.filter(f => f.message.includes('engagement-bait')).length === 0) {
+                    feedback.push({ type: 'warning', message: 'Warning: Avoid direct engagement-bait phrases. The algorithm heavily penalizes this.' });
                 }
             }
         });
@@ -113,10 +113,10 @@ export default function PostGenerator() {
             engagementScore += 30;
             if (/هل|أليس|توافق|yes|no|agree|do you|are you/i.test(lastPara)) {
                 engagementScore -= 15;
-                feedback.push({ type: 'tip', message: 'اقتراح: السؤال الختامي يبدو سؤال "نعم/لا". حاول إنهاء المنشور بسؤال مفتوح لتحفيز النقاش المعمق.' });
+                feedback.push({ type: 'tip', message: 'Tip: The closing question seems to be a "Yes/No" question. Try ending with an open question to stimulate deep discussion.' });
             }
         } else {
-            feedback.push({ type: 'tip', message: 'اقتراح: الخاتمة تقريرية. أضف سؤالاً مفتوحاً لتحفيز النقاش.' });
+            feedback.push({ type: 'tip', message: 'Tip: The ending is declarative. Add an open-ended question to increase comments.' });
         }
 
         if (textLength > 1000) {
@@ -131,11 +131,11 @@ export default function PostGenerator() {
         if (hashtags.length < 3) {
             seoScore -= 50;
             if (hashtags.length > 0) { // Only warn if they started adding hashtags
-                feedback.push({ type: 'warning', message: `عدد الوسوم قليل جداً (${hashtags.length}). استخدم 3-5 وسوم للوصول الأمثل.` });
+                feedback.push({ type: 'warning', message: `Warning: Too few hashtags (${hashtags.length}). Use 3-5 hashtags for optimal SEO.` });
             }
         } else if (hashtags.length > 5) {
             seoScore -= 15 * (hashtags.length - 5);
-            feedback.push({ type: 'warning', message: `عدد الوسوم كبير جداً (${hashtags.length}). استخدم 3-5 وسوم للوصول الأمثل.` });
+            feedback.push({ type: 'warning', message: `Warning: Too many hashtags (${hashtags.length}). Use 3-5 hashtags for optimal SEO.` });
         }
 
         // Char count rule
