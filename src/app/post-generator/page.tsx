@@ -511,18 +511,30 @@ export default function PostGenerator() {
 
                         <div className="whitespace-pre-wrap font-sans break-words mb-2" dir="auto">
                             {isExpanded ? completion : previewText}
-                            {!isExpanded && isTruncated && <span>...</span>}
+                            {!isExpanded && isTruncated && (
+                                <span>
+                                    ...
+                                    {!isGenerating && (
+                                        <button
+                                            onClick={() => setIsExpanded(true)}
+                                            className="text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 font-semibold cursor-pointer"
+                                        >
+                                            see more
+                                        </button>
+                                    )}
+                                </span>
+                            )}
                             {isGenerating && (
                                 <span className="inline-block w-2 h-4 ml-1 bg-[#0a66c2] dark:bg-[#70b5f9] animate-pulse"></span>
                             )}
                         </div>
 
-                        {hasResult && !isGenerating && isTruncated && (
+                        {hasResult && !isGenerating && isTruncated && isExpanded && (
                             <button
-                                onClick={() => setIsExpanded(!isExpanded)}
-                                className="text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 font-semibold cursor-pointer"
+                                onClick={() => setIsExpanded(false)}
+                                className="text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 font-semibold cursor-pointer mt-1"
                             >
-                                {isExpanded ? "see less" : "see more"}
+                                see less
                             </button>
                         )}
                     </div>
