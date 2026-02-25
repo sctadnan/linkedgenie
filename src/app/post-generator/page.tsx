@@ -32,7 +32,7 @@ export default function PostGenerator() {
     const userMeta = session?.user?.user_metadata || {};
     const avatarUrl = userMeta?.avatar_url || userMeta?.picture;
     const fullName = userMeta?.full_name || userMeta?.name || siteConfig.mockData.fallbackUser.name;
-    const bio = userMeta?.description || siteConfig.mockData.fallbackUser.bio;
+    const bio = userMeta?.job_title || userMeta?.description || siteConfig.mockData.fallbackUser.bio;
 
 
     // Predictive Score Calculation

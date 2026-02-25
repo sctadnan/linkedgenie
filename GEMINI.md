@@ -59,3 +59,6 @@ When preparing for production deployment:
 - `/`: Static HTML files (pages), CSS (embedded or separate), and assets.
 - `/api`: Serverless functions (Node.js).
 - `/docs`: Business and technical documentation.
+
+## changes
+do not miss handle all changes

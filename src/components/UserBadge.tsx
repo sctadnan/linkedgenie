@@ -85,6 +85,7 @@ export default function UserBadge() {
     const userMeta = session.user?.user_metadata || {};
     const avatarUrl = userMeta.avatar_url || userMeta.picture;
     const fullName = userMeta.full_name || userMeta.name;
+    const jobTitle = userMeta.job_title;
     const email = session.user?.email || "";
     const firstName = fullName ? fullName.split(' ')[0] : "User";
 
@@ -126,6 +127,9 @@ export default function UserBadge() {
                             )}
                             <div className="flex flex-col overflow-hidden">
                                 <span className="text-sm font-bold text-zinc-100 truncate">{fullName || firstName}</span>
+                                {jobTitle && (
+                                    <span className="text-xs text-zinc-400 truncate mt-0.5">{jobTitle}</span>
+                                )}
                                 <span className="text-xs text-zinc-500 truncate mb-1">{email}</span>
                                 <div className="flex items-center gap-1">
                                     <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />

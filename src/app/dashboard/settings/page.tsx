@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { motion } from 'framer-motion';
-import { Loader2, User, Sparkles, CreditCard, LogOut } from 'lucide-react';
+import { Loader2, User, Sparkles, CreditCard, LogOut, Wand2, Save } from 'lucide-react';
 import { siteConfig } from '@/config/site';
 
 export default function SettingsPage() {
@@ -11,6 +11,12 @@ export default function SettingsPage() {
     const [userMeta, setUserMeta] = useState<any>(null);
     const [profileData, setProfileData] = useState<any>(null);
     const [userId, setUserId] = useState<string | null>(null);
+
+    // Smart Personalization State
+    const [jobTitle, setJobTitle] = useState("");
+    const [toneOfVoice, setToneOfVoice] = useState("Professional");
+    const [isSaving, setIsSaving] = useState(false);
+    const [saveMessage, setSaveMessage] = useState({ text: "", type: "" });
 
     const maxCredits = 5;
 
@@ -24,6 +30,13 @@ export default function SettingsPage() {
 
             setUserId(session.user.id);
             setUserMeta(session.user.user_metadata);
+
+            if (session.user.user_metadata?.job_title) {
+                setJobTitle(session.user.user_metadata.job_title);
+            }
+            if (session.user.user_metadata?.tone_of_voice) {
+                setToneOfVoice(session.user.user_metadata.tone_of_voice);
+            }
 
             try {
                 const { data } = await supabase
@@ -54,6 +67,27 @@ export default function SettingsPage() {
     const handleSignOut = async () => {
         await supabase.auth.signOut();
         window.location.href = '/';
+    };
+
+    const handleSavePersonalization = async () => {
+        setIsSaving(true);
+        setSaveMessage({ text: "", type: "" });
+        try {
+            const { error } = await supabase.auth.updateUser({
+                data: {
+                    job_title: jobTitle,
+                    tone_of_voice: toneOfVoice
+                }
+            });
+            if (error) throw error;
+            setSaveMessage({ text: "Settings saved successfully!", type: "success" });
+            setTimeout(() => setSaveMessage({ text: "", type: "" }), 3000);
+        } catch (err) {
+            console.error("Failed to save personalization settings:", err);
+            setSaveMessage({ text: "Failed to save settings.", type: "error" });
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     if (isLoading) {
@@ -113,6 +147,73 @@ export default function SettingsPage() {
                                 className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-zinc-300 opacity-80 cursor-not-allowed"
                             />
                         </div>
+                    </div>
+                </div>
+            </motion.div>
+
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05 }}
+                className="glass rounded-3xl p-6 md:p-8"
+            >
+                <div className="flex items-center gap-3 mb-6">
+                    <Wand2 className="w-5 h-5 text-indigo-400" />
+                    <div>
+                        <h2 className="text-xl font-semibold">Smart Personalization (التخصيص الذكي)</h2>
+                        <p className="text-sm text-zinc-400 mt-1">
+                            Help the AI understand your persona to generate better, more authentic content.
+                        </p>
+                    </div>
+                </div>
+
+                <div className="space-y-6 max-w-2xl">
+                    <div>
+                        <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2 block">
+                            Job Title / Headline (اختياري)
+                        </label>
+                        <input
+                            type="text"
+                            value={jobTitle}
+                            onChange={(e) => setJobTitle(e.target.value)}
+                            placeholder="e.g. Senior Software Engineer, Marketing Director"
+                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-zinc-200 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-sans"
+                        />
+                        <p className="text-xs text-zinc-500 mt-2">
+                            This will appear on your generated posts and guide the AI&apos;s terminology.
+                        </p>
+                    </div>
+
+                    <div>
+                        <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2 block">
+                            Tone of Voice (نبرة الصوت)
+                        </label>
+                        <select
+                            value={toneOfVoice}
+                            onChange={(e) => setToneOfVoice(e.target.value)}
+                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-zinc-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all appearance-none font-sans"
+                        >
+                            <option value="Professional" className="bg-zinc-900">Professional (احترافي ورسمي)</option>
+                            <option value="Casual" className="bg-zinc-900">Casual (عفوي ومباشر)</option>
+                            <option value="Motivational" className="bg-zinc-900">Motivational (ملهم وتحفيزي)</option>
+                            <option value="Educational" className="bg-zinc-900">Educational (تعليمي وتقني)</option>
+                        </select>
+                    </div>
+
+                    <div className="pt-2 flex items-center gap-4">
+                        <button
+                            onClick={handleSavePersonalization}
+                            disabled={isSaving}
+                            className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-2.5 rounded-xl transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                            {isSaving ? "Saving..." : "Save Preferences"}
+                        </button>
+                        {saveMessage.text && (
+                            <span className={`text-sm ${saveMessage.type === 'success' ? 'text-green-400' : 'text-red-400'}`}>
+                                {saveMessage.text}
+                            </span>
+                        )}
                     </div>
                 </div>
             </motion.div>

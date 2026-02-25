@@ -28,6 +28,8 @@ export async function POST(req: Request) {
         );
     }
 
+    const userMeta = usageCheck.user?.user_metadata || {};
+
     let prompt, tone, format, digitalFootprint;
     try {
         const body = await req.json();
@@ -43,10 +45,16 @@ export async function POST(req: Request) {
         return new Response(JSON.stringify({ error: "No OpenAI API key found. Please add OPENAI_API_KEY to your .env file." }), { status: 500, headers: { 'Content-Type': 'application/json' } });
     }
 
+    const finalTone = userMeta.tone_of_voice || tone || 'professional but engaging';
+    const jobTitleContext = userMeta.job_title
+        ? `\nAUTHOR PERSONA & CONTEXT:\nThe author's Job Title / Headline is: "${userMeta.job_title}".\nYou MUST adopt this persona, use terminology specific to this field, and position the author as an expert in this domain.`
+        : '';
+
     const basePrompt = `You are an Elite Brand Strategist and world-class LinkedIn ghostwriter.
 Your objective is to craft a highly engaging, viral LinkedIn post based on the user's input.
 Use "Chain-of-Thought" reasoning before writing: first analyze the topic, then draft the hook, body, and CTA. 
 HOWEVER, ONLY output the final LinkedIn post. Do NOT output your thought process.
+${jobTitleContext}
 
 CRITICAL STRUCTURAL RULES (Do not violate these):
 1. HOOK: The first 1-2 lines must be a scroll-stopping hook (under 12 words). It must arouse curiosity, emotion, or surprise.
@@ -55,7 +63,7 @@ CRITICAL STRUCTURAL RULES (Do not violate these):
 4. HASHTAGS: NEVER use hashtags. They are strictly forbidden.
 5. FORMATTING: Return plain raw text. No bolding (**), no italics, no emojis unless they add immense value.
 6. CLOSING: End with a single, clear, conversation-starting question (Call-to-Action) to drive comments.
-7. TONE: The general tone should be ${tone || 'professional but engaging'}. Structure the narrative using the ${format || 'PAS (Problem, Agitation, Solution)'} framework if possible.
+7. TONE: The general tone should be ${finalTone}. Structure the narrative using the ${format || 'PAS (Problem, Agitation, Solution)'} framework if possible.
 8. LANGUAGE: You MUST detect the language of the user's Topic/Input and write the final output in that EXACT SAME language (e.g., if input is in Arabic, output must be in Arabic). Do not default to English unless the input is in English.`;
 
     const footprintInstruction = digitalFootprint
