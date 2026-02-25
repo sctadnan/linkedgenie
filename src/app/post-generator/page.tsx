@@ -52,16 +52,11 @@ export default function PostGenerator() {
         const textLength = text.length;
 
         // 1. Hook Power Score (target: first 140 chars)
-        let hookScore = 60;
+        let hookScore = 80; // Base score is high if structure is good
         const first140 = text.slice(0, 140);
         const firstLines = first140.split('\n');
 
-        if (/\d+/.test(first140)) hookScore += 20;
-        // Reward snappy, short opening lines (under 100 chars without linebreaks)
-        if (firstLines[0] && firstLines[0].length < 100) hookScore += 20;
-
-        const cliches = [/let that sink in/i, /unpopular opinion/i, /حقيقة يجهلها/i, /رأي غير شعبي/i, /دع هذا يتغلغل/i];
-        cliches.forEach(regex => { if (regex.test(first140)) hookScore -= 30; });
+        if (/\d+/.test(first140)) hookScore += 20; // Numbers universally build trust
 
         if (firstLines[0] && firstLines[0].length > 140) {
             hookScore -= 20;
@@ -97,22 +92,13 @@ export default function PostGenerator() {
             authenticityScore -= 60;
             feedback.push({ type: 'critical', message: 'Critical Warning: An external link in the body reduces reach by 60%. Move the link to the comments.' });
         }
-        const engagementBait = [/علق بتم/i, /شارك المنشور/i, /comment below/i, /share this/i, /like if you/i, /اضغط لايك/i];
-        engagementBait.forEach(regex => {
-            if (regex.test(text)) {
-                authenticityScore -= 30;
-                if (feedback.filter(f => f.message.includes('engagement-bait')).length === 0) {
-                    feedback.push({ type: 'warning', message: 'Warning: Avoid direct engagement-bait phrases. The algorithm heavily penalizes this.' });
-                }
-            }
-        });
 
         // 4. Deep Engagement Probability
         let engagementScore = 70;
         const endingText = text.slice(-300); // Check the bottom 300 chars so hashtags don't hide the question
         if (endingText.includes('?')) {
             engagementScore += 30;
-            if (/هل|أليس|توافق|yes|no|agree|do you|are you|توافقني/i.test(endingText)) {
+            if (/yes|no|agree|هل|أليس|توافق/i.test(endingText)) {
                 engagementScore -= 15;
                 feedback.push({ type: 'tip', message: 'Tip: The closing question seems to be a "Yes/No" question. Try ending with an open question to stimulate deep discussion.' });
             }

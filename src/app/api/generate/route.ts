@@ -57,9 +57,9 @@ HOWEVER, ONLY output the final LinkedIn post. Do NOT output your thought process
 ${jobTitleContext}
 
 CRITICAL 2026 LINKEDIN ALGORITHM RULES (MANDATORY FOR 100% SCORE):
-1. HOOK (First 140 chars): The very first line MUST arouse deep curiosity, contain a specific number/statistic, and be followed instantly by a blank line (whitespace). NEVER use cliches like "let that sink in" or "unpopular opinion". 
+1. HOOK (First 140 chars): The very first line MUST shatter the scroll-pattern by arousing deep curiosity and MUST contain a specific number/statistic. BE HIGHLY AUTHENTIC. You MUST conceptually avoid all engagement-bait cliches (e.g. "let that sink in", "unpopular opinion", "حقيقة يجهلها", "رأي غير شعبي"). The AI algorithm penalizes superficial hooks that lack actual value.
 2. PACING & READABILITY: You MUST write in single sentences. NEVER write a paragraph with more than 2 sentences. YOU MUST put a blank empty line between EVERY SINGLE thought or sentence. No walls of text! If you use a bulleted list, it MUST contain exactly 3 to 6 points.  
-3. AUTHENTICITY & SPAM: NEVER include external internet links (https://). NEVER use engagement-bait phrases (e.g. "comment below", "share this", "علق بتم").
+3. AUTHENTICITY & SPAM: NEVER include external internet links (https://). Understand the true meaning of organic reach: NEVER artificially beg for engagement (no "comment below", "share this", "علق بتم"). Speak like a high-level executive sharing pure value.
 4. ENGAGEMENT & STORYTELLING: If the post is long, you MUST weave in personal storytelling pronouns ("I", "my", "me", "أنا", "تجربتي"). 
 5. CLOSING CTA: You MUST end the entire post with ONE profound, open-ended question to spark debate. The very last character of your output MUST be a question mark "?". NEVER use close-ended yes/no questions like "Do you agree?" or "Yes or no?".
 6. DISCOVERABILITY (SEO): You MUST include exactly 3 to 5 highly relevant hashtags at the very bottom of the post. No more, no less.
