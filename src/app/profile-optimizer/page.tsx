@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useCompletion } from "@ai-sdk/react";
 import { Loader2, UserCheck, AlertCircle, ChevronRight, CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/lib/supabase";
+import { useEffect } from "react";
 
 export default function ProfileOptimizer() {
     const [profileData, setProfileData] = useState({
@@ -11,10 +13,21 @@ export default function ProfileOptimizer() {
         about: "",
         experience: ""
     });
+    const [sessionToken, setSessionToken] = useState("");
+
+    useEffect(() => {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session) setSessionToken(session.access_token);
+        });
+    }, []);
 
     const { completion, complete, isLoading, error } = useCompletion({
         api: "/api/optimize-profile",
         streamProtocol: "text",
+        headers: {
+            "Content-Type": "application/json",
+            ...(sessionToken ? { "Authorization": `Bearer ${sessionToken}` } : {})
+        },
     });
 
     const handleSubmit = (e: React.FormEvent) => {

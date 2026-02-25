@@ -10,16 +10,27 @@ export default function UserBadge() {
     const [session, setSession] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [isOpen, setIsOpen] = useState(false);
+    const [isPro, setIsPro] = useState(false);
+    const [creditsUsed, setCreditsUsed] = useState(0);
     const router = useRouter();
     const menuRef = useRef<HTMLDivElement>(null);
 
-    // Mock credits for MVP
     const maxCredits = 5;
-    const creditsRemaining = 3;
+    const creditsRemaining = Math.max(maxCredits - creditsUsed, 0);
 
     useEffect(() => {
+        const fetchProfile = async (session: any) => {
+            if (!session) return;
+            const { data } = await supabase.from('profiles').select('is_pro, credits_used').eq('id', session.user.id).single();
+            if (data) {
+                setIsPro(data.is_pro);
+                setCreditsUsed(data.credits_used);
+            }
+        };
+
         supabase.auth.getSession().then(({ data: { session } }) => {
             setSession(session);
+            fetchProfile(session);
             setLoading(false);
         });
 
@@ -27,6 +38,7 @@ export default function UserBadge() {
             data: { subscription },
         } = supabase.auth.onAuthStateChange((_event, session) => {
             setSession(session);
+            fetchProfile(session);
             setLoading(false);
         });
 
@@ -115,33 +127,41 @@ export default function UserBadge() {
 
                         <div className="p-2 flex flex-col gap-1">
                             {/* 2. Generation Credits Progress */}
-                            <div className="px-3 py-3 bg-white/5 rounded-xl border border-white/5">
-                                <div className="flex items-center justify-between mb-2">
-                                    <span className="text-xs font-semibold text-zinc-300 flex items-center gap-1.5">
-                                        <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-                                        Free Generations
-                                    </span>
-                                    <span className="text-xs font-bold text-zinc-100">{creditsRemaining} / {maxCredits}</span>
+                            {!isPro ? (
+                                <div className="px-3 py-3 bg-white/5 rounded-xl border border-white/5">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-xs font-semibold text-zinc-300 flex items-center gap-1.5">
+                                            <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+                                            Free Generations
+                                        </span>
+                                        <span className="text-xs font-bold text-zinc-100">{creditsRemaining} / {maxCredits}</span>
+                                    </div>
+                                    <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full bg-gradient-to-r from-purple-500 to-blue-500 rounded-full transition-all"
+                                            style={{ width: `${(creditsRemaining / maxCredits) * 100}%` }}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
-                                    <div
-                                        className="h-full bg-gradient-to-r from-purple-500 to-blue-500 rounded-full transition-all"
-                                        style={{ width: `${(creditsRemaining / maxCredits) * 100}%` }}
-                                    />
+                            ) : (
+                                <div className="px-3 py-3 bg-gradient-to-r from-amber-500/10 to-orange-500/10 rounded-xl border border-orange-500/20 text-center">
+                                    <span className="text-sm font-bold text-orange-400">Pro Member ✨</span>
                                 </div>
-                            </div>
+                            )}
 
                             {/* 3. Pro Upgrade CTA */}
-                            <a
-                                href={process.env.NEXT_PUBLIC_CHECKOUT_URL || "/#pricing"}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="px-3 py-2.5 mt-1 bg-gradient-to-r from-orange-500/20 to-amber-500/20 hover:from-orange-500/30 hover:to-amber-500/30 border border-orange-500/40 rounded-xl transition-colors flex items-center justify-between group"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                <span className="text-sm font-bold text-orange-400">Upgrade to Pro ✨</span>
-                                <span className="text-xs font-bold text-orange-200 bg-orange-500/30 px-2 py-0.5 rounded-full group-hover:bg-orange-500/40 transition-colors shadow-sm">Unlimited</span>
-                            </a>
+                            {!isPro && (
+                                <a
+                                    href={process.env.NEXT_PUBLIC_LEMON_CHECKOUT_URL || "/#pricing"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="px-3 py-2.5 mt-1 bg-gradient-to-r from-orange-500/20 to-amber-500/20 hover:from-orange-500/30 hover:to-amber-500/30 border border-orange-500/40 rounded-xl transition-colors flex items-center justify-between group"
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    <span className="text-sm font-bold text-orange-400">Upgrade to Pro ✨</span>
+                                    <span className="text-xs font-bold text-orange-200 bg-orange-500/30 px-2 py-0.5 rounded-full group-hover:bg-orange-500/40 transition-colors shadow-sm">Unlimited</span>
+                                </a>
+                            )}
                         </div>
 
                         {/* 4. Quick Links */}

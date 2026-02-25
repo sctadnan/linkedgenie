@@ -1,6 +1,7 @@
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { ratelimit } from '@/lib/ratelimit';
+import { enforceUsageLimit } from '@/lib/usage-gate';
 
 export async function POST(req: Request) {
     const ip = req.headers.get("x-forwarded-for") ?? "127.0.0.1";
@@ -14,6 +15,15 @@ export async function POST(req: Request) {
                 { status: 429, headers: { 'Content-Type': 'application/json' } }
             );
         }
+    }
+
+    // Enforce Pro/Credits limit
+    const usageCheck = await enforceUsageLimit(req);
+    if (usageCheck.error) {
+        return new Response(
+            JSON.stringify({ error: usageCheck.error === "OUT_OF_CREDITS" ? "You have run out of free generations. Please upgrade to Pro." : usageCheck.error }),
+            { status: usageCheck.status || 401, headers: { 'Content-Type': 'application/json' } }
+        );
     }
 
     let posts, roleModel;

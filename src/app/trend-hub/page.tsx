@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useCompletion } from "@ai-sdk/react";
 import { Loader2, TrendingUp, Search, Hash, Copy, Send, ArrowRight, Rss, AlertCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/lib/supabase";
 import { fetchLiveTrends, TrendItem } from "@/actions/fetch-trends";
 
 export default function TrendHubPage() {
@@ -12,6 +13,13 @@ export default function TrendHubPage() {
     const [liveTrends, setLiveTrends] = useState<TrendItem[]>([]);
     const [isLoadingTrends, setIsLoadingTrends] = useState(true);
     const [isSaving, setIsSaving] = useState(false); // Added as per instruction, though not used in provided diff
+    const [sessionToken, setSessionToken] = useState("");
+
+    useEffect(() => {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session) setSessionToken(session.access_token);
+        });
+    }, []);
 
     useEffect(() => {
         const loadTrends = async () => {
@@ -30,6 +38,10 @@ export default function TrendHubPage() {
     const { completion, complete, isLoading, error } = useCompletion({
         api: "/api/trend-analysis",
         streamProtocol: "text",
+        headers: {
+            "Content-Type": "application/json",
+            ...(sessionToken ? { "Authorization": `Bearer ${sessionToken}` } : {})
+        },
     });
 
     const handleSubmit = (e: React.FormEvent) => {

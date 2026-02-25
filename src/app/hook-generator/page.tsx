@@ -4,11 +4,25 @@ import { useState } from "react";
 import { useCompletion } from "@ai-sdk/react";
 import { Loader2, Wand2, Copy, AlertCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/lib/supabase";
+import { useEffect } from "react";
 
 export default function HookGenerator() {
+    const [sessionToken, setSessionToken] = useState("");
+
+    useEffect(() => {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session) setSessionToken(session.access_token);
+        });
+    }, []);
+
     const { completion, input, handleInputChange, handleSubmit, isLoading, error } = useCompletion({
         api: "/api/generate-hook",
         streamProtocol: "text",
+        headers: {
+            "Content-Type": "application/json",
+            ...(sessionToken ? { "Authorization": `Bearer ${sessionToken}` } : {})
+        },
     });
 
     const generatedHooks = completion.split('\n').filter(h => h.trim().length > 0);

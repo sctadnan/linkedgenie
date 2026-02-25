@@ -15,6 +15,13 @@ export default function PostGenerator() {
     const [isFootprintModalOpen, setIsFootprintModalOpen] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [savedMessage, setSavedMessage] = useState("");
+    const [sessionToken, setSessionToken] = useState("");
+
+    useEffect(() => {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session) setSessionToken(session.access_token);
+        });
+    }, []);
 
     // Predictive Score Calculation
     const calculateScore = (text: string) => {
@@ -63,7 +70,8 @@ export default function PostGenerator() {
         api: "/api/generate",
         streamProtocol: "text",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            ...(sessionToken ? { "Authorization": `Bearer ${sessionToken}` } : {})
         },
         body: {
             tone,
