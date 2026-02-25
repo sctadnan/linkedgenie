@@ -27,6 +27,12 @@ export default function PostGenerator() {
     const [isSavingJob, setIsSavingJob] = useState(false);
 
     useEffect(() => {
+        // Load global digital footprint if extracted from the Dashboard
+        const storedFootprint = localStorage.getItem('linkedgenie_footprint');
+        if (storedFootprint) {
+            setDigitalFootprint(storedFootprint);
+        }
+
         supabase.auth.getSession().then(({ data: { session } }) => {
             if (session) {
                 setSessionToken(session.access_token);

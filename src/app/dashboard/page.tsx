@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { motion } from 'framer-motion';
-import { Loader2, FileText, Calendar, Copy, Trash2, ArrowRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Loader2, FileText, Calendar, Copy, Trash2, ArrowRight, CheckCircle2, Sparkles, X } from 'lucide-react';
 import Link from 'next/link';
 
 interface SavedPost {
@@ -15,11 +15,33 @@ interface SavedPost {
     created_at: string;
 }
 
+function getRelativeTimeString(dateStr: string): string {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    if (diffInSeconds < 60) return 'Just now';
+
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) return `${diffInHours}h ago`;
+
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays < 7) return `${diffInDays}d ago`;
+
+    // Fallback for older posts: strict English locale to avoid regional numeral bugs
+    return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(date);
+}
+
 export default function DashboardPage() {
     const [posts, setPosts] = useState<SavedPost[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
     const [copiedId, setCopiedId] = useState<string | null>(null);
+    const [selectedPosts, setSelectedPosts] = useState<Set<string>>(new Set());
+    const [isExtracting, setIsExtracting] = useState(false);
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -49,7 +71,8 @@ export default function DashboardPage() {
         fetchPosts();
     }, []);
 
-    const handleDelete = async (id: string) => {
+    const handleDelete = async (e: React.MouseEvent, id: string) => {
+        e.stopPropagation();
         try {
             const { error } = await supabase
                 .from('saved_posts')
@@ -58,15 +81,62 @@ export default function DashboardPage() {
 
             if (error) throw error;
             setPosts(posts.filter(p => p.id !== id));
+            // Remove from selection if deleted
+            if (selectedPosts.has(id)) {
+                const nextSet = new Set(selectedPosts);
+                nextSet.delete(id);
+                setSelectedPosts(nextSet);
+            }
         } catch (err: any) {
             alert("Failed to delete post: " + err.message);
         }
     };
 
-    const handleCopy = (id: string, content: string) => {
+    const handleCopy = (e: React.MouseEvent, id: string, content: string) => {
+        e.stopPropagation();
         navigator.clipboard.writeText(content);
         setCopiedId(id);
         setTimeout(() => setCopiedId(null), 2000);
+    };
+
+    const toggleSelection = (id: string) => {
+        const nextSet = new Set(selectedPosts);
+        if (nextSet.has(id)) {
+            nextSet.delete(id);
+        } else {
+            nextSet.add(id);
+        }
+        setSelectedPosts(nextSet);
+    };
+
+    const handleExtractFootprint = async () => {
+        if (selectedPosts.size === 0) return;
+        setIsExtracting(true);
+
+        const selectedContent = posts
+            .filter(p => selectedPosts.has(p.id))
+            .map(p => p.content)
+            .join('\n\n---\n\n');
+
+        try {
+            const res = await fetch('/api/extract-footprint', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ posts: selectedContent }),
+            });
+
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || "Failed to extract footprint");
+
+            // Store footprint globally in local storage for the Generator to pick up
+            localStorage.setItem('linkedgenie_footprint', data.footprint);
+
+            // Redirect to generator
+            window.location.href = '/post-generator';
+        } catch (err: any) {
+            alert(err.message);
+            setIsExtracting(false);
+        }
     };
 
     if (isLoading) {
@@ -113,10 +183,11 @@ export default function DashboardPage() {
                     </Link>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-max">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-max grid-flow-dense">
                     {posts.map((post, index) => {
                         // Bento Grid Logic: Make the first item span 2 columns on large screens if there are enough posts
                         const isFeatured = index === 0 && posts.length > 3;
+                        const isSelected = selectedPosts.has(post.id);
 
                         return (
                             <motion.div
@@ -124,22 +195,31 @@ export default function DashboardPage() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1 }}
                                 key={post.id}
-                                className={`relative group bg-zinc-900/40 border border-white/10 rounded-3xl p-6 hover:bg-zinc-900/80 transition-all flex flex-col ${isFeatured ? 'lg:col-span-2' : ''}`}
+                                onClick={() => toggleSelection(post.id)}
+                                className={`relative group cursor-pointer border rounded-3xl p-6 transition-all flex flex-col ${isFeatured ? 'lg:col-span-2' : ''} ${isSelected
+                                        ? 'bg-purple-900/20 border-purple-500/50 ring-1 ring-purple-500 shadow-[0_0_30px_rgba(168,85,247,0.15)]'
+                                        : 'bg-zinc-900/40 border-white/10 hover:bg-zinc-900/80 hover:-translate-y-1 hover:ring-1 hover:ring-white/10'
+                                    }`}
                             >
+                                {/* Selection Indicator */}
+                                <div className={`absolute top-4 right-4 w-6 h-6 rounded-full border flex items-center justify-center transition-all ${isSelected ? 'bg-purple-500 border-purple-400 text-white' : 'border-white/20 bg-black/20 group-hover:border-white/40'
+                                    }`}>
+                                    {isSelected && <CheckCircle2 className="w-4 h-4" />}
+                                </div>
                                 <div className="flex items-start justify-between mb-4 gap-4">
-                                    <div className="flex-1">
-                                        <h3 className="font-semibold text-zinc-200 line-clamp-1 truncate block max-w-full">
+                                    <div className="flex-1 min-w-0">
+                                        <h3 className="font-semibold text-zinc-200 line-clamp-2 break-words block max-w-full" dir="auto">
                                             {post.prompt || "Untitled Draft"}
                                         </h3>
-                                        <div className="flex items-center gap-3 mt-2 text-xs text-zinc-500">
-                                            <span className="flex items-center gap-1">
+                                        <div className="flex flex-wrap items-center gap-2 mt-2 text-xs text-zinc-500">
+                                            <span className="flex items-center gap-1 shrink-0">
                                                 <Calendar className="w-3 h-3" />
-                                                {new Date(post.created_at).toLocaleDateString()}
+                                                {getRelativeTimeString(post.created_at)}
                                             </span>
-                                            <span className="px-2 py-0.5 rounded-md bg-white/5 border border-white/5">
+                                            <span className="px-2 py-0.5 rounded-md bg-white/5 border border-white/5 shrink-0">
                                                 {post.tone}
                                             </span>
-                                            <span className="px-2 py-0.5 rounded-md bg-white/5 border border-white/5">
+                                            <span className="px-2 py-0.5 rounded-md bg-white/5 border border-white/5 shrink-0 line-clamp-1 break-all">
                                                 {post.format}
                                             </span>
                                         </div>
@@ -152,21 +232,15 @@ export default function DashboardPage() {
                                     </p>
                                 </div>
 
-                                <div className="flex items-center gap-2 mt-auto pt-4 border-t border-white/5">
+                                <div className="flex items-center gap-2 mt-auto pt-4 border-t border-white/5 relative z-10">
                                     <button
-                                        onClick={() => handleCopy(post.id, post.content)}
+                                        onClick={(e) => handleCopy(e, post.id, post.content)}
                                         className="flex-1 py-2 px-4 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 text-sm font-semibold transition-colors flex items-center justify-center gap-2"
                                     >
-                                        {copiedId === post.id ? (
-                                            "Copied!"
-                                        ) : (
-                                            <>
-                                                <Copy className="w-4 h-4" /> Copy
-                                            </>
-                                        )}
+                                        {copiedId === post.id ? "Copied!" : <><Copy className="w-4 h-4" /> Copy</>}
                                     </button>
                                     <button
-                                        onClick={() => handleDelete(post.id)}
+                                        onClick={(e) => handleDelete(e, post.id)}
                                         className="p-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-colors"
                                         title="Delete draft"
                                     >
@@ -178,6 +252,48 @@ export default function DashboardPage() {
                     })}
                 </div>
             )}
+
+            {/* Floating Action Bar (FAB) for Footprint Extraction */}
+            <AnimatePresence>
+                {selectedPosts.size > 0 && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 100 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 100 }}
+                        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4 bg-zinc-900/90 backdrop-blur-xl border border-white/10 shadow-2xl p-4 rounded-2xl w-[90%] md:w-auto max-w-xl"
+                    >
+                        <div className="flex items-center gap-3 px-2 hidden sm:flex">
+                            <div className="bg-purple-500/20 text-purple-400 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
+                                {selectedPosts.size}
+                            </div>
+                            <span className="text-zinc-300 font-medium text-sm whitespace-nowrap">Drafts Selected</span>
+                        </div>
+
+                        <div className="h-8 w-px bg-white/10 hidden sm:block"></div>
+
+                        <button
+                            onClick={handleExtractFootprint}
+                            disabled={isExtracting}
+                            className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white px-6 py-2.5 rounded-xl font-semibold shadow-lg transition-all disabled:opacity-50"
+                        >
+                            {isExtracting ? (
+                                <Loader2 className="w-5 h-5 animate-spin" />
+                            ) : (
+                                <Sparkles className="w-5 h-5" />
+                            )}
+                            {isExtracting ? "Extracting..." : "Generate Footprint"}
+                        </button>
+
+                        <button
+                            onClick={() => setSelectedPosts(new Set())}
+                            className="p-2.5 text-zinc-400 hover:text-white hover:bg-white/10 rounded-xl transition-colors shrink-0"
+                            title="Clear Selection"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }
