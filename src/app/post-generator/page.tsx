@@ -56,8 +56,8 @@ export default function PostGenerator() {
         const first140 = text.slice(0, 140);
         const firstLines = first140.split('\n');
 
-        // Numbers OR question marks build curiosity/trust
-        if (/\d+/.test(first140) || first140.includes('?') || first140.includes('؟')) {
+        // Numbers OR global question marks build curiosity/trust
+        if (/\d+/.test(first140) || /[?؟？;՞¿]/.test(first140)) {
             hookScore += 20;
         }
 
@@ -99,12 +99,10 @@ export default function PostGenerator() {
         // 4. Deep Engagement Probability
         let engagementScore = 70;
         const endingText = text.slice(-300); // Check the bottom 300 chars so hashtags don't hide the question
-        if (endingText.includes('?') || endingText.includes('؟')) {
+
+        // Detect global question marks (English, Arabic, Asian fullwidth, Spanish, Greek)
+        if (/[?؟？;՞¿]/.test(endingText)) {
             engagementScore += 30;
-            if (/yes|no|agree|هل|أليس|توافق/i.test(endingText)) {
-                engagementScore -= 15;
-                feedback.push({ type: 'tip', message: 'Tip: The closing question seems to be a "Yes/No" question. Try ending with an open question to stimulate deep discussion.' });
-            }
         } else {
             feedback.push({ type: 'tip', message: 'Tip: The ending is declarative. Add an open-ended question to increase comments.' });
         }
