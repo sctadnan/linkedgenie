@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useCompletion } from "@ai-sdk/react";
-import { Loader2, Sparkles, Send, Copy, ThumbsUp, MessageSquare, Repeat2, BookmarkPlus, Fingerprint, Activity } from "lucide-react";
+import { Loader2, Sparkles, Send, Copy, ThumbsUp, MessageSquare, Repeat2, BookmarkPlus, Fingerprint, Activity, Check, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { DigitalFootprintModal } from "@/components/DigitalFootprintModal";
@@ -20,11 +20,20 @@ export default function PostGenerator() {
     const [session, setSession] = useState<any>(null);
     const [isExpanded, setIsExpanded] = useState(false);
 
+    // Inline Job Title Editing State
+    const [localJobTitle, setLocalJobTitle] = useState("");
+    const [isEditingJob, setIsEditingJob] = useState(false);
+    const [tempJobTitle, setTempJobTitle] = useState("");
+    const [isSavingJob, setIsSavingJob] = useState(false);
+
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
             if (session) {
                 setSessionToken(session.access_token);
                 setSession(session);
+                if (session.user.user_metadata?.job_title) {
+                    setLocalJobTitle(session.user.user_metadata.job_title);
+                }
             }
         });
     }, []);
@@ -35,7 +44,6 @@ export default function PostGenerator() {
     const bio = userMeta?.job_title || userMeta?.description || siteConfig.mockData.fallbackUser.bio;
 
 
-    // Predictive Score Calculation
     const calculateScore = (text: string) => {
         if (!text) return 0;
         let score = 50; // Base score
@@ -43,6 +51,23 @@ export default function PostGenerator() {
         if (text.split('\n\n').length > 3) score += 15; // Good whitespace
         if (text.includes('?')) score += 15; // CTA or question included
         return Math.min(100, score);
+    };
+
+    const handleSaveJobTitle = async () => {
+        setIsSavingJob(true);
+        try {
+            const { error } = await supabase.auth.updateUser({
+                data: { job_title: tempJobTitle }
+            });
+            if (error) throw error;
+            setLocalJobTitle(tempJobTitle);
+            setIsEditingJob(false);
+        } catch (err) {
+            console.error("Failed to save inline job title:", err);
+            // Optionally, show a toast here if you have a toast system
+        } finally {
+            setIsSavingJob(false);
+        }
     };
 
     const handleSave = async () => {
@@ -263,15 +288,57 @@ export default function PostGenerator() {
                                 <span className="text-zinc-500 text-[13px] leading-none">• 1st</span>
                             </div>
 
-                            {!userMeta?.job_title ? (
-                                <a
-                                    href="/dashboard/settings"
-                                    className="inline-block mt-1.5 mb-1 px-3 py-1 bg-gradient-to-r from-blue-500/10 to-purple-500/10 hover:from-blue-500/20 hover:to-purple-500/20 border border-blue-500/20 rounded-full text-[11px] font-semibold text-blue-400 decoration-transparent transition-all shadow-sm"
+                            {isEditingJob ? (
+                                <div className="flex items-center gap-2 mt-1 mb-1">
+                                    <input
+                                        type="text"
+                                        autoFocus
+                                        value={tempJobTitle}
+                                        onChange={(e) => setTempJobTitle(e.target.value)}
+                                        placeholder="e.g. Software Engineer"
+                                        className="bg-black/40 border border-white/20 rounded-md px-2 py-1 text-[12px] text-zinc-200 outline-none focus:ring-1 focus:ring-blue-500/50 flex-1 max-w-[200px]"
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') handleSaveJobTitle();
+                                            if (e.key === 'Escape') setIsEditingJob(false);
+                                        }}
+                                    />
+                                    <button
+                                        onClick={handleSaveJobTitle}
+                                        disabled={isSavingJob}
+                                        className="p-1 hover:bg-white/10 rounded text-emerald-400 disabled:opacity-50"
+                                    >
+                                        {isSavingJob ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-4 h-4" />}
+                                    </button>
+                                    <button
+                                        onClick={() => setIsEditingJob(false)}
+                                        disabled={isSavingJob}
+                                        className="p-1 hover:bg-white/10 rounded text-red-400 disabled:opacity-50"
+                                    >
+                                        <X className="w-4 h-4" />
+                                    </button>
+                                </div>
+                            ) : !localJobTitle ? (
+                                <button
+                                    onClick={() => {
+                                        setTempJobTitle("");
+                                        setIsEditingJob(true);
+                                    }}
+                                    className="inline-block mt-1.5 mb-1 px-3 py-1 bg-gradient-to-r from-blue-500/10 to-purple-500/10 hover:from-blue-500/20 hover:to-purple-500/20 border border-blue-500/20 rounded-full text-[11px] font-semibold text-blue-400 transition-all shadow-sm"
                                 >
                                     🪄 Add Headline +
-                                </a>
+                                </button>
                             ) : (
-                                <p className="text-zinc-500 text-[12px] mt-1 pr-4 truncate">{bio}</p>
+                                <p
+                                    className="text-zinc-500 text-[12px] mt-1 pr-4 truncate cursor-pointer hover:text-zinc-400 group flex items-center gap-1"
+                                    onClick={() => {
+                                        setTempJobTitle(localJobTitle);
+                                        setIsEditingJob(true);
+                                    }}
+                                    title="Click to edit"
+                                >
+                                    {localJobTitle}
+                                    <span className="opacity-0 group-hover:opacity-100 text-[10px] text-blue-400 tracking-wider transition-opacity font-semibold ml-1">EDIT</span>
+                                </p>
                             )}
 
                             <div className="flex items-center gap-1 mt-0.5 text-zinc-500 text-[12px]">
