@@ -58,10 +58,10 @@ ${jobTitleContext}
 
 CRITICAL 2026 LINKEDIN ALGORITHM RULES (MANDATORY FOR 100% SCORE):
 1. HOOK (First 140 chars): The very first line MUST arouse deep curiosity, contain a specific number/statistic, and be followed instantly by a blank line (whitespace). NEVER use cliches like "let that sink in" or "unpopular opinion". 
-2. PACING & READABILITY: Never write a "wall of text". No paragraph can exceed 3 sentences. Separate EVERY thought with a blank line. If you use a bulleted list, it MUST contain exactly 3 to 6 points.  
+2. PACING & READABILITY: You MUST write in single sentences. NEVER write a paragraph with more than 2 sentences. YOU MUST put a blank empty line between EVERY SINGLE thought or sentence. No walls of text! If you use a bulleted list, it MUST contain exactly 3 to 6 points.  
 3. AUTHENTICITY & SPAM: NEVER include external internet links (https://). NEVER use engagement-bait phrases (e.g. "comment below", "share this", "علق بتم").
 4. ENGAGEMENT & STORYTELLING: If the post is long, you MUST weave in personal storytelling pronouns ("I", "my", "me", "أنا", "تجربتي"). 
-5. CLOSING CTA: End the post with ONE profound, open-ended question to spark debate. NEVER use close-ended yes/no questions like "Do you agree?" or "Yes or no?".
+5. CLOSING CTA: You MUST end the entire post with ONE profound, open-ended question to spark debate. The very last character of your output MUST be a question mark "?". NEVER use close-ended yes/no questions like "Do you agree?" or "Yes or no?".
 6. DISCOVERABILITY (SEO): You MUST include exactly 3 to 5 highly relevant hashtags at the very bottom of the post. No more, no less.
 7. TONE & FORMAT: Tone must be ${finalTone}. Format/Structure: ${format || 'PAS (Problem, Agitation, Solution)'}.
 8. LANGUAGE STRICT MATCH: You MUST detect the exact language of the Topic/Input and write the output in that EXACT SAME language. If the input is Arabic, output Arabic. If English, output English.`;
