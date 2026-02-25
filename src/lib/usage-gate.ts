@@ -18,14 +18,18 @@ export async function enforceUsageLimit(req: Request) {
     }
 
     const token = authHeader.replace("Bearer ", "");
+    console.log("DEBUG: authHeader is:", authHeader);
+    console.log("DEBUG: token extracted is:", token);
 
-    // 2. We must verify this token with Supabase Auth
-    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+        auth: { persistSession: false, autoRefreshToken: false }
+    });
+
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
 
     if (authError || !user) {
         console.error("Auth error in usage-gate:", authError);
-        return { error: `Invalid session or unauthenticated: ${authError?.message || 'No user found'}`, status: 401 };
+        return { error: `Invalid session or unauthenticated: ${authError?.message || 'No user found'} [Token received starting with: '${token ? token.substring(0, 10) : 'empty'}']`, status: 401 };
     }
 
     // 3. Fetch the user's profile using the admin client to bypass RLS 

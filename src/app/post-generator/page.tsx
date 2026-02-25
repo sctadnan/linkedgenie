@@ -219,6 +219,10 @@ export default function PostGenerator() {
     const { completion, input, handleInputChange, complete, isLoading, error } = useCompletion({
         api: "/api/generate",
         streamProtocol: "text",
+        headers: {
+            "Content-Type": "application/json",
+            ...(sessionToken ? { "Authorization": `Bearer ${sessionToken}` } : {})
+        },
         onError: (err) => {
             console.error("useCompletion failed:", err);
         },
