@@ -47,7 +47,7 @@ export async function enforceUsageLimit(req: Request) {
 
         if (insertError) {
             console.error("Failed to lazily create profile:", insertError);
-            return { error: "Profile not found and could not be created automatically.", status: 500 };
+            return { error: `Profile not found and could not be created automatically. DB Error: ${insertError.message}`, status: 500 };
         }
 
         profile = newProfile;
