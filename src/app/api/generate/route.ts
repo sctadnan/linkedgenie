@@ -1,8 +1,14 @@
 import { streamText } from 'ai';
-import { openai } from '@ai-sdk/openai';
+import { createOpenAI } from '@ai-sdk/openai';
 import { ratelimit } from '@/lib/ratelimit';
 import { enforceUsageLimit } from '@/lib/usage-gate';
 import { siteConfig } from '@/config/site';
+
+// Explicitly set baseURL to avoid system-level OPENAI_BASE_URL overrides (e.g. Antigravity dev env)
+const openai = createOpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+    baseURL: 'https://api.openai.com/v1',
+});
 
 // Require OPENAI_API_KEY environment variable
 export async function POST(req: Request) {
