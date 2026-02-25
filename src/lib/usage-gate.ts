@@ -30,14 +30,31 @@ export async function enforceUsageLimit(req: Request) {
     // 3. Fetch the user's profile using the admin client to bypass RLS 
     // (RLS might block read if they somehow aren't authenticated properly contextually)
     // We use the admin client in server contexts strictly for reading trusted data here
-    const { data: profile, error: profileError } = await supabaseAdmin
+    let { data: profile, error: profileError } = await supabaseAdmin
         .from("profiles")
         .select("is_pro, credits_used")
         .eq("id", user.id)
         .single();
 
-    if (profileError || !profile) {
-        return { error: "Profile not found", status: 404 };
+    // If the profile does not exist (e.g. they signed up before we created the DB trigger)
+    // PGRST116 is the PostgREST error code for "Results contain 0 rows"
+    if (profileError?.code === 'PGRST116' || !profile) {
+        const { data: newProfile, error: insertError } = await supabaseAdmin
+            .from("profiles")
+            .insert({ id: user.id, is_pro: false, credits_used: 0 })
+            .select("is_pro, credits_used")
+            .single();
+
+        if (insertError) {
+            console.error("Failed to lazily create profile:", insertError);
+            return { error: "Profile not found and could not be created automatically.", status: 500 };
+        }
+
+        profile = newProfile;
+        profileError = null;
+    } else if (profileError) {
+        console.error("Database error fetching profile:", profileError);
+        return { error: "Internal database error when fetching profile", status: 500 };
     }
 
     // 4. Logic Enforcement
