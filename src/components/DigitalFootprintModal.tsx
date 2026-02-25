@@ -92,6 +92,7 @@ export function DigitalFootprintModal({ isOpen, onClose, onFootprintExtracted, c
 
             const data = await res.json();
             onFootprintExtracted(data.footprint);
+            localStorage.setItem('linkedgenie_footprint', data.footprint);
             onClose();
         } catch (err: any) {
             setError(err.message);
@@ -145,6 +146,7 @@ export function DigitalFootprintModal({ isOpen, onClose, onFootprintExtracted, c
                                         <button
                                             onClick={() => {
                                                 onFootprintExtracted("");
+                                                localStorage.removeItem('linkedgenie_footprint');
                                                 onClose();
                                             }}
                                             className="text-xs bg-red-500/20 text-red-400 hover:bg-red-500/30 px-2.5 py-1 rounded transition-colors flex items-center gap-1"
