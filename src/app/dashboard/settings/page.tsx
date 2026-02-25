@@ -160,9 +160,9 @@ export default function SettingsPage() {
                 <div className="flex items-center gap-3 mb-6">
                     <Wand2 className="w-5 h-5 text-indigo-400" />
                     <div>
-                        <h2 className="text-xl font-semibold">Smart Personalization (التخصيص الذكي)</h2>
+                        <h2 className="text-xl font-semibold">Smart Personalization</h2>
                         <p className="text-sm text-zinc-400 mt-1">
-                            Help the AI understand your persona to generate better, more authentic content.
+                            Add your domain expertise so the AI can tailor posts using terminology that resonates with your audience.
                         </p>
                     </div>
                 </div>
@@ -170,7 +170,7 @@ export default function SettingsPage() {
                 <div className="space-y-6 max-w-2xl">
                     <div>
                         <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2 block">
-                            Job Title / Headline (اختياري)
+                            Job Title / Headline
                         </label>
                         <input
                             type="text"
@@ -179,24 +179,27 @@ export default function SettingsPage() {
                             placeholder="e.g. Senior Software Engineer, Marketing Director"
                             className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-zinc-200 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-sans"
                         />
-                        <p className="text-xs text-zinc-500 mt-2">
-                            This will appear on your generated posts and guide the AI&apos;s terminology.
-                        </p>
+                        <div className="flex items-start gap-1.5 mt-2 text-zinc-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+                            <p className="text-[11px] leading-tight flex-1">
+                                Securely stored and only used to train the AI on your unique style. We never share this.
+                            </p>
+                        </div>
                     </div>
 
                     <div>
                         <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2 block">
-                            Tone of Voice (نبرة الصوت)
+                            Tone of Voice
                         </label>
                         <select
                             value={toneOfVoice}
                             onChange={(e) => setToneOfVoice(e.target.value)}
-                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-zinc-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all appearance-none font-sans"
+                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-zinc-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all appearance-none font-sans cursor-pointer"
                         >
-                            <option value="Professional" className="bg-zinc-900">Professional (احترافي ورسمي)</option>
-                            <option value="Casual" className="bg-zinc-900">Casual (عفوي ومباشر)</option>
-                            <option value="Motivational" className="bg-zinc-900">Motivational (ملهم وتحفيزي)</option>
-                            <option value="Educational" className="bg-zinc-900">Educational (تعليمي وتقني)</option>
+                            <option value="Professional" className="bg-zinc-900">Professional</option>
+                            <option value="Casual" className="bg-zinc-900">Casual</option>
+                            <option value="Motivational" className="bg-zinc-900">Motivational</option>
+                            <option value="Educational" className="bg-zinc-900">Educational</option>
                         </select>
                     </div>
 

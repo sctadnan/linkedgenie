@@ -262,7 +262,18 @@ export default function PostGenerator() {
                                 <h3 className="font-semibold text-[15px] leading-none text-slate-900 dark:text-zinc-100">{fullName}</h3>
                                 <span className="text-zinc-500 text-[13px] leading-none">• 1st</span>
                             </div>
-                            <p className="text-zinc-500 text-[12px] mt-1 pr-4">{bio}</p>
+
+                            {!userMeta?.job_title ? (
+                                <a
+                                    href="/dashboard/settings"
+                                    className="inline-block mt-1.5 mb-1 px-3 py-1 bg-gradient-to-r from-blue-500/10 to-purple-500/10 hover:from-blue-500/20 hover:to-purple-500/20 border border-blue-500/20 rounded-full text-[11px] font-semibold text-blue-400 decoration-transparent transition-all shadow-sm"
+                                >
+                                    🪄 Add Headline +
+                                </a>
+                            ) : (
+                                <p className="text-zinc-500 text-[12px] mt-1 pr-4 truncate">{bio}</p>
+                            )}
+
                             <div className="flex items-center gap-1 mt-0.5 text-zinc-500 text-[12px]">
                                 <span>Just now</span> •
                                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" /></svg>
