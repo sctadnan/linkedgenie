@@ -263,11 +263,11 @@ export default function PostGenerator() {
     if (lines.length > 3) {
         // Find exactly where the 3rd line ends (if there are empty linebreaks, they count)
         const cutoffLength = lines.slice(0, 3).join('\n').length;
-        previewText = completion.substring(0, cutoffLength);
+        previewText = completion.substring(0, cutoffLength).trimEnd();
         isTruncated = true;
     }
     if (previewText.length > 210) {
-        previewText = previewText.substring(0, 210);
+        previewText = previewText.substring(0, 210).trimEnd();
         isTruncated = true;
     }
 
@@ -512,17 +512,7 @@ export default function PostGenerator() {
                         <div className="whitespace-pre-wrap font-sans break-words mb-2" dir="auto">
                             {isExpanded ? completion : previewText}
                             {!isExpanded && isTruncated && (
-                                <span>
-                                    ...
-                                    {!isGenerating && (
-                                        <button
-                                            onClick={() => setIsExpanded(true)}
-                                            className="text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 font-semibold cursor-pointer"
-                                        >
-                                            see more
-                                        </button>
-                                    )}
-                                </span>
+                                <span>...{!isGenerating && (<button onClick={() => setIsExpanded(true)} className="text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 font-semibold cursor-pointer">see more</button>)}</span>
                             )}
                             {isGenerating && (
                                 <span className="inline-block w-2 h-4 ml-1 bg-[#0a66c2] dark:bg-[#70b5f9] animate-pulse"></span>
