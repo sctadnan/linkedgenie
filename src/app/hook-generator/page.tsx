@@ -53,7 +53,7 @@ export default function HookGenerator() {
                 <form onSubmit={handleSubmit} className="glass rounded-2xl p-2 flex flex-col sm:flex-row gap-2 relative z-10">
                     <input
                         type="text"
-                        className="flex-1 bg-transparent border-none px-6 py-4 text-zinc-200 outline-none placeholder:text-zinc-500"
+                        className="flex-1 w-full bg-transparent border-none px-4 md:px-6 py-4 text-zinc-200 outline-none placeholder:text-zinc-500 text-sm md:text-base text-ellipsis"
                         placeholder="What is your post about? (e.g. Remote work vs Office)"
                         value={input}
                         onChange={handleInputChange}
@@ -84,8 +84,8 @@ export default function HookGenerator() {
                         >
                             <h3 className="text-xl font-semibold mb-2">Your Scroll-Stopping Hooks:</h3>
                             {generatedHooks.map((hook, idx) => (
-                                <div key={idx} className="glass p-5 rounded-xl group flex items-start justify-between gap-4 hover:border-pink-500/30 transition-colors">
-                                    <p className="text-zinc-200 leading-relaxed font-medium">{hook.replace('►', '').trim()}</p>
+                                <div key={idx} className="glass p-4 md:p-5 rounded-xl group flex items-start justify-between gap-4 hover:border-pink-500/30 transition-colors break-words overflow-hidden">
+                                    <p className="text-zinc-200 leading-relaxed font-medium text-sm md:text-base break-words">{hook.replace('►', '').trim()}</p>
                                     <button
                                         onClick={() => navigator.clipboard.writeText(hook.replace('►', '').trim())}
                                         className="text-zinc-500 hover:text-white transition-colors p-2 glass rounded-lg opacity-0 group-hover:opacity-100 flex-shrink-0"

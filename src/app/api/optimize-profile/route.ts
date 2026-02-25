@@ -2,6 +2,7 @@ import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { ratelimit } from '@/lib/ratelimit';
 import { enforceUsageLimit } from '@/lib/usage-gate';
+import { siteConfig } from '@/config/site';
 
 export async function POST(req: Request) {
     const ip = req.headers.get("x-forwarded-for") ?? "127.0.0.1";
@@ -46,11 +47,12 @@ Your Goal:
 2. Provide 3 highly optimized, engaging Headline alternatives (mix of SEO friendly and bold).
 3. If they provided an About section, rewrite it to be structured, engaging, and action-oriented. Use short paragraphs and clear formatting.
 4. Keep the response clean and easy to read. Do not use complex markdown that cannot be rendered as plain text. Use bullet points and line breaks.
+5. LANGUAGE: You MUST detect the language of the user's input and write the output in that EXACT SAME language (e.g., if input is in Arabic, output must be in Arabic). Do not default to English unless the input is in English.
 `;
 
     try {
         const result = streamText({
-            model: openai('gpt-4o'),
+            model: openai(siteConfig.aiConfig.defaultModel),
             system: systemPrompt,
             prompt: `Here is my profile data:\n${prompt}`,
         });

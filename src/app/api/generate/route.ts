@@ -2,6 +2,7 @@ import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { ratelimit } from '@/lib/ratelimit';
 import { enforceUsageLimit } from '@/lib/usage-gate';
+import { siteConfig } from '@/config/site';
 
 // Require OPENAI_API_KEY environment variable
 export async function POST(req: Request) {
@@ -54,7 +55,8 @@ CRITICAL STRUCTURAL RULES (Do not violate these):
 4. HASHTAGS: NEVER use hashtags. They are strictly forbidden.
 5. FORMATTING: Return plain raw text. No bolding (**), no italics, no emojis unless they add immense value.
 6. CLOSING: End with a single, clear, conversation-starting question (Call-to-Action) to drive comments.
-7. TONE: The general tone should be ${tone || 'professional but engaging'}. Structure the narrative using the ${format || 'PAS (Problem, Agitation, Solution)'} framework if possible.`;
+7. TONE: The general tone should be ${tone || 'professional but engaging'}. Structure the narrative using the ${format || 'PAS (Problem, Agitation, Solution)'} framework if possible.
+8. LANGUAGE: You MUST detect the language of the user's Topic/Input and write the final output in that EXACT SAME language (e.g., if input is in Arabic, output must be in Arabic). Do not default to English unless the input is in English.`;
 
     const footprintInstruction = digitalFootprint
         ? `\n\nUSER'S DIGITAL FOOTPRINT (Mimic this exact style):\n${digitalFootprint}\nAnalyze this footprint deeply. Adopt the exact vocabulary, sentence rhythm, and "signature moves" described above. The post must sound like the user wrote it, NOT a generic AI.`
@@ -64,7 +66,7 @@ CRITICAL STRUCTURAL RULES (Do not violate these):
 
     try {
         const result = streamText({
-            model: openai('gpt-4o'),
+            model: openai(siteConfig.aiConfig.defaultModel),
             system: systemPrompt,
             prompt: `Topic: ${prompt}`,
         });

@@ -2,6 +2,7 @@ import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { ratelimit } from '@/lib/ratelimit';
 import { enforceUsageLimit } from '@/lib/usage-gate';
+import { siteConfig } from '@/config/site';
 
 export async function POST(req: Request) {
     const ip = req.headers.get("x-forwarded-for") ?? "127.0.0.1";
@@ -44,11 +45,12 @@ Rules:
 1. Provide exactly 5 hooks, numbered 1 to 5, each on a new line.
 2. Prefix each hook with the symbol ► (e.g. ► Hook text goes here)
 3. Keep them incredibly engaging, punchy, and under 2 sentences each.
-4. Do not provide any conversational text before or after the hooks. Just the 5 hooks.`;
+4. Do not provide any conversational text before or after the hooks. Just the 5 hooks.
+5. LANGUAGE: You MUST detect the language of the user's Topic and write the output in that EXACT SAME language (e.g., if input is in Arabic, output must be in Arabic). Do not default to English unless the input is in English.`;
 
     try {
         const result = streamText({
-            model: openai('gpt-4o'),
+            model: openai(siteConfig.aiConfig.defaultModel),
             system: systemPrompt,
             prompt: `Topic: ${prompt}`,
         });

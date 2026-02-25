@@ -2,6 +2,7 @@ import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { ratelimit } from '@/lib/ratelimit';
 import { enforceUsageLimit } from '@/lib/usage-gate';
+import { siteConfig } from '@/config/site';
 
 export async function POST(req: Request) {
     const ip = req.headers.get("x-forwarded-for") ?? "127.0.0.1";
@@ -58,7 +59,7 @@ Return ONLY the analysis as a clear, instructional text guide that another AI co
 
     try {
         const result = await generateText({
-            model: openai('gpt-4o'),
+            model: openai(siteConfig.aiConfig.defaultModel),
             system: systemPrompt,
             prompt: `Here are the sample posts to analyze:\n\n${Array.isArray(posts) ? posts.join('\n\n---\n\n') : posts}`,
         });

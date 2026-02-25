@@ -87,8 +87,8 @@ export default function TrendHubPage() {
                             type="text"
                             value={input}
                             onChange={handleInputChange}
-                            placeholder="Paste a live trend URL or keyword (e.g., GPT-5 release)..."
-                            className="flex-1 bg-zinc-900 border border-white/10 rounded-full px-6 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all placeholder:text-zinc-600 shadow-xl"
+                            placeholder="Paste a live trend URL or keyword..."
+                            className="flex-1 w-full bg-zinc-900 border border-white/10 rounded-full px-4 md:px-6 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all placeholder:text-zinc-600 shadow-xl text-ellipsis"
                             disabled={isLoading}
                         />
                         <button
@@ -142,8 +142,8 @@ export default function TrendHubPage() {
                                     </div>
                                 </div>
 
-                                <div className="prose prose-invert prose-orange max-w-none">
-                                    <div className="whitespace-pre-wrap font-sans text-[16px] leading-relaxed text-zinc-200">
+                                <div className="prose prose-invert prose-orange max-w-none break-words overflow-hidden">
+                                    <div className="whitespace-pre-wrap font-sans text-sm md:text-[16px] leading-relaxed text-zinc-200 break-words">
                                         {completion}
                                         {isLoading && (
                                             <span className="inline-block w-2 h-4 ml-1 bg-orange-500 animate-pulse"></span>

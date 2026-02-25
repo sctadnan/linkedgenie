@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { DigitalFootprintModal } from "@/components/DigitalFootprintModal";
 import { triggerConfetti, triggerSmallConfetti } from "@/lib/confetti";
+import { siteConfig } from "@/config/site";
 
 export default function PostGenerator() {
     const [tone, setTone] = useState("Professional");
@@ -16,12 +17,23 @@ export default function PostGenerator() {
     const [isSaving, setIsSaving] = useState(false);
     const [savedMessage, setSavedMessage] = useState("");
     const [sessionToken, setSessionToken] = useState("");
+    const [session, setSession] = useState<any>(null);
+    const [isExpanded, setIsExpanded] = useState(false);
 
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
-            if (session) setSessionToken(session.access_token);
+            if (session) {
+                setSessionToken(session.access_token);
+                setSession(session);
+            }
         });
     }, []);
+
+    const userMeta = session?.user?.user_metadata || {};
+    const avatarUrl = userMeta?.avatar_url || userMeta?.picture;
+    const fullName = userMeta?.full_name || userMeta?.name || siteConfig.mockData.fallbackUser.name;
+    const bio = userMeta?.description || siteConfig.mockData.fallbackUser.bio;
+
 
     // Predictive Score Calculation
     const calculateScore = (text: string) => {
@@ -199,7 +211,7 @@ export default function PostGenerator() {
                         </button>
                     </div>
 
-                    <div className="mt-auto pt-4 pb-20 md:pb-0">
+                    <div className="pt-4">
                         <button
                             type="submit"
                             disabled={isGenerating || !input}
@@ -238,13 +250,19 @@ export default function PostGenerator() {
                 >
                     {/* LinkedIn Header Mockup (Desktop Scale) */}
                     <div className="p-4 flex items-start gap-3">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex-shrink-0" />
+                        {avatarUrl ? (
+                            <img src={avatarUrl} alt={fullName} className="w-12 h-12 rounded-full border border-white/10 flex-shrink-0 object-cover" />
+                        ) : (
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex-shrink-0 flex items-center justify-center text-white text-lg font-bold">
+                                {fullName ? fullName.charAt(0).toUpperCase() : "A"}
+                            </div>
+                        )}
                         <div className="flex-1 mt-0.5">
                             <div className="flex items-center gap-1.5 hover:underline cursor-pointer">
-                                <h3 className="font-semibold text-[15px] leading-none text-slate-900 dark:text-zinc-100">Alex Anderson</h3>
+                                <h3 className="font-semibold text-[15px] leading-none text-slate-900 dark:text-zinc-100">{fullName}</h3>
                                 <span className="text-zinc-500 text-[13px] leading-none">• 1st</span>
                             </div>
-                            <p className="text-zinc-500 text-[12px] mt-1 pr-4">Building the future of AI tools | Helping 10k+ creators</p>
+                            <p className="text-zinc-500 text-[12px] mt-1 pr-4">{bio}</p>
                             <div className="flex items-center gap-1 mt-0.5 text-zinc-500 text-[12px]">
                                 <span>Just now</span> •
                                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" /></svg>
@@ -265,15 +283,18 @@ export default function PostGenerator() {
                         )}
 
                         <div className="whitespace-pre-wrap font-sans break-words mb-2">
-                            {completion}
+                            {isExpanded ? completion : (completion.length > 200 ? completion.substring(0, 200) + "..." : completion)}
                             {isGenerating && (
                                 <span className="inline-block w-2 h-4 ml-1 bg-[#0a66c2] dark:bg-[#70b5f9] animate-pulse"></span>
                             )}
                         </div>
 
                         {hasResult && !isGenerating && completion.length > 200 && (
-                            <button className="text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 font-semibold cursor-pointer">
-                                ...see more
+                            <button
+                                onClick={() => setIsExpanded(!isExpanded)}
+                                className="text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 font-semibold cursor-pointer"
+                            >
+                                {isExpanded ? "see less" : "...see more"}
                             </button>
                         )}
                     </div>

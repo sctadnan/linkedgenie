@@ -5,6 +5,7 @@ import UserBadge from "@/components/UserBadge";
 import MobileNav from "@/components/MobileNav";
 import { niches } from "@/data/niches";
 import Link from "next/link";
+import { siteConfig } from "@/config/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,9 +18,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LinkedGenie V2 | AI LinkedIn Content Creator & Optimizer",
-  description: "Generate viral LinkedIn posts, optimize your profile, and discover trending hooks in seconds with AI powered writing.",
-  keywords: ["LinkedIn post generator", "Profile optimization tool", "AI LinkedIn writer", "LinkedIn hook generator"],
+  title: siteConfig.siteMetadata.title,
+  description: siteConfig.siteMetadata.description,
+  keywords: siteConfig.siteMetadata.keywords,
 };
 
 export default function RootLayout({
@@ -34,17 +35,16 @@ export default function RootLayout({
           <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
             <a href="/" className="font-bold text-xl tracking-tight text-white flex items-center gap-2">
               <span className="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-xs">LG</span>
-              LinkedGenie <span className="text-zinc-500 text-sm font-normal">v2</span>
+              LinkedGenie
             </a>
             {/* Main Navigation - Tool Links Restored */}
             <div className="flex items-center gap-6">
               <nav className="hidden lg:flex items-center gap-5 text-[13px] font-medium text-zinc-400 bg-black/50 border border-white/5 px-4 py-2 rounded-full">
-                <a href="/post-generator" className="hover:text-white transition-colors">Post AI</a>
-                <a href="/profile-optimizer" className="hover:text-white transition-colors">Profile AI</a>
-                <a href="/hook-generator" className="hover:text-white transition-colors">Hook AI</a>
-                <a href="/trend-hub" className="hover:text-white transition-colors">Trends</a>
+                {siteConfig.navigationLinks.slice(0, 4).map((link) => (
+                  <a key={link.name} href={link.href} className="hover:text-white transition-colors">{link.name}</a>
+                ))}
                 <div className="w-px h-3 bg-white/10 mx-2" />
-                <a href="/dashboard" className="text-purple-400 hover:text-purple-300 font-semibold transition-colors">Dashboard</a>
+                <a href={siteConfig.navigationLinks[4].href} className="text-purple-400 hover:text-purple-300 font-semibold transition-colors">{siteConfig.navigationLinks[4].name}</a>
               </nav>
               <div className="flex items-center gap-3">
                 {/* The Command Center UserBadge Dropdown */}

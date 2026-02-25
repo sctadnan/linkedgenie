@@ -2,6 +2,7 @@ import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { ratelimit } from '@/lib/ratelimit';
 import { enforceUsageLimit } from '@/lib/usage-gate';
+import { siteConfig } from '@/config/site';
 
 export async function POST(req: Request) {
     const ip = req.headers.get("x-forwarded-for") ?? "127.0.0.1";
@@ -52,12 +53,13 @@ Your objective is to:
 4. **VELOCITY RULE RECOMMENDATION:** Analyze the "age" or intensity of this trend.
    - If it feels like "Breaking News" or a fresh, sudden trend: Suggest high-velocity formats like a "Text-only post" or a "Poll" to capture immediate attention.
    - If it's a mature, ongoing trend (e.g., AI in Healthcare): Suggest deep-dive formats like a "Document/Carousel" or a "Long-form Listicle".
+5. LANGUAGE: You MUST detect the language of the user's Topic/Input and write the output in that EXACT SAME language (e.g., if input is in Arabic, output must be in Arabic). Do not default to English unless the input is in English.
 
 Format the output cleanly with brief headings. No markdown bolding (**). Keep it punchy and actionable.`;
 
     try {
         const result = streamText({
-            model: openai('gpt-4o'),
+            model: openai(siteConfig.aiConfig.defaultModel),
             system: systemPrompt,
             prompt: `Analyze this trend/topic: ${topic}`,
         });
