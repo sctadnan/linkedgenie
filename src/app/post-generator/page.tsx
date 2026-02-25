@@ -216,18 +216,9 @@ export default function PostGenerator() {
         }
     };
 
-    const { completion, input, handleInputChange, handleSubmit, isLoading, error } = useCompletion({
+    const { completion, input, handleInputChange, complete, isLoading, error } = useCompletion({
         api: "/api/generate",
         streamProtocol: "text",
-        headers: {
-            "Content-Type": "application/json",
-            ...(sessionToken ? { "Authorization": `Bearer ${sessionToken}` } : {})
-        },
-        body: {
-            tone,
-            format,
-            digitalFootprint,
-        },
         onError: (err) => {
             console.error("useCompletion failed:", err);
         },
@@ -267,6 +258,26 @@ export default function PostGenerator() {
 
     const scores = useMemo(() => calculateLinkedInScores(completion), [completion]);
 
+    const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        // Ensure we always have the freshest token before hitting the API
+        const { data: { session: freshSession } } = await supabase.auth.getSession();
+        const currentToken = freshSession?.access_token || sessionToken;
+
+        complete(input, {
+            body: {
+                tone,
+                format,
+                digitalFootprint,
+            },
+            headers: {
+                "Content-Type": "application/json",
+                ...(currentToken ? { "Authorization": `Bearer ${currentToken}` } : {})
+            }
+        });
+    };
+
     return (
         <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row relative">
 
@@ -282,7 +293,7 @@ export default function PostGenerator() {
                     </div>
                 </div>
 
-                <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-6 relative">
+                <form onSubmit={handleFormSubmit} className="flex-1 flex flex-col gap-6 relative">
 
                     <div className="flex flex-col gap-2">
                         <label className="text-sm font-medium text-zinc-300">What do you want to write about?</label>

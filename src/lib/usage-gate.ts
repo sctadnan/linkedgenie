@@ -24,7 +24,8 @@ export async function enforceUsageLimit(req: Request) {
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
 
     if (authError || !user) {
-        return { error: "Invalid session or unauthenticated", status: 401 };
+        console.error("Auth error in usage-gate:", authError);
+        return { error: `Invalid session or unauthenticated: ${authError?.message || 'No user found'}`, status: 401 };
     }
 
     // 3. Fetch the user's profile using the admin client to bypass RLS 
