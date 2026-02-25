@@ -56,7 +56,10 @@ export default function PostGenerator() {
         const first140 = text.slice(0, 140);
         const firstLines = first140.split('\n');
 
-        if (/\d+/.test(first140)) hookScore += 20; // Numbers universally build trust
+        // Numbers OR question marks build curiosity/trust
+        if (/\d+/.test(first140) || first140.includes('?') || first140.includes('؟')) {
+            hookScore += 20;
+        }
 
         if (firstLines[0] && firstLines[0].length > 140) {
             hookScore -= 20;
@@ -96,7 +99,7 @@ export default function PostGenerator() {
         // 4. Deep Engagement Probability
         let engagementScore = 70;
         const endingText = text.slice(-300); // Check the bottom 300 chars so hashtags don't hide the question
-        if (endingText.includes('?')) {
+        if (endingText.includes('?') || endingText.includes('؟')) {
             engagementScore += 30;
             if (/yes|no|agree|هل|أليس|توافق/i.test(endingText)) {
                 engagementScore -= 15;
