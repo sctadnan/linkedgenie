@@ -663,6 +663,7 @@ export default function PostGenerator() {
                 onClose={() => setIsFootprintModalOpen(false)}
                 onFootprintExtracted={setDigitalFootprint}
                 currentFootprint={digitalFootprint}
+                sessionToken={sessionToken}
             />
         </div>
     );
