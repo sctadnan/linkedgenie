@@ -146,7 +146,7 @@ export default function DashboardPage() {
                                     </div>
                                 </div>
 
-                                <div className="flex-1 mb-6">
+                                <div className="flex-1 mb-6" dir="auto">
                                     <p className={`text-sm text-zinc-400 whitespace-pre-wrap ${isFeatured ? 'line-clamp-6' : 'line-clamp-4'}`}>
                                         {post.content}
                                     </p>

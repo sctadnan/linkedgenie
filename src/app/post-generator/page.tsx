@@ -97,18 +97,18 @@ export default function PostGenerator() {
             const { error } = await supabase
                 .from('saved_posts')
                 .insert([
-                    { user_id: session.user.id, content: completion, tone, format, prompt: input }
+                    { user_id: session.user.id, content: completion, tone, format, prompt: input, topic: input }
                 ]);
 
             if (error) {
                 console.error("Error saving post:", error);
-                setSavedMessage("Failed to save.");
+                setSavedMessage(`Failed to save: ${error.message}`);
             } else {
                 setSavedMessage("Saved to Drafts!");
                 triggerSmallConfetti(); // Gamification reward
             }
         } catch (err: any) {
-            setSavedMessage(err.message || "Failed to save");
+            setSavedMessage(`Failed to save: ${err.message || "Unknown error"}`);
         } finally {
             setIsSaving(false);
             setTimeout(() => setSavedMessage(""), 3000);
@@ -142,6 +142,7 @@ export default function PostGenerator() {
 
     const isGenerating = isLoading;
     const hasResult = completion.length > 0;
+    const isRtl = /[\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC]/.test(completion || input);
 
     // Auto-scroll on mobile when result starts generating
     useEffect(() => {
@@ -188,6 +189,7 @@ export default function PostGenerator() {
                             value={input}
                             onChange={handleInputChange}
                             required
+                            dir="auto"
                         />
                     </div>
 
@@ -284,6 +286,7 @@ export default function PostGenerator() {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
+                    dir={isRtl ? "rtl" : "ltr"}
                     className="w-full max-w-[552px] bg-white dark:bg-[#1D2226] border border-zinc-300/50 dark:border-white/10 rounded-lg shadow-md z-10 overflow-hidden text-slate-900 dark:text-zinc-100"
                 >
                     {/* LinkedIn Header Mockup (Desktop Scale) */}

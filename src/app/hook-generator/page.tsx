@@ -58,6 +58,7 @@ export default function HookGenerator() {
                         value={input}
                         onChange={handleInputChange}
                         required
+                        dir="auto"
                     />
                     <button
                         type="submit"
@@ -84,12 +85,13 @@ export default function HookGenerator() {
                         >
                             <h3 className="text-xl font-semibold mb-2">Your Scroll-Stopping Hooks:</h3>
                             {generatedHooks.map((hook, idx) => (
-                                <div key={idx} className="glass p-4 md:p-5 rounded-xl group flex items-start justify-between gap-4 hover:border-pink-500/30 transition-colors break-words overflow-hidden">
+                                <div key={idx} className="glass p-4 md:p-5 rounded-xl group flex items-start justify-between gap-4 hover:border-pink-500/30 transition-colors break-words overflow-hidden" dir="auto">
                                     <p className="text-zinc-200 leading-relaxed font-medium text-sm md:text-base break-words">{hook.replace('►', '').trim()}</p>
                                     <button
                                         onClick={() => navigator.clipboard.writeText(hook.replace('►', '').trim())}
                                         className="text-zinc-500 hover:text-white transition-colors p-2 glass rounded-lg opacity-0 group-hover:opacity-100 flex-shrink-0"
                                         title="Copy to clipboard"
+                                        dir="ltr"
                                     >
                                         <Copy className="w-4 h-4" />
                                     </button>

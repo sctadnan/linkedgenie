@@ -77,6 +77,7 @@ export default function ProfileOptimizer() {
                                 value={profileData.headline}
                                 onChange={(e) => setProfileData({ ...profileData, headline: e.target.value })}
                                 required
+                                dir="auto"
                             />
                         </div>
 
@@ -87,6 +88,7 @@ export default function ProfileOptimizer() {
                                 placeholder="Paste your LinkedIn About section here..."
                                 value={profileData.about}
                                 onChange={(e) => setProfileData({ ...profileData, about: e.target.value })}
+                                dir="auto"
                             />
                         </div>
 
@@ -157,6 +159,7 @@ export default function ProfileOptimizer() {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     className="prose prose-invert prose-emerald max-w-none text-zinc-300"
+                                    dir="auto"
                                 >
                                     {/* We are parsing simple markdown-like text from the AI stream */}
                                     <div className="whitespace-pre-wrap font-sans text-[15px] leading-relaxed break-words">
