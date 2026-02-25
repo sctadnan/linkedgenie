@@ -56,15 +56,15 @@ Use "Chain-of-Thought" reasoning before writing: first analyze the topic, then d
 HOWEVER, ONLY output the final LinkedIn post. Do NOT output your thought process.
 ${jobTitleContext}
 
-CRITICAL STRUCTURAL RULES (Do not violate these):
-1. HOOK: The first 1-2 lines must be a scroll-stopping hook (under 12 words). It must arouse curiosity, emotion, or surprise.
-2. PACING: Use extremely short paragraphs. No paragraph should exceed 3 lines. Use generous white space (empty lines) between thoughts.
-3. LENGTH: The entire post MUST be strictly under 1300 characters to optimize for the LinkedIn algorithm.
-4. HASHTAGS: NEVER use hashtags. They are strictly forbidden.
-5. FORMATTING: Return plain raw text. No bolding (**), no italics, no emojis unless they add immense value.
-6. CLOSING: End with a single, clear, conversation-starting question (Call-to-Action) to drive comments.
-7. TONE: The general tone should be ${finalTone}. Structure the narrative using the ${format || 'PAS (Problem, Agitation, Solution)'} framework if possible.
-8. LANGUAGE: You MUST detect the language of the user's Topic/Input and write the final output in that EXACT SAME language (e.g., if input is in Arabic, output must be in Arabic). Do not default to English unless the input is in English.`;
+CRITICAL 2026 LINKEDIN ALGORITHM RULES (MANDATORY FOR 100% SCORE):
+1. HOOK (First 140 chars): The very first line MUST arouse deep curiosity, contain a specific number/statistic, and be followed instantly by a blank line (whitespace). NEVER use cliches like "let that sink in" or "unpopular opinion". 
+2. PACING & READABILITY: Never write a "wall of text". No paragraph can exceed 3 sentences. Separate EVERY thought with a blank line. If you use a bulleted list, it MUST contain exactly 3 to 6 points.  
+3. AUTHENTICITY & SPAM: NEVER include external internet links (https://). NEVER use engagement-bait phrases (e.g. "comment below", "share this", "علق بتم").
+4. ENGAGEMENT & STORYTELLING: If the post is long, you MUST weave in personal storytelling pronouns ("I", "my", "me", "أنا", "تجربتي"). 
+5. CLOSING CTA: End the post with ONE profound, open-ended question to spark debate. NEVER use close-ended yes/no questions like "Do you agree?" or "Yes or no?".
+6. DISCOVERABILITY (SEO): You MUST include exactly 3 to 5 highly relevant hashtags at the very bottom of the post. No more, no less.
+7. TONE & FORMAT: Tone must be ${finalTone}. Format/Structure: ${format || 'PAS (Problem, Agitation, Solution)'}.
+8. LANGUAGE STRICT MATCH: You MUST detect the exact language of the Topic/Input and write the output in that EXACT SAME language. If the input is Arabic, output Arabic. If English, output English.`;
 
     const footprintInstruction = digitalFootprint
         ? `\n\nUSER'S DIGITAL FOOTPRINT (Mimic this exact style):\n${digitalFootprint}\nAnalyze this footprint deeply. Adopt the exact vocabulary, sentence rhythm, and "signature moves" described above. The post must sound like the user wrote it, NOT a generic AI.`
