@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} >
-        <header className="fixed top-0 left-0 w-full glass z-50 border-b border-white/10">
+        <header className="fixed top-0 left-0 w-full bg-[#030712]/85 backdrop-blur-xl z-50 border-b border-white/10">
           <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
             <a href="/" className="font-bold text-xl tracking-tight text-white flex items-center gap-2">
               <span className="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-xs">LG</span>

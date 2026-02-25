@@ -114,7 +114,7 @@ export default function UserBadge() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
                         transition={{ duration: 0.15, ease: "easeOut" }}
-                        className="absolute right-0 mt-3 w-72 bg-zinc-950/95 glass border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50 flex flex-col"
+                        className="absolute right-0 mt-3 w-72 bg-[#030712]/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50 flex flex-col"
                     >
                         {/* 1. Header: User Info & RPG Level */}
                         <div className="p-4 border-b border-white/5 bg-black/20 flex items-center gap-3">
