@@ -140,7 +140,7 @@ export default function PostGenerator() {
 
         // Char count rule
         if (textLength > 3000) {
-            feedback.push({ type: 'critical', message: `تحذير حرج: النص يتجاوز 3000 حرف (${textLength}). لن يقبله LinkedIn.` });
+            feedback.push({ type: 'critical', message: `Critical Warning: The text exceeds 3000 characters (${textLength}) and will be rejected by LinkedIn.` });
         }
 
         const clamp = (val: number) => Math.max(0, Math.min(100, val));
