@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import UserBadge from "@/components/UserBadge";
+import MobileNav from "@/components/MobileNav";
 import { niches } from "@/data/niches";
 import Link from "next/link";
 
@@ -48,6 +49,7 @@ export default function RootLayout({
               <div className="flex items-center gap-3">
                 {/* The Command Center UserBadge Dropdown */}
                 <UserBadge />
+                <MobileNav />
               </div>
             </div>
           </div>

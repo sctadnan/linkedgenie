@@ -92,7 +92,7 @@ export default function UserBadge() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
                         transition={{ duration: 0.15, ease: "easeOut" }}
-                        className="absolute right-0 mt-3 w-72 glass border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50 flex flex-col"
+                        className="absolute right-0 mt-3 w-72 bg-zinc-950/95 glass border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50 flex flex-col"
                     >
                         {/* 1. Header: User Info & RPG Level */}
                         <div className="p-4 border-b border-white/5 bg-black/20 flex items-center gap-3">
@@ -132,18 +132,16 @@ export default function UserBadge() {
                             </div>
 
                             {/* 3. Pro Upgrade CTA */}
-                            {process.env.NEXT_PUBLIC_CHECKOUT_URL && (
-                                <a
-                                    href={process.env.NEXT_PUBLIC_CHECKOUT_URL}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="px-3 py-2.5 mt-1 bg-gradient-to-r from-amber-500/10 to-orange-500/10 hover:from-amber-500/20 hover:to-orange-500/20 border border-orange-500/20 rounded-xl transition-colors flex items-center justify-between group"
-                                    onClick={() => setIsOpen(false)}
-                                >
-                                    <span className="text-xs font-bold text-orange-400">Upgrade to Pro ✨</span>
-                                    <span className="text-[10px] font-semibold text-orange-500/70 bg-orange-500/10 px-2 py-0.5 rounded-full group-hover:bg-orange-500/20 transition-colors">Unlimited</span>
-                                </a>
-                            )}
+                            <a
+                                href={process.env.NEXT_PUBLIC_CHECKOUT_URL || "/#pricing"}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-3 py-2.5 mt-1 bg-gradient-to-r from-orange-500/20 to-amber-500/20 hover:from-orange-500/30 hover:to-amber-500/30 border border-orange-500/40 rounded-xl transition-colors flex items-center justify-between group"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                <span className="text-sm font-bold text-orange-400">Upgrade to Pro ✨</span>
+                                <span className="text-xs font-bold text-orange-200 bg-orange-500/30 px-2 py-0.5 rounded-full group-hover:bg-orange-500/40 transition-colors shadow-sm">Unlimited</span>
+                            </a>
                         </div>
 
                         {/* 4. Quick Links */}
