@@ -15,6 +15,15 @@ export default function UserBadge() {
     const router = useRouter();
     const menuRef = useRef<HTMLDivElement>(null);
 
+    const getCheckoutUrl = () => {
+        const baseUrl = process.env.NEXT_PUBLIC_LEMON_CHECKOUT_URL;
+        if (!baseUrl) return "/#pricing";
+        if (!session?.user?.id) return baseUrl;
+
+        const separator = baseUrl.includes('?') ? '&' : '?';
+        return `${baseUrl}${separator}checkout[custom][user_id]=${session.user.id}`;
+    };
+
     const maxCredits = 5;
     const creditsRemaining = Math.max(maxCredits - creditsUsed, 0);
 
@@ -152,7 +161,7 @@ export default function UserBadge() {
                             {/* 3. Pro Upgrade CTA */}
                             {!isPro && (
                                 <a
-                                    href={process.env.NEXT_PUBLIC_LEMON_CHECKOUT_URL || "/#pricing"}
+                                    href={getCheckoutUrl()}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="px-3 py-2.5 mt-1 bg-gradient-to-r from-orange-500/20 to-amber-500/20 hover:from-orange-500/30 hover:to-amber-500/30 border border-orange-500/40 rounded-xl transition-colors flex items-center justify-between group"
