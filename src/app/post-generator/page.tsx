@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useCompletion } from "@ai-sdk/react";
-import { Loader2, Sparkles, Send, Copy, ThumbsUp, MessageSquare, Repeat2, BookmarkPlus, Fingerprint, Activity, Check, X, Lock } from "lucide-react";
+import { Loader2, Sparkles, Send, Copy, ThumbsUp, MessageSquare, Repeat2, BookmarkPlus, Fingerprint, Activity, Check, X, Lock, AlertTriangle, Info, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { DigitalFootprintModal } from "@/components/DigitalFootprintModal";
@@ -45,13 +45,114 @@ export default function PostGenerator() {
     const bio = userMeta?.job_title || userMeta?.description || siteConfig.mockData.fallbackUser.bio;
 
 
-    const calculateScore = (text: string) => {
-        if (!text) return 0;
-        let score = 50; // Base score
-        if (text.length > 200 && text.length < 1300) score += 20; // Optimal length
-        if (text.split('\n\n').length > 3) score += 15; // Good whitespace
-        if (text.includes('?')) score += 15; // CTA or question included
-        return Math.min(100, score);
+    const calculateLinkedInScores = (text: string) => {
+        if (!text) return { hook: 0, readability: 0, authenticity: 0, engagement: 0, seo: 0, total: 0, feedback: [] };
+
+        const feedback: { type: 'critical' | 'warning' | 'tip', message: string }[] = [];
+        const textLength = text.length;
+
+        // 1. Hook Power Score (target: first 140 chars)
+        let hookScore = 50;
+        const first140 = text.slice(0, 140);
+        const firstLines = first140.split('\n');
+
+        if (/\d+/.test(first140)) hookScore += 20;
+        if (/why|how|secret|fail|mistake|فشل|سر|لماذا|كيف/i.test(first140)) hookScore += 20;
+
+        const cliches = [/let that sink in/i, /unpopular opinion/i, /حقيقة يجهلها/i, /رأي غير شعبي/i, /دع هذا يتغلغل/i];
+        cliches.forEach(regex => { if (regex.test(first140)) hookScore -= 30; });
+
+        if (firstLines[0] && firstLines[0].length > 140) {
+            hookScore -= 20;
+            feedback.push({ type: 'warning', message: 'تنبيه: السطر الأول طويل جداً وسيتم اقتطاعه في الموبايل. قم بإضافة مسافة أو اختصار الجملة قبل الحرف 140.' });
+        } else if (first140.length >= 140 && !first140.includes('\n')) {
+            feedback.push({ type: 'warning', message: 'تنبيه: أول 140 حرف خالية من المسافات والفواصل. أضف مسافة لتسهيل القراءة.' });
+        }
+
+        // 2. Readability Score
+        let readabilityScore = 100;
+        const paragraphs = text.split(/\n\s*\n/);
+        paragraphs.forEach((p, index) => {
+            const lines = p.split('\n');
+            if (lines.length > 3) {
+                readabilityScore -= 15;
+                if (feedback.filter(f => f.message.includes('جدار نصي')).length === 0) {
+                    feedback.push({ type: 'warning', message: `تنبيه: الفقرة رقم ${index + 1} طويلة جداً (جدار نصي). قم بتقسيمها إلى نقاط.` });
+                }
+            }
+        });
+
+        const listLines = text.split('\n').filter(line => /^[-•*]|\d+\./.test(line.trim()));
+        if (listLines.length >= 3 && listLines.length <= 6) {
+            readabilityScore += 10;
+        } else if (listLines.length > 6) {
+            readabilityScore -= 10;
+            feedback.push({ type: 'tip', message: 'القائمة النقطية طويلة. يفضل أن تكون بين 3-6 نقاط.' });
+        }
+
+        // 3. Authenticity & Spam-Free
+        let authenticityScore = 100;
+        if (/https?:\/\/[^\s]+/.test(text)) {
+            authenticityScore -= 60;
+            feedback.push({ type: 'critical', message: 'تحذير حرج: وجود رابط خارجي في المتن سيقلل الوصول بنسبة 60%. انقل الرابط إلى التعليقات.' });
+        }
+        const engagementBait = [/علق بتم/i, /شارك المنشور/i, /comment below/i, /share this/i, /like if you/i, /اضغط لايك/i];
+        engagementBait.forEach(regex => {
+            if (regex.test(text)) {
+                authenticityScore -= 30;
+                if (feedback.filter(f => f.message.includes('طعم')).length === 0) {
+                    feedback.push({ type: 'warning', message: 'تحذير: تجنب طلب التفاعل المباشر (طعم التفاعل)، سيقلل الخوارزمية من وصولك.' });
+                }
+            }
+        });
+
+        // 4. Deep Engagement Probability
+        let engagementScore = 50;
+        const lastPara = paragraphs[paragraphs.length - 1] || '';
+        if (lastPara.includes('?')) {
+            engagementScore += 30;
+            if (/هل|أليس|توافق|yes|no|agree|do you|are you/i.test(lastPara)) {
+                engagementScore -= 15;
+                feedback.push({ type: 'tip', message: 'اقتراح: السؤال الختامي يبدو سؤال "نعم/لا". حاول إنهاء المنشور بسؤال مفتوح لتحفيز النقاش المعمق.' });
+            }
+        } else {
+            feedback.push({ type: 'tip', message: 'اقتراح: الخاتمة تقريرية. أضف سؤالاً مفتوحاً لتحفيز النقاش.' });
+        }
+
+        if (textLength > 1000) {
+            if (/I |my |me |أنا|تجربتي|تعلمت|واجهت/i.test(text)) {
+                engagementScore += 20;
+            }
+        }
+
+        // 5. Semantic SEO & Discoverability
+        let seoScore = 100;
+        const hashtags = text.match(/#[^\s#]+/g) || [];
+        if (hashtags.length < 3) {
+            seoScore -= 50;
+            if (hashtags.length > 0) { // Only warn if they started adding hashtags
+                feedback.push({ type: 'warning', message: `عدد الوسوم قليل جداً (${hashtags.length}). استخدم 3-5 وسوم للوصول الأمثل.` });
+            }
+        } else if (hashtags.length > 5) {
+            seoScore -= 15 * (hashtags.length - 5);
+            feedback.push({ type: 'warning', message: `عدد الوسوم كبير جداً (${hashtags.length}). استخدم 3-5 وسوم للوصول الأمثل.` });
+        }
+
+        // Char count rule
+        if (textLength > 3000) {
+            feedback.push({ type: 'critical', message: `تحذير حرج: النص يتجاوز 3000 حرف (${textLength}). لن يقبله LinkedIn.` });
+        }
+
+        const clamp = (val: number) => Math.max(0, Math.min(100, val));
+        hookScore = clamp(hookScore);
+        readabilityScore = clamp(readabilityScore);
+        authenticityScore = clamp(authenticityScore);
+        engagementScore = clamp(engagementScore);
+        seoScore = clamp(seoScore);
+
+        const total = Math.round((hookScore * 0.25) + (readabilityScore * 0.2) + (authenticityScore * 0.2) + (engagementScore * 0.2) + (seoScore * 0.15));
+
+        return { hook: Math.round(hookScore), readability: Math.round(readabilityScore), authenticity: Math.round(authenticityScore), engagement: Math.round(engagementScore), seo: Math.round(seoScore), total, feedback: feedback.slice(0, 5) };
     };
 
     const handleSaveJobTitle = async () => {
@@ -132,8 +233,8 @@ export default function PostGenerator() {
         },
         onFinish: (prompt, result) => {
             console.log("Generation finished successfully. Result length:", result.length);
-            const score = calculateScore(result);
-            if (score >= 80) {
+            const scores = calculateLinkedInScores(result);
+            if (scores.total >= 80) {
                 // Gamification: Reward high scoring posts with a confetti burst!
                 triggerConfetti();
             }
@@ -163,6 +264,8 @@ export default function PostGenerator() {
             setTimeout(() => setSavedMessage(""), 2000);
         }
     };
+
+    const scores = useMemo(() => calculateLinkedInScores(completion), [completion]);
 
     return (
         <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row relative">
@@ -420,33 +523,67 @@ export default function PostGenerator() {
                     </div>
                 </motion.div>
 
-                {/* Predictive Scoring and Floating Actions */}
+                {/* LinkedGenie 2026 Scoring Panel */}
                 <AnimatePresence>
                     {hasResult && !isGenerating && (
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            className="mt-6 w-full max-w-lg mb-4 bg-zinc-900 border border-white/10 rounded-xl p-4 flex items-center justify-between"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 20 }}
+                            className="mt-6 w-[100%] max-w-[552px] bg-[#111318] border border-white/10 rounded-xl overflow-hidden shadow-2xl mb-4"
                         >
-                            <div className="flex items-center gap-3">
-                                <Activity className="w-5 h-5 text-blue-400" />
-                                <div>
-                                    <p className="text-sm font-semibold text-zinc-200">Viral Potential Score</p>
-                                    <div className="flex items-center gap-2 mt-1">
-                                        <div className="h-1.5 w-32 bg-zinc-800 rounded-full overflow-hidden">
-                                            <div
-                                                className="h-full bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full transition-all duration-1000"
-                                                style={{ width: `${calculateScore(completion)}%` }}
-                                            />
-                                        </div>
-                                        <span className="text-xs font-bold text-emerald-400">{calculateScore(completion)}/100</span>
-                                    </div>
+                            <div className="p-4 border-b border-white/5 flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <Activity className="w-5 h-5 text-indigo-400" />
+                                    <h3 className="font-semibold text-zinc-100">LinkedGenie 2026 Analysis</h3>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <span className={`px-2 py-0.5 rounded text-xs font-bold ${scores.total >= 80 ? 'bg-emerald-500/20 text-emerald-400' : scores.total >= 60 ? 'bg-amber-500/20 text-amber-400' : 'bg-red-500/20 text-red-400'}`}>
+                                        Score: {scores.total}/100
+                                    </span>
                                 </div>
                             </div>
-                            <div className="text-xs text-zinc-500 text-right">
-                                {completion.length > 1300 ? <span className="text-red-400 flex items-center justify-end">Too long</span> : <span className="text-emerald-400 flex items-center justify-end">Optimal length</span>}
+
+                            <div className="p-4 space-y-4">
+                                {[
+                                    { label: "Hook Power Score", score: scores.hook, color: "bg-blue-500" },
+                                    { label: "Readability & Formatting", score: scores.readability, color: "bg-indigo-500" },
+                                    { label: "Authenticity & Spam-Free", score: scores.authenticity, color: "bg-purple-500" },
+                                    { label: "Deep Engagement Probability", score: scores.engagement, color: "bg-pink-500" },
+                                    { label: "Discovery & SEO", score: scores.seo, color: "bg-emerald-500" },
+                                ].map((item, i) => (
+                                    <div key={i} className="flex flex-col gap-1.5">
+                                        <div className="flex justify-between text-xs font-medium text-zinc-400">
+                                            <span>{item.label}</span>
+                                            <span className="text-zinc-200">{item.score}%</span>
+                                        </div>
+                                        <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                                            <motion.div
+                                                initial={{ width: 0 }}
+                                                animate={{ width: `${item.score}%` }}
+                                                transition={{ delay: i * 0.1, duration: 0.8 }}
+                                                className={`h-full ${item.color} rounded-full`}
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
+
+                            {scores.feedback.length > 0 && (
+                                <div className="bg-white/[0.02] p-4 border-t border-white/5">
+                                    <h4 className="text-[11px] font-semibold text-zinc-500 mb-3 uppercase tracking-wider">Actionable Feedback</h4>
+                                    <div className="space-y-2">
+                                        {scores.feedback.map((fb, i) => (
+                                            <div key={i} className={`flex gap-3 p-3 rounded-lg text-sm ${fb.type === 'critical' ? 'bg-red-500/10 text-red-400 border border-red-500/20' : fb.type === 'warning' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-blue-500/10 text-blue-400 border border-blue-500/20'}`}>
+                                                <div className="mt-0.5 shrink-0">
+                                                    {fb.type === 'critical' ? <AlertTriangle className="w-4 h-4" /> : fb.type === 'warning' ? <AlertTriangle className="w-4 h-4" /> : <Info className="w-4 h-4" />}
+                                                </div>
+                                                <p className="leading-snug text-[13px]">{fb.message}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </motion.div>
                     )}
                 </AnimatePresence>
