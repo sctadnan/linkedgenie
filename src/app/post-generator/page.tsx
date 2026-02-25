@@ -58,7 +58,7 @@ export default function PostGenerator() {
             }
 
             const { error } = await supabase
-                .from('drafts')
+                .from('saved_posts')
                 .insert([
                     { user_id: session.user.id, content: completion, tone, format, prompt: input }
                 ]);

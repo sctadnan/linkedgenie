@@ -11,7 +11,7 @@ export async function POST(req: Request) {
         const { name, email, message } = await req.json();
 
         const data = await resend.emails.send({
-            from: 'LinkedGenie V2 Contact <onboarding@resend.dev>',
+            from: 'LinkedGenie Contact <onboarding@resend.dev>',
             to: process.env.DEV_EMAIL,
             subject: `New Feedback/Message from ${name}`,
             text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
