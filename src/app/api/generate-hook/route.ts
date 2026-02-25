@@ -11,7 +11,7 @@ export async function POST(req: Request) {
         const { success } = await ratelimit.limit(ip);
         if (!success) {
             return new Response(
-                JSON.stringify({ error: "Rate limit exceeded. Please try again tomorrow or upgrade." }),
+                JSON.stringify({ error: "Too many requests. Please try again in a minute." }),
                 { status: 429, headers: { 'Content-Type': 'application/json' } }
             );
         }

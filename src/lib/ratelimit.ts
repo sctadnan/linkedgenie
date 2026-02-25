@@ -7,10 +7,10 @@ const redis = new Redis({
     token: process.env.UPSTASH_REDIS_REST_KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN || '',
 });
 
-// Allow 5 requests per IP per day for free users
+// Allow a global rate limit purely to prevent DDoS attacks (business logic handled by usage-gate.ts)
 export const ratelimit = new Ratelimit({
     redis: redis,
-    limiter: Ratelimit.slidingWindow(5, "1 d"),
+    limiter: Ratelimit.slidingWindow(30, "1 m"),
     analytics: true,
     prefix: "@upstash/ratelimit",
 });
