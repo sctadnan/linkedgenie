@@ -28,8 +28,8 @@ export async function POST(req: Request) {
         const userId = customData?.user_id; // Pass this in your checkout link as custom_data: { user_id: 'uuid' }
 
         switch (eventName) {
-            case 'subscription_created':
-            case 'subscription_updated': {
+            case 'subscription_created': {
+                // New subscription — always grant Pro
                 if (userId) {
                     await supabaseAdmin
                         .from('profiles')
@@ -42,8 +42,36 @@ export async function POST(req: Request) {
                 }
                 break;
             }
+            case 'subscription_updated':
+            case 'subscription_resumed': {
+                // Status can be: active, cancelled, expired, paused, unpaid, past_due, trialing
+                const status = payload.data.attributes.status as string;
+                const subscriptionId = payload.data.id.toString();
+                const isActive = status === 'active' || status === 'trialing';
+
+                if (isActive && userId) {
+                    // Ensure profile is updated with latest IDs when active
+                    await supabaseAdmin
+                        .from('profiles')
+                        .update({
+                            is_pro: true,
+                            lemon_customer_id: payload.data.attributes.customer_id.toString(),
+                            lemon_subscription_id: subscriptionId,
+                        })
+                        .eq('id', userId);
+                } else if (!isActive) {
+                    // Cancelled, paused, unpaid, expired — revoke Pro immediately
+                    await supabaseAdmin
+                        .from('profiles')
+                        .update({ is_pro: false })
+                        .eq('lemon_subscription_id', subscriptionId);
+                }
+                break;
+            }
+            case 'subscription_cancelled':
             case 'subscription_expired':
-            case 'subscription_cancelled': {
+            case 'subscription_paused': {
+                // Hard revoke regardless of anything else
                 const subscriptionId = payload.data.id.toString();
                 await supabaseAdmin
                     .from('profiles')
