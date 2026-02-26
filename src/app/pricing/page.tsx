@@ -54,6 +54,7 @@ const TESTIMONIALS = [
 
 export default function PricingPage() {
     const [userId, setUserId] = useState<string | null>(null);
+    const [userEmail, setUserEmail] = useState<string>('');
     const [isPro, setIsPro] = useState(false);
     const [isLoadingUser, setIsLoadingUser] = useState(true);
 
@@ -62,6 +63,7 @@ export default function PricingPage() {
             const { data: { session } } = await supabase.auth.getSession();
             if (session) {
                 setUserId(session.user.id);
+                setUserEmail(session.user.email || '');
                 const { data } = await supabase
                     .from('profiles')
                     .select('is_pro')
@@ -78,8 +80,9 @@ export default function PricingPage() {
         const baseUrl = process.env.NEXT_PUBLIC_LEMON_CHECKOUT_URL;
         if (!baseUrl) return '/auth';
         if (!userId) return '/auth';
+        const email = encodeURIComponent(userEmail);
         const separator = baseUrl.includes('?') ? '&' : '?';
-        return `${baseUrl}${separator}checkout[custom][user_id]=${userId}`;
+        return `${baseUrl}${separator}checkout[custom][user_id]=${userId}&checkout[email]=${email}`;
     };
 
     // Prices from env vars — update in Vercel dashboard to change price without code deploy

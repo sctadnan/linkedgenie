@@ -60,8 +60,9 @@ export default function SettingsPage() {
         if (!baseUrl) return "/#pricing";
         if (!userId) return baseUrl;
 
+        const email = encodeURIComponent(userMeta?.email || '');
         const separator = baseUrl.includes('?') ? '&' : '?';
-        return `${baseUrl}${separator}checkout[custom][user_id]=${userId}`;
+        return `${baseUrl}${separator}checkout[custom][user_id]=${userId}&checkout[email]=${email}`;
     };
 
     const handleSignOut = async () => {

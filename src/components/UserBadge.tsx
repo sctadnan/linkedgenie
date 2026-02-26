@@ -20,8 +20,9 @@ export default function UserBadge() {
         if (!baseUrl) return "/#pricing";
         if (!session?.user?.id) return baseUrl;
 
+        const email = encodeURIComponent(session.user.email || '');
         const separator = baseUrl.includes('?') ? '&' : '?';
-        return `${baseUrl}${separator}checkout[custom][user_id]=${session.user.id}`;
+        return `${baseUrl}${separator}checkout[custom][user_id]=${session.user.id}&checkout[email]=${email}`;
     };
 
     const maxCredits = 5;
