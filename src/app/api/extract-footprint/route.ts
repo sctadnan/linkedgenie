@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     }
 
     // Enforce Pro/Credits limit
-    const usageCheck = await enforceUsageLimit(req);
+    const usageCheck = await enforceUsageLimit(req, 'post');
     if (usageCheck.error) {
         return new Response(
             JSON.stringify({ error: usageCheck.error === "OUT_OF_CREDITS" ? "You have run out of free generations. Please upgrade to Pro." : usageCheck.error }),
