@@ -5,6 +5,7 @@ declare module 'google-trends-api' {
         hl?: string;
         timezone?: number;
         ns?: number;
+        category?: number;
     }
 
     function dailyTrends(options: DailyTrendsOptions): Promise<string>;
