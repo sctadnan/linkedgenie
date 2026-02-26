@@ -2,12 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { useCompletion } from "@ai-sdk/react";
+<<<<<<< Updated upstream
 import { Loader2, Sparkles, Send, Copy, ThumbsUp, MessageSquare, Repeat2, BookmarkPlus, Fingerprint, Activity } from "lucide-react";
+=======
+import { Loader2, Sparkles, Send, Copy, ThumbsUp, MessageSquare, Repeat2, BookmarkPlus, Fingerprint, Activity, Check, X, Lock, AlertTriangle, Info, ChevronDown, Wand2, Mail, Twitter, Share2 } from "lucide-react";
+>>>>>>> Stashed changes
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { DigitalFootprintModal } from "@/components/DigitalFootprintModal";
 import { triggerConfetti, triggerSmallConfetti } from "@/lib/confetti";
 import { siteConfig } from "@/config/site";
+import { ViralShareCard } from "@/components/ViralShareCard";
 
 export default function PostGenerator() {
     const [tone, setTone] = useState("Professional");
@@ -19,8 +24,35 @@ export default function PostGenerator() {
     const [sessionToken, setSessionToken] = useState("");
     const [session, setSession] = useState<any>(null);
     const [isExpanded, setIsExpanded] = useState(false);
+    // Smart Bridge — hook context from Hook Lab / Trend Hub
+    const [hookContext, setHookContext] = useState<{ hook: string; topic: string; sentiment: string; angles: string[] } | null>(null);
+    const [prefilledInput, setPrefilledInput] = useState("");
+    // Content Remix state
+    const [remixMode, setRemixMode] = useState<'thread' | 'email' | null>(null);
+    const [remixContent, setRemixContent] = useState("");
+    const [isRemixing, setIsRemixing] = useState(false);
+    const [showShareCard, setShowShareCard] = useState(false);
 
     useEffect(() => {
+<<<<<<< Updated upstream
+=======
+        // Load global digital footprint
+        const storedFootprint = localStorage.getItem('linkedgenie_footprint');
+        if (storedFootprint) setDigitalFootprint(storedFootprint);
+
+        // Smart Bridge: read hook context from Hook Lab / Trend Hub
+        const rawContext = sessionStorage.getItem('genie_hook_context');
+        if (rawContext) {
+            try {
+                const ctx = JSON.parse(rawContext);
+                setHookContext(ctx);
+                setPrefilledInput(ctx.hook || '');
+            } catch {
+                // ignore malformed context
+            }
+        }
+
+>>>>>>> Stashed changes
         supabase.auth.getSession().then(({ data: { session } }) => {
             if (session) {
                 setSessionToken(session.access_token);
@@ -78,7 +110,11 @@ export default function PostGenerator() {
         }
     };
 
+<<<<<<< Updated upstream
     const { completion, input, handleInputChange, handleSubmit, isLoading, error } = useCompletion({
+=======
+    const { completion, input, handleInputChange, complete, isLoading, error, setInput } = useCompletion({
+>>>>>>> Stashed changes
         api: "/api/generate",
         streamProtocol: "text",
         headers: {
@@ -94,14 +130,68 @@ export default function PostGenerator() {
             console.error("useCompletion failed:", err);
         },
         onFinish: (prompt, result) => {
+<<<<<<< Updated upstream
             console.log("Generation finished successfully. Result length:", result.length);
             const score = calculateScore(result);
             if (score >= 80) {
                 // Gamification: Reward high scoring posts with a confetti burst!
+=======
+            const scores = calculateLinkedInScores(result);
+            // Clear hook context after first generation so it doesn't persist
+            sessionStorage.removeItem('genie_hook_context');
+            if (scores.total >= 80) {
+>>>>>>> Stashed changes
                 triggerConfetti();
             }
         }
     });
+
+    // Pre-fill the input from hook context (after useCompletion is set up so setInput is available)
+    useEffect(() => {
+        if (prefilledInput && setInput) {
+            setInput(prefilledInput);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [prefilledInput]);
+
+    // Content Remix handler
+    const handleRemix = async (mode: 'thread' | 'email') => {
+        if (!completion) return;
+        setRemixMode(mode);
+        setIsRemixing(true);
+        setRemixContent('');
+        try {
+            const systemPrompt = mode === 'thread'
+                ? `You are a social media expert. Convert this LinkedIn post into a concise Twitter/X thread of 4-6 tweets. Each tweet must be under 280 characters. Number each tweet (1/, 2/, etc). Preserve the key insights and hook.`
+                : `You are an email marketing expert. Convert this LinkedIn post into a professional email newsletter format with: a compelling subject line (Subject: ...), a greeting, the body content adapted for email, and a sign-off. Keep it under 300 words.`;
+            const res = await fetch('/api/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(sessionToken ? { 'Authorization': `Bearer ${sessionToken}` } : {}),
+                },
+                body: JSON.stringify({
+                    prompt: `Convert this LinkedIn post:\n\n${completion}`,
+                    tone: 'Professional',
+                    format: mode === 'thread' ? 'Thread' : 'Email Newsletter',
+                }),
+            });
+            if (!res.ok || !res.body) throw new Error('Failed');
+            const reader = res.body.getReader();
+            const decoder = new TextDecoder();
+            let result = '';
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                result += decoder.decode(value, { stream: true });
+                setRemixContent(result);
+            }
+        } catch {
+            setRemixContent('Failed to remix. Please try again.');
+        } finally {
+            setIsRemixing(false);
+        }
+    };
 
     const isGenerating = isLoading;
     const hasResult = completion.length > 0;
@@ -126,12 +216,58 @@ export default function PostGenerator() {
         }
     };
 
+<<<<<<< Updated upstream
+=======
+    const scores = useMemo(() => calculateLinkedInScores(completion), [completion]);
+
+    // LinkedIn Preview Truncation Logic
+    const lines = completion.split('\n');
+    let isTruncated = false;
+    let previewText = completion;
+
+    if (lines.length > 3) {
+        // Find exactly where the 3rd line ends (if there are empty linebreaks, they count)
+        const cutoffLength = lines.slice(0, 3).join('\n').length;
+        previewText = completion.substring(0, cutoffLength).trimEnd();
+        isTruncated = true;
+    }
+    if (previewText.length > 210) {
+        // Find the last space before the 210 character limit to avoid cutting mid-word
+        const lastSpace = previewText.lastIndexOf(' ', 210);
+        previewText = previewText.substring(0, lastSpace > 0 ? lastSpace : 210).trimEnd();
+        isTruncated = true;
+    }
+
+    const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const { data: { session: freshSession } } = await supabase.auth.getSession();
+        const currentToken = freshSession?.access_token || sessionToken;
+
+        complete(input, {
+            body: {
+                tone,
+                format,
+                digitalFootprint,
+                // Pass hook context if available
+                ...(hookContext ? { trendContext: hookContext } : {}),
+            },
+            headers: {
+                "Content-Type": "application/json",
+                ...(currentToken ? { "Authorization": `Bearer ${currentToken}` } : {})
+            }
+        });
+        // Clear hook context after submission so it's used once
+        setHookContext(null);
+    };
+
+>>>>>>> Stashed changes
     return (
         <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row relative">
 
             {/* Left Panel - Controls */}
             <div className="w-full md:w-5/12 border-b md:border-b-0 md:border-r border-white/10 glass p-6 md:p-8 flex flex-col h-auto md:h-screen md:sticky top-0 overflow-y-auto z-20">
-                <div className="mb-8 flex items-center gap-3 animate-fade-in-up">
+                <div className="mb-6 flex items-center gap-3 animate-fade-in-up">
                     <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400">
                         <Sparkles className="w-5 h-5" />
                     </div>
@@ -141,7 +277,30 @@ export default function PostGenerator() {
                     </div>
                 </div>
 
+<<<<<<< Updated upstream
                 <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-6 relative">
+=======
+                {/* Smart Bridge — Hook Context Banner */}
+                {hookContext && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mb-5 bg-indigo-500/10 border border-indigo-500/30 rounded-xl p-3 flex items-start gap-3"
+                    >
+                        <Wand2 className="w-4 h-4 text-indigo-400 flex-shrink-0 mt-0.5" />
+                        <div className="flex-1 min-w-0">
+                            <p className="text-xs font-bold text-indigo-300 mb-0.5">📌 Context from Hook Lab</p>
+                            <p className="text-xs text-indigo-300/70 truncate">Topic: {hookContext.topic}</p>
+                            <p className="text-xs text-indigo-300/70">Sentiment: {hookContext.sentiment} · The hook is pre-filled below</p>
+                        </div>
+                        <button onClick={() => { setHookContext(null); setPrefilledInput(''); }} className="text-zinc-600 hover:text-zinc-400">
+                            <X className="w-3.5 h-3.5" />
+                        </button>
+                    </motion.div>
+                )}
+
+                <form onSubmit={handleFormSubmit} className="flex-1 flex flex-col gap-6 relative">
+>>>>>>> Stashed changes
 
                     <div className="flex flex-col gap-2">
                         <label className="text-sm font-medium text-zinc-300">What do you want to write about?</label>
@@ -381,9 +540,79 @@ export default function PostGenerator() {
                             {savedMessage && (
                                 <p className="text-zinc-400 text-sm">{savedMessage}</p>
                             )}
+
+                            {/* Content Remix Section */}
+                            <div className="w-full max-w-[552px] border border-white/8 rounded-2xl p-5 bg-white/[0.02]">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <Wand2 className="w-4 h-4 text-purple-400" />
+                                    <h3 className="text-sm font-semibold text-zinc-300">Content Remix</h3>
+                                    <span className="text-[10px] text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded-full font-bold">NEW</span>
+                                </div>
+                                <p className="text-xs text-zinc-500 mb-4">Transform your post into other formats with one click.</p>
+                                <div className="flex flex-wrap gap-2 mb-4">
+                                    <button
+                                        onClick={() => handleRemix('thread')}
+                                        disabled={isRemixing}
+                                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-sm font-medium transition-all disabled:opacity-50"
+                                    >
+                                        <Twitter className="w-4 h-4 text-sky-400" />
+                                        Convert to Thread
+                                    </button>
+                                    <button
+                                        onClick={() => handleRemix('email')}
+                                        disabled={isRemixing}
+                                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-sm font-medium transition-all disabled:opacity-50"
+                                    >
+                                        <Mail className="w-4 h-4 text-emerald-400" />
+                                        Convert to Email
+                                    </button>
+                                    <button
+                                        onClick={() => setShowShareCard(true)}
+                                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 text-sm font-medium transition-all border border-indigo-500/20"
+                                    >
+                                        <Share2 className="w-4 h-4" />
+                                        Share Score Card
+                                    </button>
+                                </div>
+
+                                {/* Remix Output */}
+                                {(isRemixing || remixContent) && (
+                                    <div className="bg-black/30 rounded-xl p-4 border border-white/5">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">
+                                                {remixMode === 'thread' ? '🧵 Thread Draft' : '📧 Email Draft'}
+                                            </span>
+                                            {!isRemixing && remixContent && (
+                                                <button
+                                                    onClick={() => { navigator.clipboard.writeText(remixContent); triggerSmallConfetti(); }}
+                                                    className="ml-auto text-[10px] text-zinc-500 hover:text-zinc-300 flex items-center gap-1"
+                                                >
+                                                    <Copy className="w-3 h-3" /> Copy
+                                                </button>
+                                            )}
+                                        </div>
+                                        {isRemixing ? (
+                                            <div className="flex items-center gap-2 text-zinc-500 text-xs">
+                                                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                                Remixing your content...
+                                            </div>
+                                        ) : (
+                                            <pre className="text-xs text-zinc-300 whitespace-pre-wrap leading-relaxed max-h-48 overflow-y-auto" dir="auto">{remixContent}</pre>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
+
+                {/* Viral Share Card Modal */}
+                <ViralShareCard
+                    isOpen={showShareCard}
+                    onClose={() => setShowShareCard(false)}
+                    score={scores.total}
+                    hookPreview={completion.slice(0, 200)}
+                />
             </div>
 
             <DigitalFootprintModal

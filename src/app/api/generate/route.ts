@@ -28,13 +28,20 @@ export async function POST(req: Request) {
         );
     }
 
+<<<<<<< Updated upstream
     let prompt, tone, format, digitalFootprint;
+=======
+    const userMeta = usageCheck.user?.user_metadata || {};
+
+    let prompt, tone, format, digitalFootprint, trendContext;
+>>>>>>> Stashed changes
     try {
         const body = await req.json();
-        prompt = body.prompt; // AI SDK always sends the text here
+        prompt = body.prompt;
         tone = body.tone;
         format = body.format;
-        digitalFootprint = body.digitalFootprint; // New parameter for extracted style
+        digitalFootprint = body.digitalFootprint;
+        trendContext = body.trendContext; // { hook, topic, sentiment, angles } from hook lab
     } catch (e) {
         return new Response(JSON.stringify({ error: "Invalid request body" }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
@@ -62,7 +69,11 @@ CRITICAL STRUCTURAL RULES (Do not violate these):
         ? `\n\nUSER'S DIGITAL FOOTPRINT (Mimic this exact style):\n${digitalFootprint}\nAnalyze this footprint deeply. Adopt the exact vocabulary, sentence rhythm, and "signature moves" described above. The post must sound like the user wrote it, NOT a generic AI.`
         : '';
 
-    const systemPrompt = basePrompt + footprintInstruction;
+    const trendContextInstruction = trendContext
+        ? `\n\nHOOK LAB CONTEXT (Build the post around this hook and trend):\n- Selected Hook: "${trendContext.hook}"\n- Trend Topic: ${trendContext.topic}\n- Market Sentiment: ${trendContext.sentiment}\n- Unexplored Angles: ${(trendContext.angles || []).join(', ') || 'N/A'}\n\nCRITICAL: The very first line of your post MUST be the exact hook text provided above, word for word. Build the rest of the post to support and expand on the curiosity gap or claim made in that hook. Do NOT change the hook.`
+        : '';
+
+    const systemPrompt = basePrompt + footprintInstruction + trendContextInstruction;
 
     try {
         const result = streamText({

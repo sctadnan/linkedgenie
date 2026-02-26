@@ -6,6 +6,12 @@ import MobileNav from "@/components/MobileNav";
 import { niches } from "@/data/niches";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
+import dynamic from "next/dynamic";
+
+const TrendAlertBanner = dynamic(
+  () => import("@/components/TrendAlertBanner").then(m => m.TrendAlertBanner),
+  { ssr: false }
+);
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -54,6 +60,7 @@ export default function RootLayout({
             </div>
           </div>
         </header>
+        <TrendAlertBanner />
         <main className="pt-16 min-h-screen relative">
           {!process.env.OPENAI_API_KEY && (
             <div className="bg-amber-500 text-black px-6 py-3 text-center text-sm font-medium z-40 relative shadow-md">
