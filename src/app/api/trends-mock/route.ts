@@ -2,15 +2,13 @@ import { NextResponse } from 'next/server';
 import googleTrends from 'google-trends-api';
 import { XMLParser } from 'fast-xml-parser';
 
-// The fallback hardcoded list — always available
 const FALLBACK_TRENDS = [
     { id: 1, topic: "The End of the 9-to-5", category: "Remote Work" },
     { id: 2, topic: "AI Replacing Entry-Level Jobs", category: "Technology" },
     { id: 3, topic: "Toxic Positivity on LinkedIn", category: "Culture" },
-    { id: 4, topic: "Personal Branding vs Imposter Syndrome", category: "Personal Development" }
+    { id: 4, topic: "Personal Branding vs Imposter Syndrome", category: "Personal Development" },
 ];
 
-// RSS feeds from LinkedIn-adjacent professional sources
 const RSS_FEEDS = [
     { url: 'https://feeds.feedburner.com/fastcompany/headlines', category: 'Business' },
     { url: 'https://hbr.org/resources/xml/hbr_rss.xml', category: 'Leadership' },
@@ -19,63 +17,52 @@ const RSS_FEEDS = [
 
 type Trend = { id: number; topic: string; category: string };
 
-// ── Helper: Fetch trends from Google Trends (Daily Trending Searches)
-async function fetchGoogleTrends(): Promise<Trend[]> {
-    const result = await googleTrends.dailyTrends({
-        trendDate: new Date(),
-        geo: 'US',
-    });
-
+// Fetch top Google Trends (relaxed filter — skip only obvious sports/death/games)
+async function fetchGoogleTrends(): Promise<string[]> {
+    const result = await googleTrends.dailyTrends({ trendDate: new Date(), geo: 'US' });
     const json = JSON.parse(result);
     const items: { title: { query: string } }[] =
         json?.default?.trendingSearchesDays?.[0]?.trendingSearches ?? [];
 
-    // Pick 4 relevant professional-sounding topics, skip obvious celebrity/sports ones
-    const filtered = items
+    return items
         .map((i) => i.title.query)
-        .filter((q) =>
-            !/(game|movie|score|died|vs\.|nfl|nba|mlb|nhl|singer|actor|actress|killed|crash)/i.test(q)
-        )
+        .filter((q) => !/(score|killed|crash|nfl|nba|mlb|nhl|actor|actress)/i.test(q))
         .slice(0, 4);
-
-    return filtered.map((topic, idx) => ({
-        id: idx + 1,
-        topic,
-        category: 'Trending',
-    }));
 }
 
-// ── Helper: Fetch trends from RSS feeds
-async function fetchRssTrends(): Promise<Trend[]> {
+// Fetch top 2 headlines from each RSS feed
+async function fetchRssTrends(): Promise<{ title: string; category: string }[]> {
     const parser = new XMLParser({ ignoreAttributes: false });
-    const results: Trend[] = [];
+    const results: { title: string; category: string }[] = [];
 
     await Promise.allSettled(
         RSS_FEEDS.map(async (feed) => {
             const res = await fetch(feed.url, {
-                headers: { 'User-Agent': 'LinkedGenie/1.0 (RSS Reader)' },
+                headers: { 'User-Agent': 'LinkedGenie/1.0' },
                 signal: AbortSignal.timeout(4000),
             });
             const xml = await res.text();
             const obj = parser.parse(xml);
 
-            const items =
-                obj?.rss?.channel?.item ??
-                obj?.feed?.entry ??
-                [];
+            const items: unknown[] =
+                obj?.rss?.channel?.item ?? obj?.feed?.entry ?? [];
 
-            const first = Array.isArray(items) ? items[0] : null;
-            if (!first) return;
+            const list = Array.isArray(items) ? items.slice(0, 2) : [];
 
-            const title: string =
-                first?.title?.['#text'] ?? first?.title ?? '';
+            for (const item of list) {
+                const raw = (item as Record<string, unknown>);
+                const titleVal = raw?.title;
+                const title: string =
+                    typeof titleVal === 'object' && titleVal !== null
+                        ? String((titleVal as Record<string, unknown>)['#text'] ?? '')
+                        : String(titleVal ?? '');
 
-            if (title) {
-                results.push({
-                    id: results.length + 1,
-                    topic: title.length > 70 ? title.substring(0, 70) + '...' : title,
-                    category: feed.category,
-                });
+                if (title.trim()) {
+                    results.push({
+                        title: title.length > 65 ? title.substring(0, 65) + '...' : title,
+                        category: feed.category,
+                    });
+                }
             }
         })
     );
@@ -84,47 +71,40 @@ async function fetchRssTrends(): Promise<Trend[]> {
 }
 
 export async function GET() {
-    let trends: Trend[] = [];
-    let source = 'hardcoded';
+    const googleTopics: string[] = [];
+    const rssItems: { title: string; category: string }[] = [];
 
-    // TIER 1: Try Google Trends
-    try {
-        const googleTrendItems = await fetchGoogleTrends();
-        if (googleTrendItems.length >= 2) {
-            trends = googleTrendItems;
-            source = 'google-trends';
-        }
-    } catch {
-        // Google Trends failed — fall through to RSS
+    // Run both sources in parallel
+    await Promise.allSettled([
+        fetchGoogleTrends().then((r) => googleTopics.push(...r)).catch(() => null),
+        fetchRssTrends().then((r) => rssItems.push(...r)).catch(() => null),
+    ]);
+
+    // Build combined list — Google Trends first, then RSS, up to 6 total
+    const combined: Trend[] = [];
+
+    for (const topic of googleTopics) {
+        if (combined.length >= 3) break;
+        combined.push({ id: combined.length + 1, topic, category: 'Trending' });
     }
 
-    // TIER 2: Try RSS feeds if Google Trends didn't work or returned too few
-    if (trends.length < 2) {
-        try {
-            const rssItems = await fetchRssTrends();
-            if (rssItems.length >= 2) {
-                trends = rssItems;
-                source = 'rss';
-            }
-        } catch {
-            // RSS also failed — fall through to hardcoded
-        }
+    for (const item of rssItems) {
+        if (combined.length >= 6) break;
+        combined.push({ id: combined.length + 1, topic: item.title, category: item.category });
     }
 
-    // TIER 3: Hardcoded fallback — always wins if above two failed
-    if (trends.length === 0) {
-        trends = FALLBACK_TRENDS;
-        source = 'hardcoded';
+    // Always fall back to hardcoded if we still don't have enough
+    if (combined.length < 3) {
+        const fallbackNeeded = FALLBACK_TRENDS.slice(combined.length);
+        combined.push(
+            ...fallbackNeeded.map((f, i) => ({ ...f, id: combined.length + i + 1 }))
+        );
     }
+
+    const source = googleTopics.length > 0 ? 'google+rss' : rssItems.length > 0 ? 'rss' : 'hardcoded';
 
     return NextResponse.json(
-        { trends, source },
-        {
-            status: 200,
-            headers: {
-                // Cache for 1 hour on CDN edge (Vercel), revalidate in background
-                'Cache-Control': 's-maxage=3600, stale-while-revalidate=600',
-            },
-        }
+        { trends: combined, source },
+        { status: 200, headers: { 'Cache-Control': 's-maxage=3600, stale-while-revalidate=600' } }
     );
 }
