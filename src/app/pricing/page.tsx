@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Check, Sparkles, Zap, Shield, ArrowRight, Star } from 'lucide-react';
+import { Check, Sparkles, Zap, ArrowRight, Star } from 'lucide-react';
 
 const FREE_FEATURES = [
     '5 AI post generations / day',
@@ -178,11 +178,12 @@ export default function PricingPage() {
                                 <Sparkles className="w-5 h-5 text-indigo-400" />
                                 <h2 className="text-lg font-bold text-white">Pro</h2>
                             </div>
-                            <div className="flex items-end gap-1 mb-2">
-                                <span className="text-5xl font-black text-white">$9</span>
+                            <div className="flex items-end gap-2 mb-2">
+                                <span className="text-5xl font-black text-white">$5</span>
+                                <span className="text-zinc-500 line-through text-xl mb-2">$7</span>
                                 <span className="text-zinc-400 mb-2">/month</span>
                             </div>
-                            <p className="text-sm text-zinc-400">Unlimited AI power for creators</p>
+                            <p className="text-sm text-indigo-400 font-semibold">🔥 Launch discount — save $2/mo</p>
                         </div>
 
                         <ul className="space-y-3 mb-8 flex-1 relative">
@@ -223,15 +224,7 @@ export default function PricingPage() {
                 </div>
 
                 {/* Feature comparison shield */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="flex items-center justify-center gap-3 text-sm text-zinc-500 mb-20"
-                >
-                    <Shield className="w-4 h-4 text-zinc-600" />
-                    <span>30-day money-back guarantee · No hidden fees · Cancel anytime</span>
-                </motion.div>
+
 
                 {/* Testimonials */}
                 <motion.div
