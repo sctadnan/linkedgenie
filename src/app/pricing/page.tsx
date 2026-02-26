@@ -77,14 +77,15 @@ export default function PricingPage() {
     const getCheckoutUrl = () => {
         const baseUrl = process.env.NEXT_PUBLIC_LEMON_CHECKOUT_URL;
         if (!baseUrl) return '/auth';
-        if (!userId) return '/auth'; // Redirect to sign-in first
+        if (!userId) return '/auth';
         const separator = baseUrl.includes('?') ? '&' : '?';
         return `${baseUrl}${separator}checkout[custom][user_id]=${userId}`;
     };
 
-    const getPortalUrl = () => {
-        return process.env.NEXT_PUBLIC_LEMON_CUSTOMER_PORTAL_URL || null;
-    };
+    // Prices from env vars — update in Vercel dashboard to change price without code deploy
+    const proPrice = process.env.NEXT_PUBLIC_LEMON_PRICE ?? '5';
+    const originalPrice = process.env.NEXT_PUBLIC_LEMON_ORIGINAL_PRICE ?? '7';
+    const hasDiscount = proPrice !== originalPrice;
 
     return (
         <div className="min-h-screen bg-background text-foreground relative overflow-hidden">
@@ -179,11 +180,17 @@ export default function PricingPage() {
                                 <h2 className="text-lg font-bold text-white">Pro</h2>
                             </div>
                             <div className="flex items-end gap-2 mb-2">
-                                <span className="text-5xl font-black text-white">$5</span>
-                                <span className="text-zinc-500 line-through text-xl mb-2">$7</span>
+                                <span className="text-5xl font-black text-white">${proPrice}</span>
+                                {hasDiscount && (
+                                    <span className="text-zinc-500 line-through text-xl mb-2">${originalPrice}</span>
+                                )}
                                 <span className="text-zinc-400 mb-2">/month</span>
                             </div>
-                            <p className="text-sm text-indigo-400 font-semibold">🔥 Launch discount — save $2/mo</p>
+                            {hasDiscount ? (
+                                <p className="text-sm text-indigo-400 font-semibold">🔥 Launch discount — save ${Number(originalPrice) - Number(proPrice)}/mo</p>
+                            ) : (
+                                <p className="text-sm text-zinc-400">Unlimited AI power for creators</p>
+                            )}
                         </div>
 
                         <ul className="space-y-3 mb-8 flex-1 relative">

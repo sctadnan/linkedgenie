@@ -252,10 +252,12 @@ export default function SettingsPage() {
                             </a>
                         ) : (
                             <a
-                                href="mailto:support@lemonsqueezy.com?subject=Manage%20My%20Subscription&body=Hi%2C%20I%20would%20like%20to%20manage%20or%20cancel%20my%20LinkedGenie%20Pro%20subscription."
+                                href="https://app.lemonsqueezy.com/my-orders"
+                                target="_blank"
+                                rel="noreferrer"
                                 className="bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/30 text-orange-300 font-semibold px-5 py-2.5 rounded-xl transition-colors text-center whitespace-nowrap text-sm"
                             >
-                                Contact Billing Support
+                                Manage Subscription ↗
                             </a>
                         )}
                     </div>
