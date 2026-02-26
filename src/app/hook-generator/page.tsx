@@ -177,7 +177,23 @@ export default function HookGenerator() {
                     </button>
                 </form>
 
-                {error && (
+                {error?.message === "GUEST_LIMIT_REACHED" ? (
+                    <div className="mt-4 bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 p-4 rounded-xl flex items-start gap-3">
+                        <AlertCircle className="w-5 h-5 flex-shrink-0 text-indigo-400 mt-0.5" />
+                        <div>
+                            <p className="text-sm font-bold text-indigo-200 mb-1">لقد استنفدت محاولتك المجانية 🎉</p>
+                            <p className="text-sm text-indigo-300/80">
+                                سجّل الدخول للحصول على <strong>5 محاولات إضافية</strong> مجاناً.
+                            </p>
+                            <a
+                                href="/"
+                                className="mt-3 inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+                            >
+                                تسجيل الدخول مجاناً →
+                            </a>
+                        </div>
+                    </div>
+                ) : error && (
                     <div className="mt-4 bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl flex items-center gap-3">
                         <AlertCircle className="w-5 h-5 flex-shrink-0" />
                         <p className="text-sm font-medium">{error.message || "Failed to generate hooks."}</p>

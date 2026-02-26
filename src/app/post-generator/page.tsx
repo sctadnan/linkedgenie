@@ -360,7 +360,18 @@ export default function PostGenerator() {
                         </div>
                     </div>
 
-                    {error && (
+                    {error?.message === "GUEST_LIMIT_REACHED" ? (
+                        <div className="bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 p-4 rounded-xl">
+                            <p className="font-bold text-indigo-200 mb-1">لقد استنفدت محاولاتك المجانية 🎉</p>
+                            <p className="text-sm text-indigo-300/80 mb-3">سجّل الدخول للحصول على <strong>5 محاولات إضافية</strong> مجاناً.</p>
+                            <a
+                                href="/"
+                                className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+                            >
+                                تسجيل الدخول مجاناً →
+                            </a>
+                        </div>
+                    ) : error && (
                         <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl text-sm">
                             <p className="font-bold">Error Generation Failed:</p>
                             <p>{error.message}</p>

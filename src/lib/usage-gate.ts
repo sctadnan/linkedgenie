@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { supabaseAdmin } from "./server-supabase";
+import { checkGuestLimit, type GuestToolType } from "./guest-gate";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
@@ -8,18 +9,29 @@ const MAX_FREE_CREDITS = 5;
 
 /**
  * Validates the user's session and checks their credit/pro status.
- * Use this at the top of all protected API routes.
+ * Supports both guest (IP-based) and authenticated (Supabase) users.
+ *
+ * @param req - The incoming request
+ * @param guestType - The tool type for guest limit tracking ('hook' | 'post')
  */
-export async function enforceUsageLimit(req: Request) {
-    // 1. Get the Authorization header from the request
+export async function enforceUsageLimit(req: Request, guestType: GuestToolType) {
     const authHeader = req.headers.get("Authorization");
+
+    // ── GUEST PATH ────────────────────────────────────────────────────────────
     if (!authHeader) {
-        return { error: "Missing Authorization header", status: 401 };
+        const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "127.0.0.1";
+        const result = await checkGuestLimit(ip, guestType);
+
+        if (!result.allowed) {
+            return { error: "GUEST_LIMIT_REACHED", status: 403, guestLimit: result.limit, guestUsed: result.used };
+        }
+
+        // Guest is allowed; no user object to return
+        return { success: true, user: null, isGuest: true };
     }
 
+    // ── AUTHENTICATED PATH ────────────────────────────────────────────────────
     const token = authHeader.replace("Bearer ", "");
-    console.log("DEBUG: authHeader is:", authHeader);
-    console.log("DEBUG: token extracted is:", token);
 
     const supabase = createClient(supabaseUrl, supabaseAnonKey, {
         auth: { persistSession: false, autoRefreshToken: false }
@@ -29,20 +41,20 @@ export async function enforceUsageLimit(req: Request) {
 
     if (authError || !user) {
         console.error("Auth error in usage-gate:", authError);
-        return { error: `Invalid session or unauthenticated: ${authError?.message || 'No user found'} [Token received starting with: '${token ? token.substring(0, 10) : 'empty'}']`, status: 401 };
+        return {
+            error: `Invalid session or unauthenticated: ${authError?.message || 'No user found'}`,
+            status: 401
+        };
     }
 
-    // 3. Fetch the user's profile using the admin client to bypass RLS 
-    // (RLS might block read if they somehow aren't authenticated properly contextually)
-    // We use the admin client in server contexts strictly for reading trusted data here
+    // Fetch user profile via admin client to bypass RLS
     let { data: profile, error: profileError } = await supabaseAdmin
         .from("profiles")
         .select("is_pro, credits_used")
         .eq("id", user.id)
         .single();
 
-    // If the profile does not exist (e.g. they signed up before we created the DB trigger)
-    // PGRST116 is the PostgREST error code for "Results contain 0 rows"
+    // Lazily create profile if missing (PGRST116 = 0 rows returned)
     if (profileError?.code === 'PGRST116' || !profile) {
         const { data: newProfile, error: insertError } = await supabaseAdmin
             .from("profiles")
@@ -62,18 +74,17 @@ export async function enforceUsageLimit(req: Request) {
         return { error: "Internal database error when fetching profile", status: 500 };
     }
 
-    // 4. Logic Enforcement
+    // Pro users have unlimited access
     if (profile.is_pro) {
-        // PRO User - Free pass
         return { success: true, user };
     }
 
+    // Free user — out of credits
     if (profile.credits_used >= MAX_FREE_CREDITS) {
-        // FREE User - Out of credits
         return { error: "OUT_OF_CREDITS", status: 403 };
     }
 
-    // FREE User - Has credits, increment by 1
+    // Free user — has credits, increment by 1
     const { error: updateError } = await supabaseAdmin
         .from("profiles")
         .update({ credits_used: profile.credits_used + 1 })

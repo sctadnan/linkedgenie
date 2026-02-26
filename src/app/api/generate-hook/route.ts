@@ -34,12 +34,18 @@ export async function POST(req: Request) {
         }
     }
 
-    // Enforce Pro/Credits limit
-    const usageCheck = await enforceUsageLimit(req);
+    // Enforce guest/free/pro usage limits
+    const usageCheck = await enforceUsageLimit(req, 'hook');
     if (usageCheck.error) {
+        const message =
+            usageCheck.error === "GUEST_LIMIT_REACHED"
+                ? "GUEST_LIMIT_REACHED"
+                : usageCheck.error === "OUT_OF_CREDITS"
+                    ? "You have run out of free generations. Please upgrade to Pro."
+                    : usageCheck.error;
         return new Response(
-            JSON.stringify({ error: usageCheck.error === "OUT_OF_CREDITS" ? "You have run out of free generations. Please upgrade to Pro." : usageCheck.error }),
-            { status: usageCheck.status || 401, headers: { 'Content-Type': 'application/json' } }
+            JSON.stringify({ error: message }),
+            { status: usageCheck.status || 403, headers: { 'Content-Type': 'application/json' } }
         );
     }
 

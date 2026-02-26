@@ -40,11 +40,11 @@ export default function RootLayout({
             {/* Main Navigation - Tool Links Restored */}
             <div className="flex items-center gap-6">
               <nav className="hidden lg:flex items-center gap-5 text-[13px] font-medium text-zinc-400 bg-black/50 border border-white/5 px-4 py-2 rounded-full">
-                {siteConfig.navigationLinks.slice(0, 4).map((link) => (
+                {siteConfig.navigationLinks.slice(0, 5).map((link) => (
                   <a key={link.name} href={link.href} className="hover:text-white transition-colors">{link.name}</a>
                 ))}
                 <div className="w-px h-3 bg-white/10 mx-2" />
-                <a href={siteConfig.navigationLinks[4].href} className="text-purple-400 hover:text-purple-300 font-semibold transition-colors">{siteConfig.navigationLinks[4].name}</a>
+                <a href={siteConfig.navigationLinks[5].href} className="text-purple-400 hover:text-purple-300 font-semibold transition-colors">{siteConfig.navigationLinks[5].name}</a>
               </nav>
               <div className="flex items-center gap-3">
                 {/* The Command Center UserBadge Dropdown */}
@@ -86,7 +86,7 @@ export default function RootLayout({
                     <li><a href="/about" className="hover:text-white transition-colors">About Us</a></li>
                     <li><a href="/dashboard" className="hover:text-white transition-colors">Dashboard</a></li>
                     <li><a href="/#features" className="hover:text-white transition-colors">Features</a></li>
-                    <li><a href="/#pricing" className="hover:text-white transition-colors">Pricing</a></li>
+                    <li><a href="/pricing" className="hover:text-white transition-colors">Pricing</a></li>
                   </ul>
                 </div>
 

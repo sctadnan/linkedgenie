@@ -9,6 +9,7 @@ export const siteConfig = {
         { name: "Profile AI", href: "/profile-optimizer" },
         { name: "Hook AI", href: "/hook-generator" },
         { name: "Trends", href: "/trend-hub" },
+        { name: "Pricing", href: "/pricing" },
         { name: "Dashboard", href: "/dashboard" },
     ],
     aiConfig: {

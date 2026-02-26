@@ -241,13 +241,20 @@ export default function SettingsPage() {
                             </div>
                             <p className="text-orange-200/80 text-sm">You have unlimited access to all AI generation tools and premium features.</p>
                         </div>
-                        <a
-                            href={process.env.NEXT_PUBLIC_LEMON_CUSTOMER_PORTAL_URL || "#"}
-                            target="_blank"
-                            className="bg-orange-500 hover:bg-orange-400 text-white font-semibold px-6 py-2.5 rounded-xl transition-colors text-center whitespace-nowrap"
-                        >
-                            Manage Billing
-                        </a>
+                        {process.env.NEXT_PUBLIC_LEMON_CUSTOMER_PORTAL_URL ? (
+                            <a
+                                href={process.env.NEXT_PUBLIC_LEMON_CUSTOMER_PORTAL_URL}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="bg-orange-500 hover:bg-orange-400 text-white font-semibold px-6 py-2.5 rounded-xl transition-colors text-center whitespace-nowrap"
+                            >
+                                Manage Billing
+                            </a>
+                        ) : (
+                            <span className="text-sm text-orange-200/60 italic">
+                                Billing managed via Lemon Squeezy — check your email for the portal link.
+                            </span>
+                        )}
                     </div>
                 ) : (
                     <div className="space-y-6">
